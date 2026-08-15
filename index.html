@@ -311,7 +311,18 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
 .tl-time { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: none; letter-spacing: 0; }
 
 /* === WHATSAPP-STYLE MULTI-USER CHAT === */
-.chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.15); }
+.chat-container { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+    background-color: #0b111e; 
+    /* 🔥 FIX 4: WhatsApp-style Dotted Texture */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+}
 .chat-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; font-weight: 600; word-wrap: break-word; animation: chatFadeIn 0.3s ease forwards; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.2);}
 .chat-bubble-user { background: linear-gradient(135deg, var(--brand), #1A9CBF); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; }
 .chat-bubble-other { background: var(--card-light); color: var(--text); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border); }
@@ -330,30 +341,41 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
 .chat-send-btn:hover { transform: scale(1.1); }
 
 /* === OPERATOR WORKSPACE (SPLIT VIEW) === */
-.op-split-container { display: flex; height: calc(100vh - 140px); gap: 20px; }
-.op-left-pane { width: 35%; min-width: 300px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--premium-shadow); }
-.op-right-pane { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--premium-shadow); }
+/* 🔥 FIX 5 & 6: Widths increased to 40%, layout made responsive & pixel-perfect */
+.op-split-container { display: flex; height: calc(100vh - 135px); gap: 20px; }
+.op-left-pane { width: 30%; min-width: 340px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--premium-shadow); }
+.op-right-pane { flex: 1; min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--premium-shadow); }
 
-.op-queue-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
+.op-queue-header { flex-shrink: 0; padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); }
 .op-queue-list { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
 
 .op-job-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; display: flex; flex-direction: column; gap: 8px; }
 .op-job-card:hover { background: rgba(255,255,255,0.05); }
 .op-job-card.active { background: rgba(38,195,234,0.1); border-color: rgba(38,195,234,0.3); border-left-color: var(--brand); }
 
-/* Urgency Colors & Animations */
-.urg-critical { border-left-color: var(--danger); animation: pulseRed 2s infinite; }
-.urg-warning { border-left-color: var(--accent); }
+/* 🔥 FIX 1 & 2: Softer Red Contrast and Radar Removed from Card */
+.urg-critical { border-left-color: #ff6b6b; background: rgba(255, 107, 107, 0.05); } 
+.urg-warning { border-left-color: var(--accent); background: rgba(245, 158, 11, 0.03); }
 .urg-safe { border-left-color: var(--success); }
 
-@keyframes pulseRed { 
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 
-    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } 
-}
+/* 🔥 FIX 2: Dynamic Badge Radars based on Status */
+.badge-pulse-revision { animation: pulseCritical 2s infinite; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+.badge-pulse-pending { animation: pulseWarning 2s infinite; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+.badge-pulse-assigned { animation: pulseInfo 2s infinite; box-shadow: 0 0 0 0 rgba(38, 195, 234, 0.4); }
 
-.op-ws-header { padding: 20px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+@keyframes pulseCritical { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+@keyframes pulseWarning { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); } 70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+@keyframes pulseInfo { 0% { box-shadow: 0 0 0 0 rgba(38, 195, 234, 0.6); } 70% { box-shadow: 0 0 0 8px rgba(38, 195, 234, 0); } 100% { box-shadow: 0 0 0 0 rgba(38, 195, 234, 0); } }
+
+.op-ws-header { flex-shrink: 0; padding: 20px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
 .op-ws-details { display: flex; flex-direction: column; gap: 4px; }
+
+/* 🔥 FIX 5: Mobile & Tablet Responsiveness */
+@media (max-width: 950px) {
+    .op-split-container { flex-direction: column; height: auto; overflow: visible; }
+    .op-left-pane { width: 100%; height: 50vh; min-height: 400px; }
+    .op-right-pane { width: 100%; height: 60vh; min-height: 500px; }
+}
 
 </style>
 </head>
@@ -1471,9 +1493,10 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
         </div>
 
         <!-- RIGHT PANE: ACTIVE WORKSPACE & CHAT -->
-        <div class="op-right-pane" id="opActiveWorkspace" style="display:none;">
+        <!-- 🔥 FIX 6: Enforced 100% height flex column to lock the chat box inside the pane securely -->
+        <div class="op-right-pane" id="opActiveWorkspace" style="display:none; height: 100%;">
           
-          <!-- Job Info & Actions (NO RAW UPLOADS SHOWN) -->
+          <!-- Job Info & Actions -->
           <div class="op-ws-header">
             <div class="op-ws-details">
                 <h2 id="wsJobId" style="color:var(--brand); margin:0; font-size:18px; font-weight:900; letter-spacing:1px;">Select a Job</h2>
@@ -1490,8 +1513,8 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
             </div>
           </div>
 
-          <!-- Multi-User Chat UI -->
-          <div id="wsChatContainer" class="chat-container" style="background: transparent;"></div>
+          <!-- Multi-User Chat UI (Using min-height:0 allows flexbox scrolling to work perfectly) -->
+          <div id="wsChatContainer" class="chat-container" style="min-height: 0;"></div>
 
           <!-- Sticky Bottom Input -->
           <div class="chat-input-wrapper">
@@ -4574,7 +4597,7 @@ function renderOperatorWorkspace() {
     
     // Combine Papers and Docs into one queue, filtering only actionable jobs
     const allJobs = [...(globalPayload.data.papers || []), ...(globalPayload.data.docs || [])];
-    const activeJobs = allJobs.filter(j => j.status === 'Pending' || j.status === 'Assigned' || j.status === 'Pending Revision');
+    const activeJobs = allJobs.filter(j => j.status === 'Pending' || j.status === 'Assigned' || j.status === 'Pending Revision' || j.status === 'In Progress');
     
     // Strict Sorting: Soonest deadline at the top
     activeJobs.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
@@ -4593,12 +4616,22 @@ function renderOperatorWorkspace() {
         const deadTime = new Date(job.deadline).getTime();
         const hoursLeft = (deadTime - nowTime) / (1000 * 60 * 60);
         
+        // 🔥 FIX 1: Map Urgency for Card Border Only
         let urgClass = 'urg-safe';
-        if (hoursLeft < 0 || hoursLeft <= 3) urgClass = 'urg-critical'; // Red + Pulse
-        else if (hoursLeft <= 12) urgClass = 'urg-warning'; // Yellow
+        if (hoursLeft < 0 || hoursLeft <= 3) urgClass = 'urg-critical'; // Light Red Border
+        else if (hoursLeft <= 12) urgClass = 'urg-warning'; // Yellow Border
 
-        // If job is Pending Revision, force critical glow so it's spotted instantly
         if (job.status === 'Pending Revision') urgClass = 'urg-critical';
+        
+        // 🔥 FIX 2: Dynamic Badge Radars
+        let badgeClass = 'bg-warning';
+        let pulseClass = '';
+        if (job.status === 'Pending Revision') { badgeClass = 'bg-danger'; pulseClass = 'badge-pulse-revision'; }
+        else if (job.status === 'Pending') { badgeClass = 'bg-warning'; pulseClass = 'badge-pulse-pending'; }
+        else if (job.status === 'Assigned' || job.status === 'In Progress') { badgeClass = 'bg-info'; pulseClass = 'badge-pulse-assigned'; }
+
+        // 🔥 FIX 3: Submission Date Formatting
+        const submitDate = new Date(job.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
         
         const typeLabel = job.subject ? `Paper • ${job.subject} (${job.class})` : `Doc • ${job.type} (${job.class})`;
 
@@ -4606,11 +4639,16 @@ function renderOperatorWorkspace() {
         <div class="op-job-card ${urgClass}" id="opCard_${job.id}" onclick="selectWorkspaceJob('${encodeURIComponent(JSON.stringify(job))}')">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <span style="color:var(--brand); font-size:12px; font-weight:900; font-family:monospace;">${job.id}</span>
-                <span class="badge" style="font-size:8px; padding:2px 6px; background:rgba(255,255,255,0.1); color:white;">${job.status}</span>
+                <span class="badge ${badgeClass} ${pulseClass}" style="font-size:8px; padding:3px 6px;">${job.status}</span>
             </div>
             <div style="font-size:11px; color:var(--text); font-weight:700;">${job.inst}</div>
             <div style="font-size:10px; color:var(--text-muted); font-weight:600;">${typeLabel}</div>
-            ${getDeadlineHTML(job.deadline, nowTime)}
+            <div style="font-size:9px; color:rgba(255,255,255,0.4); font-weight:600; margin-top:2px;">Submitted: ${submitDate}</div>
+            
+            <div style="margin-top:4px;">
+                <!-- 🔥 FIX 1: getDeadlineUI generates the class that triggers live ticking seconds -->
+                ${getDeadlineUI(job.deadline)}
+            </div>
         </div>`;
     }).join('');
 }
