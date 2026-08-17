@@ -2266,54 +2266,7 @@ function renderNotifications(notifs) {
     }).join('');
 }
 
-// ==========================================
-// 🚀 SUPABASE REAL-TIME WEBSOCKET ENGINE
-// ==========================================
-let realtimeChannels = [];
 
-function startSilentSyncEngine() {
-    if (!window.supabaseInstance) return;
-
-    if (realtimeChannels.length > 0) {
-        realtimeChannels.forEach(ch => window.supabaseInstance.removeChannel(ch));
-        realtimeChannels = [];
-    }
-
-    // 1. Listen instantly for NEW NOTIFICATIONS
-    const notifChannel = window.supabaseInstance.channel('live-notifications')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
-            const notif = payload.new;
-            if (!globalUser) return;
-            
-            if (notif.target_roles && (notif.target_roles.includes(globalUser.role) || notif.target_roles.includes(globalUser.id))) {
-                try { playSound('notification'); } catch(e){} 
-                const newNotif = { title: notif.title, msg: notif.message, time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), isRead: false };
-                localNotifications.unshift(newNotif);
-                renderNotifications(localNotifications);
-            }
-        }).subscribe();
-        
-    // 2. Listen instantly for NEW CHAT MESSAGES
-    const chatChannel = window.supabaseInstance.channel('live-chats')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications' }, payload => {
-            const newMsg = payload.new;
-            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
-            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
-            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
-            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
-            
-            if (opWorkspaceVisible && activeWsJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'wsChatContainer', true);
-            else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
-        }).subscribe();
-
-    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES
-    const jobsChannel = window.supabaseInstance.channel('live-jobs')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
-            if (globalUser) initDashboard(globalUser.email, Memory.getToken(), null, true);
-        }).subscribe();
-
-    realtimeChannels.push(notifChannel, chatChannel, jobsChannel);
-}
 
 function markAllNotificationsRead() {
     document.getElementById('notifBadge').style.display = 'none';
@@ -4634,54 +4587,53 @@ function renderOperatorWorkspace() {
 }
 
 // ==========================================
-// 🔥 CHAT ENGINE UX UPGRADES
+// 💬 RESPONSIVE & OPTIMISTIC CHAT ENGINE
 // ==========================================
 
-// ==========================================
-// 💬 RESPONSIVE CHAT INPUT CONTROLLERS
-// ==========================================
-
-// Auto-resizes textarea smoothly up to 4 lines
 function handleChatTextarea(el) {
-    el.style.height = 'auto'; // Reset
+    el.style.height = 'auto';
     let newHeight = el.scrollHeight;
-    if (newHeight > 100) newHeight = 100; // Caps at approximately 4 lines
+    if (newHeight > 100) newHeight = 100;
     el.style.height = newHeight + 'px';
 }
 
-// Intercepts the Enter key to Send instantly
 function handleChatKeypress(event, btnId) {
     if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); // Prevents a new line from forming
-        document.getElementById(btnId).click(); // Triggers the send button safely
+        event.preventDefault();
+        document.getElementById(btnId).click();
     }
 }
 
-// Reusable Silent Chat Fetcher (Smart Auto-Scroll & Flicker Prevention)
+// 🔥 INSTANT OPTIMISTIC UI (Fake loading bubble for zero-latency feel)
+function injectOptimisticMessage(containerId, text) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const formattedMsg = String(text).replace(/\n/g, '<br>');
+    const html = `
+    <div class="chat-bubble chat-bubble-user" style="opacity:0.7; border: 1px dashed var(--brand); transform: scale(0.98);">
+        <div>${formattedMsg}</div>
+        <div class="chat-time" style="color:rgba(0,0,0,0.6);">Sending...</div>
+    </div>`;
+    container.insertAdjacentHTML('beforeend', html);
+    setTimeout(() => { container.scrollTop = container.scrollHeight; }, 10);
+}
+
 function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
     serverCall('getJobTimeline', { jobId: jobId })
         .then(res => {
             const container = document.getElementById(containerId);
             if (!container) return;
-            
-            // 1. Check if user is currently scrolled near the bottom
-            const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+            const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
             
             if (res.success && res.history && res.history.length > 0) {
                 const newHtml = res.history.map(ev => {
                     if (ev.actorRole === 'automation' || ev.type === 'system') {
                         return `<div class="chat-bubble-sys">${ev.message} • ${ev.timestamp}</div>`;
                     }
-                    
                     const isMe = (ev.actorName === globalUser.name.split(" ")[0]) && (ev.actorRole === globalUser.role);
                     const bubbleClass = isMe ? "chat-bubble-user" : "chat-bubble-other";
-                    const senderTag = isMe ? '' : `
-                        <div class="chat-meta">
-                            <span class="chat-sender" style="color:var(--brand);">${ev.actorName} <span class="chat-role">${ev.actorRole}</span></span>
-                        </div>`;
-                    
+                    const senderTag = isMe ? '' : `<div class="chat-meta"><span class="chat-sender" style="color:var(--brand);">${ev.actorName} <span class="chat-role">${ev.actorRole}</span></span></div>`;
                     const formattedMsg = String(ev.message).replace(/\n/g, '<br>');
-                    
                     return `
                     <div class="chat-bubble ${bubbleClass}">
                         ${senderTag}
@@ -4690,19 +4642,20 @@ function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
                     </div>`;
                 }).join('');
                 
-                // 2. Only update DOM if a new message actually arrived
                 const prevCount = parseInt(container.getAttribute('data-msg-count') || "0");
                 if (prevCount !== res.history.length) {
                     
-                    // 3. Play subtle ping if a new message arrived in the background
-                    if (isBackgroundPoll && prevCount > 0 && res.history.length > prevCount) {
+                    // 🔥 FIX 3: SOUND LOGIC. Do not chime if *I* am the one who sent the last message!
+                    const lastMsg = res.history[res.history.length - 1];
+                    const iSentLast = (lastMsg.actorName === globalUser.name.split(" ")[0]) && (lastMsg.actorRole === globalUser.role);
+                    
+                    if (isBackgroundPoll && prevCount > 0 && res.history.length > prevCount && !iSentLast) {
                         try { playSound('notification'); } catch(e){}
                     }
                     
                     container.innerHTML = newHtml;
                     container.setAttribute('data-msg-count', res.history.length);
                     
-                    // 4. Smart Auto-Scroll
                     if (isNearBottom || !isBackgroundPoll) {
                         setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
                     }
@@ -4717,7 +4670,6 @@ function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
 
 function selectWorkspaceJob(encodedJob) {
     const job = JSON.parse(decodeURIComponent(encodedJob));
-    
     document.getElementById('opIdleWorkspace').style.display = 'none';
     document.getElementById('opActiveWorkspace').style.display = 'flex';
     
@@ -4729,36 +4681,26 @@ function selectWorkspaceJob(encodedJob) {
     document.getElementById('wsJobId').innerText = job.id;
     document.getElementById('wsInstName').innerText = `🏢 ${job.inst}`;
     document.getElementById('wsJobDetails').innerText = job.subject ? `📄 ${job.subject} (${job.class})` : `📋 ${job.type} (${job.class})`;
-    
-    // Tying into the global 1s interval engine for live ticking
     document.getElementById('wsDeadlineTimer').innerHTML = getDeadlineUI(job.deadline);
     
-    // Wire up Format App Button dynamically based on Job Type
     const btnLaunch = document.getElementById('btnLaunchFormat');
     let appUrl = job.subject ? "YOUR_PAPER_FORMAT_APP_URL" : (String(job.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
     
     btnLaunch.onclick = () => { 
         triggerBtnAnim(btnLaunch); 
-        
-        // 1. Tell Vercel the operator has actively started the engine
         serverCall('updateJobStatus', { jobId: job.id, status: 'In Progress' })
             .then(res => {
                 resetBtnAnim(btnLaunch);
                 if (res.success) {
-                    // 2. Status updated in DB! Launch the web app in a new tab
                     window.open(`${appUrl}?jobId=${job.id}`);
-                    
-                    // 3. Silently trigger a local refresh to clear notification states
                     initDashboard(globalUser.email, Memory.getToken(), null, true);
-                } else {
-                    showPopup("Failed to start job: " + res.message, "error");
-                }
-            })
-            .catch(err => {
-                resetBtnAnim(btnLaunch);
-                showPopup("Network Error: " + err.message, "error");
-            });
+                } else showPopup("Failed to start job: " + res.message, "error");
+            }).catch(err => { resetBtnAnim(btnLaunch); showPopup("Network Error: " + err.message, "error"); });
     };
+
+    const chatContainer = document.getElementById('wsChatContainer');
+    chatContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
+    loadChatSilently(job.id, 'wsChatContainer');
 }
 
 function submitWorkspaceChat(btn) {
@@ -4767,30 +4709,20 @@ function submitWorkspaceChat(btn) {
     const noteText = inputEl.value.trim();
     if (!jobId || !noteText) return;
 
-    triggerBtnAnim(btn);
+    // 🔥 FIX 1: Instant Optimistic UI (Zero delay)
+    injectOptimisticMessage('wsChatContainer', noteText);
+    inputEl.value = '';
+    inputEl.style.height = 'auto'; // Shrink box
 
-    const payload = {
-        jobId: jobId,
-        mode: 'note',
-        message: noteText,
-        actorName: globalUser.name.split(" ")[0],
-        actorRole: globalUser.role
-    };
-
+    const payload = { jobId: jobId, mode: 'note', message: noteText, actorName: globalUser.name.split(" ")[0], actorRole: globalUser.role };
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
-            resetBtnAnim(btn);
             if (res.success) {
-                inputEl.value = '';
-                inputEl.style.height = 'auto'; // Shrink box back to 1 line
-                try { playSound('success'); } catch(e){}
-                
-                // 🔥 INSTANT UI REFRESH: Immediately fetch the new message for the sender
+                // Silently pull the real message to replace the "Sending..." bubble
                 loadChatSilently(jobId, 'wsChatContainer');
-                                          
             } else showPopup("Failed: " + res.message, "error");
         })
-        .catch(err => { resetBtnAnim(btn); showPopup("Network Error: " + err.message, "error"); });
+        .catch(err => { showPopup("Network Error: " + err.message, "error"); });
 }
 
 // --- TEACHER / ADMIN MODAL CHAT LOGIC ---
@@ -4801,7 +4733,7 @@ function openCorrectionModal(jobId, mode) {
     
     const inputEl = document.getElementById('correctionNoteText');
     inputEl.value = ''; 
-    inputEl.style.height = 'auto'; // Reset height
+    inputEl.style.height = 'auto';
     
     const titleText = document.getElementById('corrModalTitleText');
     const descText = document.getElementById('corrModalDesc');
@@ -4824,52 +4756,119 @@ function openCorrectionModal(jobId, mode) {
     }
 
     timelineContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
-
     openModal('correctionModal');
-
-    // Trigger the silent fetch engine
     loadChatSilently(jobId, 'jobTimelineContainer');
 }
 
+// 🔥 FIX 2: Group Modal Chat now has Optimistic UI as well
 function submitCorrectionAction(btn) {
     const jobId = document.getElementById('correctionJobId').value;
     const mode = document.getElementById('correctionMode').value;
     const inputEl = document.getElementById('correctionNoteText');
     const noteText = inputEl.value.trim();
     
-    if (!noteText) {
-        return showPopup("Please type a message before submitting.", "warning");
-    }
+    if (!noteText) return showPopup("Please type a message before submitting.", "warning");
 
-    triggerBtnAnim(btn);
+    // Instant UI Response
+    injectOptimisticMessage('jobTimelineContainer', noteText);
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
 
-    const payload = {
-        jobId: jobId,
-        mode: mode,
-        message: noteText,
-        actorName: globalUser.name.split(" ")[0],
-        actorRole: globalUser.role
-    };
-
+    const payload = { jobId: jobId, mode: mode, message: noteText, actorName: globalUser.name.split(" ")[0], actorRole: globalUser.role };
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
-            resetBtnAnim(btn);
             if (res.success) {
-                inputEl.value = '';
-                inputEl.style.height = 'auto'; // Shrink box back to 1 line
-                try { playSound('success'); } catch(e){}
-                
-                // 🔥 INSTANT UI REFRESH: Immediately fetch the new message for the sender
                 loadChatSilently(jobId, 'jobTimelineContainer');
-                
-            } else {
-                showPopup("Failed: " + res.message, "error");
-            }
+            } else showPopup("Failed: " + res.message, "error");
         })
-        .catch(err => {
-            resetBtnAnim(btn);
-            showPopup("Network Error: " + err.message, "error");
-        });
+        .catch(err => { showPopup("Network Error: " + err.message, "error"); });
+}
+
+// ==========================================
+// 🚀 SUPABASE REAL-TIME WEBSOCKET ENGINE
+// ==========================================
+let realtimeChannels = [];
+let jobDebounceTimer = null;
+
+function startSilentSyncEngine() {
+    if (!window.supabaseInstance) return;
+
+    // 🔥 Authenticate WebSocket to bypass Row Level Security
+    const sessionToken = Memory.getToken();
+    if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
+
+    if (realtimeChannels.length > 0) {
+        realtimeChannels.forEach(ch => window.supabaseInstance.removeChannel(ch));
+        realtimeChannels = [];
+    }
+
+    // 1. Listen instantly for NEW NOTIFICATIONS
+    const notifChannel = window.supabaseInstance.channel('live-notifications')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
+            const notif = payload.new;
+            if (!globalUser) return;
+            
+            if (notif.target_roles && (notif.target_roles.includes(globalUser.role) || notif.target_roles.includes(globalUser.id))) {
+                try { playSound('notification'); } catch(e){} 
+                const newNotif = { title: notif.title, msg: notif.message, time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), isRead: false };
+                localNotifications.unshift(newNotif);
+                renderNotifications(localNotifications);
+            }
+        }).subscribe();
+        
+    // 2. Listen instantly for NEW CHAT MESSAGES (From New Table)
+    const chatChannel = window.supabaseInstance.channel('live-chats')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications' }, payload => {
+            const newMsg = payload.new;
+            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
+            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
+            
+            if (opWorkspaceVisible && activeWsJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'wsChatContainer', true);
+            else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
+        }).subscribe();
+
+    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES (Failsafe)
+    const jobsChannel = window.supabaseInstance.channel('live-jobs')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
+            
+            // 🔥 FALLBACK: If the job updates in the background, refresh the chat silently just in case!
+            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
+            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
+
+            if (payload.new && payload.new.job_code) {
+                if (opWorkspaceVisible && activeWsJobId === payload.new.job_code) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
+                else if (modalVisible && activeCorrJobId === payload.new.job_code) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
+            }
+
+            if (globalUser) {
+                const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+                // Only refresh the main dashboard if the user isn't actively typing
+                if (activeTag !== 'input' && activeTag !== 'textarea') {
+                    if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
+                    jobDebounceTimer = setTimeout(() => {
+                        initDashboard(globalUser.email, Memory.getToken(), null, true);
+                    }, 1000);
+                }
+            }
+        }).subscribe();
+
+    realtimeChannels.push(notifChannel, chatChannel, jobsChannel);
+
+    // 4. Ultra-Light Micro-Poller for Chat Exclusively
+    if (window.chatPoller) clearInterval(window.chatPoller);
+    window.chatPoller = setInterval(() => {
+        const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+        const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
+        const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+        const activeCorrJobId = document.getElementById('correctionJobId')?.value;
+        
+        if (opWorkspaceVisible && activeWsJobId) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
+        else if (modalVisible && activeCorrJobId) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
+    }, 3000);
 }
 
 
