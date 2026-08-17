@@ -2253,7 +2253,7 @@ function renderNotifications(notifs) {
     list.innerHTML = localNotifications.map(n => {
         let safeTitle = (n.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
         let safeMsg = (n.msg || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
-        let safeRef = n.refId ? n.refId.replace(/'/g, "\\'") : '';
+        let safeRef = n.refId ? String(n.refId).replace(/'/g, "\\'") : '';
         
         return `
         <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};" onclick="handleNotificationClick('${safeTitle}', '${safeMsg}', '${safeRef}')">
@@ -4799,13 +4799,13 @@ function startSilentSyncEngine() {
         realtimeChannels = [];
     }
 
-    // 1. Listen instantly for NEW NOTIFICATIONS mapped to correct DB schema
+    // 1. Listen instantly for NEW NOTIFICATIONS (Mapped to user_id)
     const notifChannel = window.supabaseInstance.channel('live-notifications')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
             const notif = payload.new;
             if (!globalUser) return;
             
-            // Check if the notification belongs to this exact user ID
+            // 🔥 Strict user ID mapping based on your exact schema
             if (notif.user_id === globalUser.id) {
                 try { playSound('notification'); } catch(e){} 
                 
@@ -4814,10 +4814,16 @@ function startSilentSyncEngine() {
                     msg: notif.message, 
                     time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
                     isRead: false,
-                    refId: notif.reference_id // Store the job code for routing
+                    refId: notif.reference_id 
                 };
                 localNotifications.unshift(newNotif);
                 renderNotifications(localNotifications);
+                
+                // 🔥 DOUBLE-SYNC: A notification arrival means data changed. Silently pull the job queue instantly!
+                if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
+                jobDebounceTimer = setTimeout(() => {
+                    initDashboard(globalUser.email, Memory.getToken(), null, true);
+                }, 1000);
             }
         }).subscribe();
         
@@ -4834,27 +4840,14 @@ function startSilentSyncEngine() {
             else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
         }).subscribe();
 
-    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES 
+    // 3. Fallback: Listen instantly for Status Changes
     const jobsChannel = window.supabaseInstance.channel('live-jobs')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
-            
-            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
-            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
-            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
-            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
-
-            if (payload.new && payload.new.job_code) {
-                if (opWorkspaceVisible && activeWsJobId === payload.new.job_code) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
-                else if (modalVisible && activeCorrJobId === payload.new.job_code) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
-            }
-
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'jobs_queue' }, payload => {
             if (globalUser) {
                 const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
                 if (activeTag !== 'input' && activeTag !== 'textarea') {
                     if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
-                    jobDebounceTimer = setTimeout(() => {
-                        initDashboard(globalUser.email, Memory.getToken(), null, true);
-                    }, 1000);
+                    jobDebounceTimer = setTimeout(() => { initDashboard(globalUser.email, Memory.getToken(), null, true); }, 1000);
                 }
             }
         }).subscribe();
