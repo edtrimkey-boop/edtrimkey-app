@@ -4791,6 +4791,7 @@ let jobDebounceTimer = null;
 function startSilentSyncEngine() {
     if (!window.supabaseInstance) return;
 
+    // Authenticate the WebSocket so it bypasses security blocks
     const sessionToken = Memory.getToken();
     if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
 
@@ -4799,14 +4800,19 @@ function startSilentSyncEngine() {
         realtimeChannels = [];
     }
 
-    // 1. Listen instantly for NEW NOTIFICATIONS (Mapped to user_id)
+   // 1. Listen instantly for NEW NOTIFICATIONS mapped to roles OR precise users
     const notifChannel = window.supabaseInstance.channel('live-notifications')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
             const notif = payload.new;
             if (!globalUser) return;
             
-            // 🔥 Strict user ID mapping based on your exact schema
-            if (notif.user_id === globalUser.id) {
+            // 🔥 THE PUB/SUB FILTER: Does this notification belong to me or my role?
+            const isTargetedUser = notif.target_users && notif.target_users.includes(globalUser.id);
+            const isTargetedRole = notif.target_roles && notif.target_roles.includes(globalUser.role);
+            const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
+
+            // If it matches me, AND it belongs to my institute (or is global), trigger the alert!
+            if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
                 try { playSound('notification'); } catch(e){} 
                 
                 const newNotif = { 
@@ -4819,13 +4825,13 @@ function startSilentSyncEngine() {
                 localNotifications.unshift(newNotif);
                 renderNotifications(localNotifications);
                 
-                // 🔥 DOUBLE-SYNC: A notification arrival means data changed. Silently pull the job queue instantly!
+                // Double-Sync: Pull the job queue silently!
                 if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
                 jobDebounceTimer = setTimeout(() => {
                     initDashboard(globalUser.email, Memory.getToken(), null, true);
                 }, 1000);
             }
-        }).subscribe();
+        }).subscribe((status) => console.log("Notifications Socket:", status));
         
     // 2. Listen instantly for NEW CHAT MESSAGES 
     const chatChannel = window.supabaseInstance.channel('live-chats')
@@ -4838,33 +4844,39 @@ function startSilentSyncEngine() {
             
             if (opWorkspaceVisible && activeWsJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'wsChatContainer', true);
             else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
-        }).subscribe();
+        }).subscribe((status) => console.log("Chat Socket:", status));
 
-    // 3. Fallback: Listen instantly for Status Changes
+    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES 
     const jobsChannel = window.supabaseInstance.channel('live-jobs')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'jobs_queue' }, payload => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
             if (globalUser) {
-                const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
-                if (activeTag !== 'input' && activeTag !== 'textarea') {
-                    if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
-                    jobDebounceTimer = setTimeout(() => { initDashboard(globalUser.email, Memory.getToken(), null, true); }, 1000);
-                }
+                // 🔥 FIXED: Instantly refresh the dashboard. Removed the blocker so the Priority Queue updates seamlessly!
+                if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
+                jobDebounceTimer = setTimeout(() => {
+                    initDashboard(globalUser.email, Memory.getToken(), null, true);
+                }, 500);
             }
-        }).subscribe();
+        }).subscribe((status) => console.log("Jobs Socket:", status));
 
     realtimeChannels.push(notifChannel, chatChannel, jobsChannel);
 
-    // 4. Ultra-Light Micro-Poller for Chat Exclusively
-    if (window.chatPoller) clearInterval(window.chatPoller);
-    window.chatPoller = setInterval(() => {
-        const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
-        const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
-        const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
-        const activeCorrJobId = document.getElementById('correctionJobId')?.value;
-        
-        if (opWorkspaceVisible && activeWsJobId) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
-        else if (modalVisible && activeCorrJobId) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
-    }, 3000);
+    // 4. 🔥 THE INVINCIBLE FAILSAFE POLLER
+    // If WebSockets drop out, this silently grabs new chats and new jobs every 8 seconds. 
+    // It is designed to NEVER interrupt your typing or close your modals.
+    if (window.failsafePoller) clearInterval(window.failsafePoller);
+    window.failsafePoller = setInterval(() => {
+        if (globalUser) {
+            initDashboard(globalUser.email, Memory.getToken(), null, true);
+            
+            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
+            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
+            
+            if (opWorkspaceVisible && activeWsJobId) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
+            else if (modalVisible && activeCorrJobId) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
+        }
+    }, 8000); 
 }
 
 
