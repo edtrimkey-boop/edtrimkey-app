@@ -153,6 +153,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 .bg-warning { background: rgba(245, 158, 11, 0.1); color: var(--accent); border: 1px solid rgba(245, 158, 11, 0.2);}
 .bg-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2);}
 .bg-info { background: rgba(38, 195, 234, 0.1); color: var(--brand); border: 1px solid rgba(38, 195, 234, 0.2);}
+.bg-purple { background: rgba(139, 92, 246, 0.1); color: var(--purple); border: 1px solid rgba(139, 92, 246, 0.2); }
 .bg-delivered { background: linear-gradient(135deg, var(--success) 0%, #27AE60 100%); color: #000; border: none; box-shadow: 0 2px 10px rgba(46,204,113,0.3);} 
 
 /* === TOGGLE SWITCH & GRAY-OUT LOGIC === */
@@ -1477,7 +1478,7 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
       </div>
     </div>
 
-<!-- 🔥 NEW: OPERATOR SPLIT-VIEW COMMAND CENTER -->
+<!-- 🔥 OPERATOR SPLIT-VIEW COMMAND CENTER -->
     <div id="view-op-workspace" class="page-view">
       <div class="op-split-container">
         
@@ -1493,7 +1494,6 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
         </div>
 
         <!-- RIGHT PANE: ACTIVE WORKSPACE & CHAT -->
-        <!-- 🔥 FIX 6: Enforced 100% height flex column to lock the chat box inside the pane securely -->
         <div class="op-right-pane" id="opActiveWorkspace" style="display:none; height: 100%;">
           
           <!-- Job Info & Actions -->
@@ -1513,21 +1513,21 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
             </div>
           </div>
 
-          <!-- Multi-User Chat UI (Using min-height:0 allows flexbox scrolling to work perfectly) -->
+          <!-- Multi-User Chat UI -->
           <div id="wsChatContainer" class="chat-container" style="min-height: 0;"></div>
 
           <!-- Sticky Bottom Input -->
           <div class="chat-input-wrapper">
             <input type="hidden" id="wsActiveJobId" />
-            <textarea id="wsChatInput" class="chat-textarea" rows="1" placeholder="Type a message to the group..."></textarea>
-            <button type="button" class="chat-send-btn" onclick="submitWorkspaceChat(this)">
+            <textarea id="wsChatInput" class="chat-textarea" rows="1" placeholder="Type a message to the group..." oninput="handleChatTextarea(this)" onkeydown="handleChatKeypress(event, 'btnWsChatSubmit')"></textarea>
+            <button type="button" id="btnWsChatSubmit" class="chat-send-btn" onclick="submitWorkspaceChat(this)">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
             </button>
           </div>
         </div>
 
-        <!-- Idle State (When no job is selected) -->
-        <div class="op-right-pane" id="opIdleWorkspace" style="justify-content:center; align-items:center; background:rgba(0,0,0,0.2);">
+        <!-- 🔥 FIX: IDLE STATE (When no job is selected) -->
+        <div class="op-right-pane" id="opIdleWorkspace" style="display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(0,0,0,0.2); height: 100%;">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" style="margin-bottom:20px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           <h3 style="color:var(--text-muted); font-size:16px; font-weight:800;">No Job Selected</h3>
           <p style="color:var(--border); font-size:12px; font-weight:600;">Select a priority task from the queue to begin.</p>
@@ -1602,7 +1602,7 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
 
     <!-- STICKY BOTTOM INPUT (flex-shrink: 0) -->
     <div class="chat-input-wrapper" id="timelineActionZone">
-        <textarea id="correctionNoteText" class="chat-textarea" rows="1" placeholder="Type a message to the group..."></textarea>
+        <textarea id="correctionNoteText" class="chat-textarea" rows="1" placeholder="Type a message to the group..." oninput="handleChatTextarea(this)" onkeydown="handleChatKeypress(event, 'corrSubmitBtn')"></textarea>
         <button type="button" id="corrSubmitBtn" class="chat-send-btn" onclick="submitCorrectionAction(this)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
         </button>
@@ -2192,6 +2192,42 @@ function requestNotificationPermission() {
     });
 }
 
+// ==========================================
+// 🔔 SMART ACTIONABLE NOTIFICATIONS ENGINE
+// ==========================================
+
+function handleNotificationClick(title, msg) {
+    const fullText = title + " " + msg;
+    
+    // Finds Job IDs dynamically
+    const jobMatch = fullText.match(/[A-Z0-9]+-(PPR|RC|AC|ID|CERT)-\d{2}-\d{4,}/i);
+    const jobId = jobMatch ? jobMatch[0].toUpperCase() : null;
+    const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : '';
+
+    const notifDropdown = document.getElementById('notifDropdown');
+    if (notifDropdown) notifDropdown.classList.remove('active');
+
+    if (jobId) {
+        if (userRole === 'operator') {
+            switchTab('op-workspace');
+            setTimeout(() => {
+                const card = document.getElementById('opCard_' + jobId);
+                if (card) {
+                    card.click();
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else { showPopup(`Job ${jobId} is no longer active in your queue.`, "warning"); }
+            }, 400);
+        } else {
+            if (jobId.includes('-PPR-')) switchTab('papers');
+            else switchTab('documents');
+            
+            setTimeout(() => { openCorrectionModal(jobId, 'note'); }, 500);
+        }
+    } else {
+        showPopup(title + ": " + msg, "info");
+    }
+}
+
 function renderNotifications(notifs) {
     localNotifications = notifs || [];
     let badge = document.getElementById('notifBadge');
@@ -2208,25 +2244,75 @@ function renderNotifications(notifs) {
     let unreadCount = 0;
     localNotifications.forEach(n => {
         let hash = (n.title + n.msg).substring(0,50); 
-        if (readHashes.includes(hash)) { n.isRead = true; }
-        if (!n.isRead) { unreadCount++; }
+        if (readHashes.includes(hash)) n.isRead = true;
+        if (!n.isRead) unreadCount++;
     });
+    
     if(unreadCount > 0) {
-        let previousCount = parseInt(badge.innerText || "0");
-        if (unreadCount > previousCount) { playSound('notification'); }
         badge.innerText = unreadCount; badge.style.display = 'flex';
     } else {
-        badge.innerText = "0"; badge.style.display = 'none';
+        badge.style.display = 'none';
     }
     
     list.innerHTML = localNotifications.map(n => {
+        let safeTitle = (n.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        let safeMsg = (n.msg || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
         return `
-        <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};">
+        <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};" onclick="handleNotificationClick('${safeTitle}', '${safeMsg}')">
             <div class="notif-title" style="color: ${n.isRead ? 'var(--text-muted)' : 'var(--brand)'};">${n.title || 'System Notice'}</div>
             <div class="notif-msg">${n.msg || ''}</div>
             <div class="notif-time">${n.time || 'Just now'}</div>
         </div>`;
     }).join('');
+}
+
+// ==========================================
+// 🚀 SUPABASE REAL-TIME WEBSOCKET ENGINE
+// ==========================================
+let realtimeChannels = [];
+
+function startSilentSyncEngine() {
+    if (!window.supabaseInstance) return;
+
+    if (realtimeChannels.length > 0) {
+        realtimeChannels.forEach(ch => window.supabaseInstance.removeChannel(ch));
+        realtimeChannels = [];
+    }
+
+    // 1. Listen instantly for NEW NOTIFICATIONS
+    const notifChannel = window.supabaseInstance.channel('live-notifications')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
+            const notif = payload.new;
+            if (!globalUser) return;
+            
+            if (notif.target_roles && (notif.target_roles.includes(globalUser.role) || notif.target_roles.includes(globalUser.id))) {
+                try { playSound('notification'); } catch(e){} 
+                const newNotif = { title: notif.title, msg: notif.message, time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), isRead: false };
+                localNotifications.unshift(newNotif);
+                renderNotifications(localNotifications);
+            }
+        }).subscribe();
+        
+    // 2. Listen instantly for NEW CHAT MESSAGES
+    const chatChannel = window.supabaseInstance.channel('live-chats')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications' }, payload => {
+            const newMsg = payload.new;
+            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
+            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
+            
+            if (opWorkspaceVisible && activeWsJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'wsChatContainer', true);
+            else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
+        }).subscribe();
+
+    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES
+    const jobsChannel = window.supabaseInstance.channel('live-jobs')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
+            if (globalUser) initDashboard(globalUser.email, Memory.getToken(), null, true);
+        }).subscribe();
+
+    realtimeChannels.push(notifChannel, chatChannel, jobsChannel);
 }
 
 function markAllNotificationsRead() {
@@ -2388,7 +2474,11 @@ function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent =
       applyRoleUI(globalUser);
       renderData(payload);
       
-      if (!isSilent) setTimeout(requestNotificationPermission, 2000);
+      // 🔥 START THE BACKGROUND SYNC ON LOGIN
+      if (!isSilent) {
+          startSilentSyncEngine();
+          setTimeout(requestNotificationPermission, 2000);
+      }
       
       // Do not fire the old blocker popup if we are doing a silent background sync
       if (pendingSuccessMsg && !isSilent) {
@@ -3156,7 +3246,8 @@ function buildAccordionTable(dataArray, type, userRole) {
     let s = String(st).trim();
     if(s === 'Pending Revision' || noteText) return `<span class="badge" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid var(--danger);">🔴 REVISION</span>`;
     if(s === 'Pending') return `<span class="badge" style="background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent);">🟡 AWAITING</span>`;
-    if(s === 'In Progress' || s === 'Accepted' || s === 'Assigned') return `<span class="badge" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">🔵 FORMATTING</span>`;
+    if(s === 'Assigned') return `<span class="badge" style="background:rgba(139, 92, 246, 0.1); color:var(--purple); border:1px solid var(--purple);">🟣 ASSIGNED</span>`;
+    if(s === 'In Progress' || s === 'Accepted') return `<span class="badge" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">🔵 FORMATTING</span>`;
     if(s === 'Completed' || s === 'Delivered' || s === 'Generated' || s === 'PAID') return `<span class="badge bg-success">🟢 COMPLETED</span>`;
     return `<span class='badge bg-warning'>${s}</span>`;
   };
@@ -4411,147 +4502,6 @@ function loadDocDraft() {
     }
 }
 
-
-function showToast(msg, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    if(!container) return;
-    
-    const toast = document.createElement('div');
-    toast.className = 'tk-toast';
-    
-    let icon = '';
-    if(type === 'success') {
-        toast.style.borderLeftColor = 'var(--success)';
-        icon = `<svg width="22" height="22" stroke="var(--success)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path class="anim-check" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>`;
-    } else if (type === 'warning') {
-        toast.style.borderLeftColor = 'var(--accent)';
-        icon = `<svg width="22" height="22" stroke="var(--accent)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><line x1="26" y1="14" x2="26" y2="28"/><circle cx="26" cy="36" r="2" fill="var(--accent)" stroke="none"/></svg>`;
-    } else if (type === 'error') {
-        toast.style.borderLeftColor = 'var(--danger)';
-        icon = `<svg width="22" height="22" stroke="var(--danger)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path d="M17 17 L35 35 M35 17 L17 35"/></svg>`;
-    }
-    
-    toast.innerHTML = `${icon} <span>${msg}</span>`;
-    container.appendChild(toast);
-    
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 500); 
-    }, 5000); 
-}
-
-function openCorrectionModal(jobId, mode) {
-    document.getElementById('correctionJobId').value = jobId;
-    document.getElementById('correctionMode').value = mode;
-    document.getElementById('correctionNoteText').value = ''; 
-    
-    const titleText = document.getElementById('corrModalTitleText');
-    const descText = document.getElementById('corrModalDesc');
-    const submitBtn = document.getElementById('corrSubmitBtn');
-    const titleHeader = document.getElementById('corrModalTitle');
-    const timelineContainer = document.getElementById('jobTimelineContainer');
-
-    if (mode === 'revision') {
-        titleText.innerText = "Request Revision";
-        titleHeader.style.color = "var(--danger)";
-        descText.innerText = `Job ID: ${jobId} | This sends the job back to the operator.`;
-        submitBtn.style.background = "linear-gradient(135deg, var(--danger), #B91C1C)";
-        submitBtn.style.boxShadow = "0 4px 15px rgba(239, 68, 68, 0.4)";
-    } else {
-        titleText.innerText = "Group Communication";
-        titleHeader.style.color = "var(--brand)";
-        descText.innerText = `Job ID: ${jobId} | Visible to Admins, Teachers & Operators.`;
-        submitBtn.style.background = "var(--brand)";
-        submitBtn.style.boxShadow = "0 4px 15px var(--brand-glow)";
-    }
-
-    // 1. Show Loading State
-    timelineContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
-
-    openModal('correctionModal');
-
-    // 2. Fetch Live Multi-User History
-    serverCall('getJobTimeline', { jobId: jobId })
-        .then(res => {
-            if (res.success && res.history && res.history.length > 0) {
-                timelineContainer.innerHTML = res.history.map(ev => {
-                    // System messages (Pills)
-                    if (ev.actorRole === 'automation' || ev.type === 'system') {
-                        return `<div class="chat-bubble-sys">${ev.message} • ${ev.timestamp}</div>`;
-                    }
-                    
-                    // Identify if the message belongs to the current logged-in user
-                    const isMe = ev.actorName === globalUser.name.split(" ")[0];
-                    const bubbleClass = isMe ? "chat-bubble-user" : "chat-bubble-other";
-                    
-                    // If it's someone else, show their name and role in the group chat
-                    const senderTag = isMe ? '' : `
-                        <div class="chat-meta">
-                            <span class="chat-sender" style="color:var(--brand);">${ev.actorName} <span class="chat-role">${ev.actorRole}</span></span>
-                        </div>`;
-                    
-                    return `
-                    <div class="chat-bubble ${bubbleClass}">
-                        ${senderTag}
-                        <div>${ev.message}</div>
-                        <div class="chat-time" style="color:${isMe ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.4)'};">${ev.timestamp}</div>
-                    </div>`;
-                }).join('');
-                
-                // Auto-scroll to absolute bottom of chat
-                setTimeout(() => { timelineContainer.scrollTop = timelineContainer.scrollHeight; }, 50);
-            } else {
-                timelineContainer.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-size:12px; font-weight:600;">No messages yet. Say hello!</div>';
-            }
-        })
-        .catch(err => {
-            timelineContainer.innerHTML = `<div style="text-align:center; padding:40px; color:var(--danger); font-size:12px; font-weight:600;">Failed to load chat history.</div>`;
-        });
-}
-
-function submitCorrectionAction(btn) {
-    const jobId = document.getElementById('correctionJobId').value;
-    const mode = document.getElementById('correctionMode').value;
-    const noteText = document.getElementById('correctionNoteText').value.trim();
-    
-    if (!noteText) {
-        return showPopup("Please type a message before submitting.", "warning");
-    }
-
-    triggerBtnAnim(btn);
-
-    // Injecting the Actor details for the backend
-    const payload = {
-        jobId: jobId,
-        mode: mode,
-        message: noteText,
-        actorName: globalUser.name.split(" ")[0], // Just first name
-        actorRole: globalUser.role
-    };
-
-    serverCall('addJobTimelineEvent', payload)
-        .then(res => {
-            resetBtnAnim(btn);
-            if (res.success) {
-                document.getElementById('correctionNoteText').value = '';
-                try { playSound('success'); } catch(e){}
-                
-                // Instantly refresh the timeline without closing the modal
-                openCorrectionModal(jobId, 'note'); // Re-opens in neutral mode to refresh
-                
-                // Background refresh the main dashboard
-                initDashboard(globalUser.email, Memory.getToken(), null, true); 
-            } else {
-                showPopup("Failed: " + res.message, "error");
-            }
-        })
-        .catch(err => {
-            resetBtnAnim(btn);
-            showPopup("Network Error: " + err.message, "error");
-        });
-}
-
 // 🔥 CANCEL BUTTON LOGIC
 function cancelUpload() {
     closeModal('uploadProgressModal');
@@ -4586,6 +4536,35 @@ function retryLastUpload() {
     } else {
         showPopup("Cannot retry: No previous upload data found.", "error");
     }
+}
+
+function showToast(msg, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if(!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'tk-toast';
+    
+    let icon = '';
+    if(type === 'success') {
+        toast.style.borderLeftColor = 'var(--success)';
+        icon = `<svg width="22" height="22" stroke="var(--success)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path class="anim-check" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>`;
+    } else if (type === 'warning') {
+        toast.style.borderLeftColor = 'var(--accent)';
+        icon = `<svg width="22" height="22" stroke="var(--accent)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><line x1="26" y1="14" x2="26" y2="28"/><circle cx="26" cy="36" r="2" fill="var(--accent)" stroke="none"/></svg>`;
+    } else if (type === 'error') {
+        toast.style.borderLeftColor = 'var(--danger)';
+        icon = `<svg width="22" height="22" stroke="var(--danger)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path d="M17 17 L35 35 M35 17 L17 35"/></svg>`;
+    }
+    
+    toast.innerHTML = `${icon} <span>${msg}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 500); 
+    }, 5000); 
 }
 
 // =========================================================================================
@@ -4623,12 +4602,13 @@ function renderOperatorWorkspace() {
 
         if (job.status === 'Pending Revision') urgClass = 'urg-critical';
         
-        // 🔥 FIX 2: Dynamic Badge Radars
+       // 🔥 FIX 2: Dynamic Badge Radars mapped correctly to status
         let badgeClass = 'bg-warning';
         let pulseClass = '';
         if (job.status === 'Pending Revision') { badgeClass = 'bg-danger'; pulseClass = 'badge-pulse-revision'; }
         else if (job.status === 'Pending') { badgeClass = 'bg-warning'; pulseClass = 'badge-pulse-pending'; }
-        else if (job.status === 'Assigned' || job.status === 'In Progress') { badgeClass = 'bg-info'; pulseClass = 'badge-pulse-assigned'; }
+        else if (job.status === 'Assigned') { badgeClass = 'bg-purple'; pulseClass = ''; } // Purple, no pulse
+        else if (job.status === 'In Progress') { badgeClass = 'bg-info'; pulseClass = 'badge-pulse-assigned'; } // Blue Pulse means actively formatting
 
         // 🔥 FIX 3: Submission Date Formatting
         const submitDate = new Date(job.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -4653,68 +4633,138 @@ function renderOperatorWorkspace() {
     }).join('');
 }
 
-function selectWorkspaceJob(encodedJob) {
-    const job = JSON.parse(decodeURIComponent(encodedJob));
-    
-    // UI Switch: Hide Idle, Show Active workspace
-    document.getElementById('opIdleWorkspace').style.display = 'none';
-    document.getElementById('opActiveWorkspace').style.display = 'flex';
-    
-    // Highlight active card in left pane
-    document.querySelectorAll('.op-job-card').forEach(el => el.classList.remove('active'));
-    const activeCard = document.getElementById(`opCard_${job.id}`);
-    if(activeCard) activeCard.classList.add('active');
+// ==========================================
+// 🔥 CHAT ENGINE UX UPGRADES
+// ==========================================
 
-    // Populate Right Pane Header
-    document.getElementById('wsActiveJobId').value = job.id;
-    document.getElementById('wsJobId').innerText = job.id;
-    document.getElementById('wsInstName').innerText = `🏢 ${job.inst}`;
-    document.getElementById('wsJobDetails').innerText = job.subject ? `📄 ${job.subject} (${job.class})` : `📋 ${job.type} (${job.class})`;
-    
-    // Setup Live Countdown Timer
-    document.getElementById('wsDeadlineTimer').innerHTML = getDeadlineHTML(job.deadline, new Date().getTime());
-    
-    // Wire up Format App Button dynamically based on Job Type
-    const btnLaunch = document.getElementById('btnLaunchFormat');
-    let appUrl = job.subject ? "YOUR_PAPER_FORMAT_APP_URL" : (String(job.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
-    btnLaunch.onclick = () => { triggerBtnAnim(btnLaunch); window.open(`${appUrl}?jobId=${job.id}`); };
+// ==========================================
+// 💬 RESPONSIVE CHAT INPUT CONTROLLERS
+// ==========================================
 
-    // Fetch and Load the Group Chat directly into the workspace panel
-    const chatContainer = document.getElementById('wsChatContainer');
-    chatContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
-    
-    serverCall('getJobTimeline', { jobId: job.id })
+// Auto-resizes textarea smoothly up to 4 lines
+function handleChatTextarea(el) {
+    el.style.height = 'auto'; // Reset
+    let newHeight = el.scrollHeight;
+    if (newHeight > 100) newHeight = 100; // Caps at approximately 4 lines
+    el.style.height = newHeight + 'px';
+}
+
+// Intercepts the Enter key to Send instantly
+function handleChatKeypress(event, btnId) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Prevents a new line from forming
+        document.getElementById(btnId).click(); // Triggers the send button safely
+    }
+}
+
+// Reusable Silent Chat Fetcher (Smart Auto-Scroll & Flicker Prevention)
+function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
+    serverCall('getJobTimeline', { jobId: jobId })
         .then(res => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            // 1. Check if user is currently scrolled near the bottom
+            const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+            
             if (res.success && res.history && res.history.length > 0) {
-                chatContainer.innerHTML = res.history.map(ev => {
+                const newHtml = res.history.map(ev => {
                     if (ev.actorRole === 'automation' || ev.type === 'system') {
                         return `<div class="chat-bubble-sys">${ev.message} • ${ev.timestamp}</div>`;
                     }
-                    const isMe = ev.actorName === globalUser.name.split(" ")[0];
+                    
+                    const isMe = (ev.actorName === globalUser.name.split(" ")[0]) && (ev.actorRole === globalUser.role);
                     const bubbleClass = isMe ? "chat-bubble-user" : "chat-bubble-other";
                     const senderTag = isMe ? '' : `
                         <div class="chat-meta">
                             <span class="chat-sender" style="color:var(--brand);">${ev.actorName} <span class="chat-role">${ev.actorRole}</span></span>
                         </div>`;
                     
+                    const formattedMsg = String(ev.message).replace(/\n/g, '<br>');
+                    
                     return `
                     <div class="chat-bubble ${bubbleClass}">
                         ${senderTag}
-                        <div>${ev.message}</div>
+                        <div>${formattedMsg}</div>
                         <div class="chat-time" style="color:${isMe ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.4)'};">${ev.timestamp}</div>
                     </div>`;
                 }).join('');
                 
-                setTimeout(() => { chatContainer.scrollTop = chatContainer.scrollHeight; }, 50);
+                // 2. Only update DOM if a new message actually arrived
+                const prevCount = parseInt(container.getAttribute('data-msg-count') || "0");
+                if (prevCount !== res.history.length) {
+                    
+                    // 3. Play subtle ping if a new message arrived in the background
+                    if (isBackgroundPoll && prevCount > 0 && res.history.length > prevCount) {
+                        try { playSound('notification'); } catch(e){}
+                    }
+                    
+                    container.innerHTML = newHtml;
+                    container.setAttribute('data-msg-count', res.history.length);
+                    
+                    // 4. Smart Auto-Scroll
+                    if (isNearBottom || !isBackgroundPoll) {
+                        setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+                    }
+                }
             } else {
-                chatContainer.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-size:12px; font-weight:600;">No messages yet. Send a note to the teacher!</div>';
+                container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-size:12px; font-weight:600;">No messages yet. Say hello!</div>';
             }
         });
 }
 
+// --- OPERATOR DASHBOARD CHAT LOGIC ---
+
+function selectWorkspaceJob(encodedJob) {
+    const job = JSON.parse(decodeURIComponent(encodedJob));
+    
+    document.getElementById('opIdleWorkspace').style.display = 'none';
+    document.getElementById('opActiveWorkspace').style.display = 'flex';
+    
+    document.querySelectorAll('.op-job-card').forEach(el => el.classList.remove('active'));
+    const activeCard = document.getElementById(`opCard_${job.id}`);
+    if(activeCard) activeCard.classList.add('active');
+
+    document.getElementById('wsActiveJobId').value = job.id;
+    document.getElementById('wsJobId').innerText = job.id;
+    document.getElementById('wsInstName').innerText = `🏢 ${job.inst}`;
+    document.getElementById('wsJobDetails').innerText = job.subject ? `📄 ${job.subject} (${job.class})` : `📋 ${job.type} (${job.class})`;
+    
+    // Tying into the global 1s interval engine for live ticking
+    document.getElementById('wsDeadlineTimer').innerHTML = getDeadlineUI(job.deadline);
+    
+    // Wire up Format App Button dynamically based on Job Type
+    const btnLaunch = document.getElementById('btnLaunchFormat');
+    let appUrl = job.subject ? "YOUR_PAPER_FORMAT_APP_URL" : (String(job.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
+    
+    btnLaunch.onclick = () => { 
+        triggerBtnAnim(btnLaunch); 
+        
+        // 1. Tell Vercel the operator has actively started the engine
+        serverCall('updateJobStatus', { jobId: job.id, status: 'In Progress' })
+            .then(res => {
+                resetBtnAnim(btnLaunch);
+                if (res.success) {
+                    // 2. Status updated in DB! Launch the web app in a new tab
+                    window.open(`${appUrl}?jobId=${job.id}`);
+                    
+                    // 3. Silently trigger a local refresh to clear notification states
+                    initDashboard(globalUser.email, Memory.getToken(), null, true);
+                } else {
+                    showPopup("Failed to start job: " + res.message, "error");
+                }
+            })
+            .catch(err => {
+                resetBtnAnim(btnLaunch);
+                showPopup("Network Error: " + err.message, "error");
+            });
+    };
+}
+
 function submitWorkspaceChat(btn) {
     const jobId = document.getElementById('wsActiveJobId').value;
-    const noteText = document.getElementById('wsChatInput').value.trim();
+    const inputEl = document.getElementById('wsChatInput');
+    const noteText = inputEl.value.trim();
     if (!jobId || !noteText) return;
 
     triggerBtnAnim(btn);
@@ -4731,19 +4781,98 @@ function submitWorkspaceChat(btn) {
         .then(res => {
             resetBtnAnim(btn);
             if (res.success) {
-                document.getElementById('wsChatInput').value = '';
+                inputEl.value = '';
+                inputEl.style.height = 'auto'; // Shrink box back to 1 line
                 try { playSound('success'); } catch(e){}
                 
-                // Refresh just the chat container for high speed messaging
-                const encodedJob = encodeURIComponent(JSON.stringify({id: jobId, subject: true})); 
-                selectWorkspaceJob(encodedJob);
-                
-                // Silently refresh dashboard data in background
-                initDashboard(globalUser.email, Memory.getToken(), null, true); 
+                // 🔥 INSTANT UI REFRESH: Immediately fetch the new message for the sender
+                loadChatSilently(jobId, 'wsChatContainer');
+                                          
             } else showPopup("Failed: " + res.message, "error");
         })
         .catch(err => { resetBtnAnim(btn); showPopup("Network Error: " + err.message, "error"); });
 }
+
+// --- TEACHER / ADMIN MODAL CHAT LOGIC ---
+
+function openCorrectionModal(jobId, mode) {
+    document.getElementById('correctionJobId').value = jobId;
+    document.getElementById('correctionMode').value = mode;
+    
+    const inputEl = document.getElementById('correctionNoteText');
+    inputEl.value = ''; 
+    inputEl.style.height = 'auto'; // Reset height
+    
+    const titleText = document.getElementById('corrModalTitleText');
+    const descText = document.getElementById('corrModalDesc');
+    const submitBtn = document.getElementById('corrSubmitBtn');
+    const titleHeader = document.getElementById('corrModalTitle');
+    const timelineContainer = document.getElementById('jobTimelineContainer');
+
+    if (mode === 'revision') {
+        titleText.innerText = "Request Revision";
+        titleHeader.style.color = "var(--danger)";
+        descText.innerText = `Job ID: ${jobId} | This sends the job back to the operator.`;
+        submitBtn.style.background = "linear-gradient(135deg, var(--danger), #B91C1C)";
+        submitBtn.style.boxShadow = "0 4px 15px rgba(239, 68, 68, 0.4)";
+    } else {
+        titleText.innerText = "Group Communication";
+        titleHeader.style.color = "var(--brand)";
+        descText.innerText = `Job ID: ${jobId} | Visible to Admins, Teachers & Operators.`;
+        submitBtn.style.background = "var(--brand)";
+        submitBtn.style.boxShadow = "0 4px 15px var(--brand-glow)";
+    }
+
+    timelineContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
+
+    openModal('correctionModal');
+
+    // Trigger the silent fetch engine
+    loadChatSilently(jobId, 'jobTimelineContainer');
+}
+
+function submitCorrectionAction(btn) {
+    const jobId = document.getElementById('correctionJobId').value;
+    const mode = document.getElementById('correctionMode').value;
+    const inputEl = document.getElementById('correctionNoteText');
+    const noteText = inputEl.value.trim();
+    
+    if (!noteText) {
+        return showPopup("Please type a message before submitting.", "warning");
+    }
+
+    triggerBtnAnim(btn);
+
+    const payload = {
+        jobId: jobId,
+        mode: mode,
+        message: noteText,
+        actorName: globalUser.name.split(" ")[0],
+        actorRole: globalUser.role
+    };
+
+    serverCall('addJobTimelineEvent', payload)
+        .then(res => {
+            resetBtnAnim(btn);
+            if (res.success) {
+                inputEl.value = '';
+                inputEl.style.height = 'auto'; // Shrink box back to 1 line
+                try { playSound('success'); } catch(e){}
+                
+                // 🔥 INSTANT UI REFRESH: Immediately fetch the new message for the sender
+                loadChatSilently(jobId, 'jobTimelineContainer');
+                
+            } else {
+                showPopup("Failed: " + res.message, "error");
+            }
+        })
+        .catch(err => {
+            resetBtnAnim(btn);
+            showPopup("Network Error: " + err.message, "error");
+        });
+}
+
+
 
 </script>
 </body>
