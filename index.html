@@ -2196,12 +2196,8 @@ function requestNotificationPermission() {
 // 🔔 SMART ACTIONABLE NOTIFICATIONS ENGINE
 // ==========================================
 
-function handleNotificationClick(title, msg) {
-    const fullText = title + " " + msg;
-    
-    // Finds Job IDs dynamically
-    const jobMatch = fullText.match(/[A-Z0-9]+-(PPR|RC|AC|ID|CERT)-\d{2}-\d{4,}/i);
-    const jobId = jobMatch ? jobMatch[0].toUpperCase() : null;
+function handleNotificationClick(title, msg, refId) {
+    const jobId = refId ? String(refId).toUpperCase() : null;
     const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : '';
 
     const notifDropdown = document.getElementById('notifDropdown');
@@ -2257,8 +2253,10 @@ function renderNotifications(notifs) {
     list.innerHTML = localNotifications.map(n => {
         let safeTitle = (n.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
         let safeMsg = (n.msg || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        let safeRef = n.refId ? n.refId.replace(/'/g, "\\'") : '';
+        
         return `
-        <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};" onclick="handleNotificationClick('${safeTitle}', '${safeMsg}')">
+        <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};" onclick="handleNotificationClick('${safeTitle}', '${safeMsg}', '${safeRef}')">
             <div class="notif-title" style="color: ${n.isRead ? 'var(--text-muted)' : 'var(--brand)'};">${n.title || 'System Notice'}</div>
             <div class="notif-msg">${n.msg || ''}</div>
             <div class="notif-time">${n.time || 'Just now'}</div>
@@ -4793,7 +4791,6 @@ let jobDebounceTimer = null;
 function startSilentSyncEngine() {
     if (!window.supabaseInstance) return;
 
-    // 🔥 Authenticate WebSocket to bypass Row Level Security
     const sessionToken = Memory.getToken();
     if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
 
@@ -4802,21 +4799,29 @@ function startSilentSyncEngine() {
         realtimeChannels = [];
     }
 
-    // 1. Listen instantly for NEW NOTIFICATIONS
+    // 1. Listen instantly for NEW NOTIFICATIONS mapped to correct DB schema
     const notifChannel = window.supabaseInstance.channel('live-notifications')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
             const notif = payload.new;
             if (!globalUser) return;
             
-            if (notif.target_roles && (notif.target_roles.includes(globalUser.role) || notif.target_roles.includes(globalUser.id))) {
+            // Check if the notification belongs to this exact user ID
+            if (notif.user_id === globalUser.id) {
                 try { playSound('notification'); } catch(e){} 
-                const newNotif = { title: notif.title, msg: notif.message, time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), isRead: false };
+                
+                const newNotif = { 
+                    title: notif.title, 
+                    msg: notif.message, 
+                    time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
+                    isRead: false,
+                    refId: notif.reference_id // Store the job code for routing
+                };
                 localNotifications.unshift(newNotif);
                 renderNotifications(localNotifications);
             }
         }).subscribe();
         
-    // 2. Listen instantly for NEW CHAT MESSAGES (From New Table)
+    // 2. Listen instantly for NEW CHAT MESSAGES 
     const chatChannel = window.supabaseInstance.channel('live-chats')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications' }, payload => {
             const newMsg = payload.new;
@@ -4829,11 +4834,10 @@ function startSilentSyncEngine() {
             else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
         }).subscribe();
 
-    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES (Failsafe)
+    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES 
     const jobsChannel = window.supabaseInstance.channel('live-jobs')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
             
-            // 🔥 FALLBACK: If the job updates in the background, refresh the chat silently just in case!
             const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
             const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
             const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
@@ -4846,7 +4850,6 @@ function startSilentSyncEngine() {
 
             if (globalUser) {
                 const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
-                // Only refresh the main dashboard if the user isn't actively typing
                 if (activeTag !== 'input' && activeTag !== 'textarea') {
                     if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
                     jobDebounceTimer = setTimeout(() => {
