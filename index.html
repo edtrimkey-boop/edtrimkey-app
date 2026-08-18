@@ -4834,17 +4834,21 @@ const RealtimeManager = {
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 const notif = payload.new;
                 
-                // 🔥 THE FIX: Postgres sends arrays as raw strings over WebSockets (e.g., "{operator,admin}")
-                // Converting everything to lowercase strings prevents the Javascript Array crash!
+                // 1. Convert PostgreSQL Arrays to lowercase strings to prevent JS crashes
                 const targetUsersStr = String(notif.target_users || "").toLowerCase();
                 const targetRolesStr = String(notif.target_roles || "").toLowerCase();
                 const safeUserRole = String(globalUser.role).trim().toLowerCase();
                 const safeUserId = String(globalUser.id).toLowerCase();
 
+                // 2. Role & User Matching
                 const isTargetedUser = targetUsersStr.includes(safeUserId);
                 const isTargetedRole = targetRolesStr.includes(safeUserRole);
-                const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
+                
+                // 🔥 THE FIX: Global Workers (Operators/Admins) bypass the Institute Lockdown!
+                const isGlobalWorker = ['operator', 'system admin', 'super admin'].includes(safeUserRole);
+                const isMyInstitute  = !notif.institute_id || isGlobalWorker || notif.institute_id === globalUser.instId;
 
+                // 3. Final Security Gate
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
                     try { playSound('notification'); } catch(e){} 
                     
