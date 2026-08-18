@@ -2200,27 +2200,55 @@ function handleNotificationClick(title, msg, refId) {
     const jobId = refId ? String(refId).toUpperCase() : null;
     const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : '';
 
+    // 🔥 1. INSTANTLY MARK AS READ
+    let hash = (String(title || "") + String(msg || "")).substring(0, 50);
+    let readHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    if (!readHashes.includes(hash)) {
+        readHashes.push(hash);
+        localStorage.setItem('read_notif_hashes', JSON.stringify(readHashes));
+        
+        // Update local array and refresh the UI bell
+        let targetNotif = localNotifications.find(n => (String(n.title || "") + String(n.msg || "")).substring(0, 50) === hash);
+        if (targetNotif) targetNotif.isRead = true;
+        renderNotifications(localNotifications);
+    }
+
+    // Close the dropdown cleanly
     const notifDropdown = document.getElementById('notifDropdown');
     if (notifDropdown) notifDropdown.classList.remove('active');
 
-    if (jobId) {
-        if (userRole === 'operator') {
-            switchTab('op-workspace');
-            setTimeout(() => {
-                const card = document.getElementById('opCard_' + jobId);
-                if (card) {
-                    card.click();
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else { showPopup(`Job ${jobId} is no longer active in your queue.`, "warning"); }
-            }, 400);
-        } else {
-            if (jobId.includes('-PPR-')) switchTab('papers');
-            else switchTab('documents');
-            
-            setTimeout(() => { openCorrectionModal(jobId, 'note'); }, 500);
-        }
+    // 🔥 2. SMART ROUTING: If it's a Broadcast (SYS-ALERT) or has no Job ID
+    if (!jobId || jobId === 'SYS-ALERT') {
+        document.getElementById('customAlertTitle').innerText = title || "System Alert";
+        document.getElementById('customAlertTitle').style.color = "var(--brand)";
+        document.getElementById('customAlertMsg').innerText = msg;
+        document.getElementById('customAlertIcon').innerHTML = `
+            <svg class="anim-icon" stroke="var(--brand)" viewBox="0 0 52 52">
+                <circle class="anim-circle" cx="26" cy="26" r="25"/>
+                <circle cx="26" cy="18" r="3" fill="var(--brand)" stroke="none"/>
+                <line x1="26" y1="24" x2="26" y2="36" style="stroke-width:4; stroke-linecap:round;"/>
+            </svg>`;
+        openModal('customAlert');
+        return;
+    }
+
+    // 🔥 3. SMART ROUTING: Job Specific (Chats/Assignments)
+    if (userRole === 'operator') {
+        switchTab('op-workspace');
+        setTimeout(() => {
+            const card = document.getElementById('opCard_' + jobId);
+            if (card) {
+                card.click();
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else { 
+                showPopup(`Job ${jobId} is no longer active in your queue.`, "warning"); 
+            }
+        }, 400);
     } else {
-        showPopup(title + ": " + msg, "info");
+        if (jobId.includes('-PPR-')) switchTab('papers');
+        else switchTab('documents');
+
+        setTimeout(() => { openCorrectionModal(jobId, 'note'); }, 500);
     }
 }
 
@@ -4509,9 +4537,13 @@ function showToast(msg, type = 'success') {
     } else if (type === 'error') {
         toast.style.borderLeftColor = 'var(--danger)';
         icon = `<svg width="22" height="22" stroke="var(--danger)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path d="M17 17 L35 35 M35 17 L17 35"/></svg>`;
+    } else if (type === 'info') {
+        // 🔥 NEW: Sleek Blue Info style for incoming Broadcasts/Alerts
+        toast.style.borderLeftColor = 'var(--brand)';
+        icon = `<svg width="22" height="22" stroke="var(--brand)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><circle cx="26" cy="18" r="2" fill="var(--brand)" stroke="none"/><line x1="26" y1="24" x2="26" y2="36"/></svg>`;
     }
     
-    toast.innerHTML = `${icon} <span>${msg}</span>`;
+    toast.innerHTML = `${icon} <div style="display:flex; flex-direction:column;">${msg}</div>`;
     container.appendChild(toast);
     
     setTimeout(() => toast.classList.add('show'), 10);
@@ -4863,6 +4895,10 @@ const RealtimeManager = {
                     console.log("✅ NOTIFICATION MATCHED! RINGING BELL...");
                     
                     try { playSound('notification'); } catch(e){ console.error("Audio blocked by browser."); } 
+                    
+                    // 🔥 NEW: Trigger the Live Toast Popup
+                    let shortMsg = notif.message.length > 45 ? notif.message.substring(0, 45) + "..." : notif.message;
+                    showToast(`<span style="font-weight:800; font-size:13px;">${notif.title}</span><span style="font-size:11px; font-weight:600; color:var(--text-muted); margin-top:2px;">${shortMsg}</span>`, 'info');
                     
                     const newNotif = { 
                         title: notif.title, 
