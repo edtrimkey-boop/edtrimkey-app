@@ -4641,23 +4641,28 @@ function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
                 }).join('');
                 
                 const prevCount = parseInt(container.getAttribute('data-msg-count') || "0");
-                if (prevCount !== res.history.length) {
-                    
-                    // 🔥 FIX 3: SOUND LOGIC. Do not chime if *I* am the one who sent the last message!
-                    const lastMsg = res.history[res.history.length - 1];
-                    const iSentLast = (lastMsg.actorName === globalUser.name.split(" ")[0]) && (lastMsg.actorRole === globalUser.role);
-                    
-                    if (isBackgroundPoll && prevCount > 0 && res.history.length > prevCount && !iSentLast) {
-                        try { playSound('notification'); } catch(e){}
-                    }
-                    
-                    container.innerHTML = newHtml;
-                    container.setAttribute('data-msg-count', res.history.length);
-                    
-                    if (isNearBottom || !isBackgroundPoll) {
-                        setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
-                    }
-                }
+                        
+                        // 🔥 THE FIX: Always force a render if a "Sending..." bubble is stuck on screen
+                        const hasOptimistic = container.innerHTML.includes('Sending...');
+
+                        if (prevCount !== res.history.length || hasOptimistic) {
+                            
+                            // SOUND LOGIC: Do not chime if *I* am the one who sent the last message!
+                            const lastMsg = res.history[res.history.length - 1];
+                            const iSentLast = (lastMsg.actorName === globalUser.name.split(" ")[0]) && (lastMsg.actorRole === globalUser.role);
+                            
+                            if (isBackgroundPoll && prevCount > 0 && res.history.length > prevCount && !iSentLast) {
+                                try { playSound('notification'); } catch(e){}
+                            }
+                            
+                            container.innerHTML = newHtml;
+                            container.setAttribute('data-msg-count', res.history.length);
+                            
+                            // Scroll to bottom if we are active
+                            if (isNearBottom || !isBackgroundPoll || hasOptimistic) {
+                                setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+                            }
+                        }
             } else {
                 container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-size:12px; font-weight:600;">No messages yet. Say hello!</div>';
             }
@@ -4719,13 +4724,12 @@ function submitWorkspaceChat(btn) {
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
             if (res.success) {
-                // Silently pull the real message to replace the "Sending..." bubble
-                loadChatSilently(jobId, 'wsChatContainer');
+                // 🔥 THE FIX: Wait exactly 500ms for the DB to sync before pulling the real message
+                setTimeout(() => { loadChatSilently(jobId, 'wsChatContainer'); }, 500);
             } else showPopup("Failed: " + res.message, "error");
         })
         .catch(err => { showPopup("Network Error: " + err.message, "error"); });
 }
-
 // --- TEACHER / ADMIN MODAL CHAT LOGIC ---
 
 function openCorrectionModal(jobId, mode) {
@@ -4782,7 +4786,8 @@ function submitCorrectionAction(btn) {
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
             if (res.success) {
-                loadChatSilently(jobId, 'jobTimelineContainer');
+                // 🔥 THE FIX: Wait exactly 500ms for the DB to sync
+                setTimeout(() => { loadChatSilently(jobId, 'jobTimelineContainer'); }, 500);
             } else showPopup("Failed: " + res.message, "error");
         })
         .catch(err => { showPopup("Network Error: " + err.message, "error"); });
@@ -4829,13 +4834,15 @@ const RealtimeManager = {
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 const notif = payload.new;
                 
-                // Bulletproof array mapping to prevent JS crashes
-                const safeUsers = Array.isArray(notif.target_users) ? notif.target_users : [];
-                const safeRoles = Array.isArray(notif.target_roles) ? notif.target_roles : [];
-                
-                const isTargetedUser = safeUsers.includes(globalUser.id);
+                // 🔥 THE FIX: Postgres sends arrays as raw strings over WebSockets (e.g., "{operator,admin}")
+                // Converting everything to lowercase strings prevents the Javascript Array crash!
+                const targetUsersStr = String(notif.target_users || "").toLowerCase();
+                const targetRolesStr = String(notif.target_roles || "").toLowerCase();
                 const safeUserRole = String(globalUser.role).trim().toLowerCase();
-                const isTargetedRole = safeRoles.some(r => String(r).toLowerCase() === safeUserRole);
+                const safeUserId = String(globalUser.id).toLowerCase();
+
+                const isTargetedUser = targetUsersStr.includes(safeUserId);
+                const isTargetedRole = targetRolesStr.includes(safeUserRole);
                 const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
 
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
