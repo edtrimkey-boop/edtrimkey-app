@@ -4799,14 +4799,19 @@ const RealtimeManager = {
     init() {
         if (!window.supabaseInstance || !globalUser) return;
 
-        // 1. Authenticate WebSocket to bypass RLS securely
+        // 🔥 FIX 1: Set auth globally on the headers to ensure WebSockets never connect anonymously
         const sessionToken = Memory.getToken();
-        if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
+        if (sessionToken) {
+            window.supabaseInstance.realtime.setAuth(sessionToken);
+            window.supabaseInstance.realtime.headers['Authorization'] = `Bearer ${sessionToken}`;
+        }
 
         this.disconnectAll(); 
         
-        // 2. Subscribe to Scoped Channels
-        this.subscribeSystemChannels();
+        // Use a tiny timeout to guarantee Supabase has processed the token before connecting
+        setTimeout(() => {
+            this.subscribeSystemChannels();
+        }, 100);
     },
 
     disconnectAll() {
@@ -4825,10 +4830,13 @@ const RealtimeManager = {
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 const notif = payload.new;
                 
-                // 🔥 THE FIX: Bulletproof Case-Insensitive Security Filter
-                const isTargetedUser = notif.target_users && notif.target_users.includes(globalUser.id);
+                // 🔥 FIX 2: Ensure empty arrays don't crash the filter
+                const safeUsers = Array.isArray(notif.target_users) ? notif.target_users : [];
+                const safeRoles = Array.isArray(notif.target_roles) ? notif.target_roles : [];
+                
+                const isTargetedUser = safeUsers.includes(globalUser.id);
                 const safeUserRole = String(globalUser.role).trim().toLowerCase();
-                const isTargetedRole = notif.target_roles && notif.target_roles.some(r => String(r).toLowerCase() === safeUserRole);
+                const isTargetedRole = safeRoles.some(r => String(r).toLowerCase() === safeUserRole);
                 const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
 
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
@@ -4856,7 +4864,12 @@ const RealtimeManager = {
             })
             .subscribe((status) => {
                 // Auto-Recovery: If internet drops and reconnects, fetch jobs to catch up!
-                if (status === 'SUBSCRIBED') this.triggerRecoveryFetch();
+                if (status === 'SUBSCRIBED') {
+                    console.log("🔥 SYSTEM CHANNEL ONLINE");
+                    this.triggerRecoveryFetch();
+                } else if (status === 'CHANNEL_ERROR') {
+                    console.error("❌ SYSTEM CHANNEL ERROR: Supabase rejected the connection.");
+                }
             });
     },
 
