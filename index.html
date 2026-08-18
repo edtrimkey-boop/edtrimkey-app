@@ -4832,25 +4832,34 @@ const RealtimeManager = {
             
             // 📡 LISTENER 1: In-App Notifications
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
+                console.log("🔔 INCOMING RAW NOTIFICATION:", payload.new); // LIVE DIAGNOSTIC
+                
                 const notif = payload.new;
                 
-                // 1. Convert PostgreSQL Arrays to lowercase strings to prevent JS crashes
-                const targetUsersStr = String(notif.target_users || "").toLowerCase();
-                const targetRolesStr = String(notif.target_roles || "").toLowerCase();
-                const safeUserRole = String(globalUser.role).trim().toLowerCase();
-                const safeUserId = String(globalUser.id).toLowerCase();
-
-                // 2. Role & User Matching
-                const isTargetedUser = targetUsersStr.includes(safeUserId);
-                const isTargetedRole = targetRolesStr.includes(safeUserRole);
+                // 1. Universal Parser (Handles both Arrays and Strings from Supabase)
+                let tUsers = Array.isArray(notif.target_users) ? notif.target_users : (typeof notif.target_users === 'string' ? notif.target_users.replace(/[{}]/g, '').split(',') : []);
+                let tRoles = Array.isArray(notif.target_roles) ? notif.target_roles : (typeof notif.target_roles === 'string' ? notif.target_roles.replace(/[{}]/g, '').split(',') : []);
                 
-                // 🔥 THE FIX: Global Workers (Operators/Admins) bypass the Institute Lockdown!
-                const isGlobalWorker = ['operator', 'system admin', 'super admin'].includes(safeUserRole);
+                // 2. Force everything to lowercase to prevent Case-Sensitive JS crashes
+                tUsers = tUsers.map(u => String(u).trim().toLowerCase());
+                tRoles = tRoles.map(r => String(r).trim().toLowerCase());
+                
+                const myId = String(globalUser.id).toLowerCase();
+                const myRole = String(globalUser.role).trim().toLowerCase();
+
+                // 3. Security Matching
+                const isTargetedUser = tUsers.includes(myId);
+                const isTargetedRole = tRoles.includes(myRole);
+                const isGlobalWorker = ['operator', 'system admin', 'super admin'].includes(myRole);
                 const isMyInstitute  = !notif.institute_id || isGlobalWorker || notif.institute_id === globalUser.instId;
 
-                // 3. Final Security Gate
+                console.log(`🔍 Match Logic -> TargetRole: ${isTargetedRole}, TargetUser: ${isTargetedUser}, MyInst: ${isMyInstitute}`);
+
+                // 4. The Final Gate
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
-                    try { playSound('notification'); } catch(e){} 
+                    console.log("✅ NOTIFICATION MATCHED! RINGING BELL...");
+                    
+                    try { playSound('notification'); } catch(e){ console.error("Audio blocked by browser."); } 
                     
                     const newNotif = { 
                         title: notif.title, 
@@ -4858,11 +4867,12 @@ const RealtimeManager = {
                         time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
                         isRead: false, refId: notif.reference_id 
                     };
+                    
                     localNotifications.unshift(newNotif);
                     renderNotifications(localNotifications);
                     
-                    // Trigger live UI update instantly
-                    this.triggerRecoveryFetch();
+                } else {
+                    console.log("🚫 NOTIFICATION IGNORED (Not intended for this user/role).");
                 }
             })
             
