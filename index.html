@@ -4695,9 +4695,12 @@ function selectWorkspaceJob(encodedJob) {
                 } else showPopup("Failed to start job: " + res.message, "error");
             }).catch(err => { resetBtnAnim(btnLaunch); showPopup("Network Error: " + err.message, "error"); });
     };
-
+  
     const chatContainer = document.getElementById('wsChatContainer');
     chatContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
+    
+    // 🔥 Connect to Private Chat Channel!
+    RealtimeManager.subscribeChat(job.id);
     loadChatSilently(job.id, 'wsChatContainer');
 }
 
@@ -4755,6 +4758,9 @@ function openCorrectionModal(jobId, mode) {
 
     timelineContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
     openModal('correctionModal');
+    
+    // 🔥 Connect to Private Chat Channel!
+    RealtimeManager.subscribeChat(jobId);
     loadChatSilently(jobId, 'jobTimelineContainer');
 }
 
@@ -4783,100 +4789,107 @@ function submitCorrectionAction(btn) {
 }
 
 // ==========================================
-// 🚀 SUPABASE REAL-TIME WEBSOCKET ENGINE
+// 🚀 ENTERPRISE REALTIME MANAGER
 // ==========================================
-let realtimeChannels = [];
-let jobDebounceTimer = null;
 
-function startSilentSyncEngine() {
-    if (!window.supabaseInstance) return;
+const RealtimeManager = {
+    channels: {},
+    debounceTimer: null,
+    
+    init() {
+        if (!window.supabaseInstance || !globalUser) return;
 
-    // Authenticate the WebSocket so it bypasses security blocks
-    const sessionToken = Memory.getToken();
-    if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
+        // 1. Authenticate WebSocket to bypass RLS securely
+        const sessionToken = Memory.getToken();
+        if (sessionToken) window.supabaseInstance.realtime.setAuth(sessionToken);
 
-    if (realtimeChannels.length > 0) {
-        realtimeChannels.forEach(ch => window.supabaseInstance.removeChannel(ch));
-        realtimeChannels = [];
-    }
-
-   // 1. Listen instantly for NEW NOTIFICATIONS mapped to roles OR precise users
-    const notifChannel = window.supabaseInstance.channel('live-notifications')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, payload => {
-            const notif = payload.new;
-            if (!globalUser) return;
-            
-            // 🔥 THE PUB/SUB FILTER: Does this notification belong to me or my role?
-            const isTargetedUser = notif.target_users && notif.target_users.includes(globalUser.id);
-            const isTargetedRole = notif.target_roles && notif.target_roles.includes(globalUser.role);
-            const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
-
-            // If it matches me, AND it belongs to my institute (or is global), trigger the alert!
-            if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
-                try { playSound('notification'); } catch(e){} 
-                
-                const newNotif = { 
-                    title: notif.title, 
-                    msg: notif.message, 
-                    time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
-                    isRead: false,
-                    refId: notif.reference_id 
-                };
-                localNotifications.unshift(newNotif);
-                renderNotifications(localNotifications);
-                
-                // Double-Sync: Pull the job queue silently!
-                if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
-                jobDebounceTimer = setTimeout(() => {
-                    initDashboard(globalUser.email, Memory.getToken(), null, true);
-                }, 1000);
-            }
-        }).subscribe((status) => console.log("Notifications Socket:", status));
+        this.disconnectAll(); 
         
-    // 2. Listen instantly for NEW CHAT MESSAGES 
-    const chatChannel = window.supabaseInstance.channel('live-chats')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications' }, payload => {
-            const newMsg = payload.new;
-            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
-            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
-            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
-            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
-            
-            if (opWorkspaceVisible && activeWsJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'wsChatContainer', true);
-            else if (modalVisible && activeCorrJobId === newMsg.job_code) loadChatSilently(newMsg.job_code, 'jobTimelineContainer', true);
-        }).subscribe((status) => console.log("Chat Socket:", status));
+        // 2. Subscribe to Scoped Channels
+        this.subscribeSystemChannels();
+    },
 
-    // 3. Listen instantly for NEW JOBS OR STATUS CHANGES 
-    const jobsChannel = window.supabaseInstance.channel('live-jobs')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, payload => {
-            if (globalUser) {
-                // 🔥 FIXED: Instantly refresh the dashboard. Removed the blocker so the Priority Queue updates seamlessly!
-                if(jobDebounceTimer) clearTimeout(jobDebounceTimer);
-                jobDebounceTimer = setTimeout(() => {
-                    initDashboard(globalUser.email, Memory.getToken(), null, true);
-                }, 500);
-            }
-        }).subscribe((status) => console.log("Jobs Socket:", status));
+    disconnectAll() {
+        Object.values(this.channels).forEach(ch => {
+            if (ch) window.supabaseInstance.removeChannel(ch);
+        });
+        this.channels = {};
+    },
 
-    realtimeChannels.push(notifChannel, chatChannel, jobsChannel);
+    // 🎯 MASTER SYSTEM CHANNEL (Handles Notifications & Job Queue updates)
+    subscribeSystemChannels() {
+        const channelName = `system-events-${globalUser.id}`;
+        
+        this.channels.system = window.supabaseInstance.channel(channelName)
+            // Listen for Notifications
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
+                const notif = payload.new;
+                
+                // 🔥 THE FIX: Bulletproof Case-Insensitive Security Filter
+                const isTargetedUser = notif.target_users && notif.target_users.includes(globalUser.id);
+                const safeUserRole = String(globalUser.role).trim().toLowerCase();
+                const isTargetedRole = notif.target_roles && notif.target_roles.some(r => String(r).toLowerCase() === safeUserRole);
+                const isMyInstitute  = !notif.institute_id || notif.institute_id === globalUser.instId;
 
-    // 4. 🔥 THE INVINCIBLE FAILSAFE POLLER
-    // If WebSockets drop out, this silently grabs new chats and new jobs every 8 seconds. 
-    // It is designed to NEVER interrupt your typing or close your modals.
-    if (window.failsafePoller) clearInterval(window.failsafePoller);
-    window.failsafePoller = setInterval(() => {
-        if (globalUser) {
+                if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
+                    try { playSound('notification'); } catch(e){} 
+                    
+                    const newNotif = { 
+                        title: notif.title, 
+                        msg: notif.message, 
+                        time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
+                        isRead: false, refId: notif.reference_id 
+                    };
+                    localNotifications.unshift(newNotif);
+                    renderNotifications(localNotifications);
+                    
+                    // Pull the newest jobs silently to update the queue
+                    this.triggerRecoveryFetch();
+                }
+            })
+            // Listen for Job Updates
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, (payload) => {
+                const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+                if (activeTag !== 'input' && activeTag !== 'textarea') {
+                    this.triggerRecoveryFetch();
+                }
+            })
+            .subscribe((status) => {
+                // Auto-Recovery: If internet drops and reconnects, fetch jobs to catch up!
+                if (status === 'SUBSCRIBED') this.triggerRecoveryFetch();
+            });
+    },
+
+    // 🎯 DYNAMIC CHAT CHANNEL (Only connects when viewing a specific job)
+    subscribeChat(jobId) {
+        if (!jobId) return;
+        
+        // Clean up previous chat channel to save memory and stay under free tier limits
+        if (this.channels.chat) window.supabaseInstance.removeChannel(this.channels.chat);
+
+        const channelName = `chat-${jobId}`;
+        this.channels.chat = window.supabaseInstance.channel(channelName)
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications', filter: `job_code=eq.${jobId}` }, (payload) => {
+                const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
+                const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
+                
+                if (opWorkspaceVisible) loadChatSilently(jobId, 'wsChatContainer', true);
+                else if (modalVisible) loadChatSilently(jobId, 'jobTimelineContainer', true);
+            })
+            .subscribe();
+    },
+
+    triggerRecoveryFetch() {
+        if(this.debounceTimer) clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
             initDashboard(globalUser.email, Memory.getToken(), null, true);
-            
-            const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
-            const activeWsJobId = document.getElementById('wsActiveJobId')?.value;
-            const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
-            const activeCorrJobId = document.getElementById('correctionJobId')?.value;
-            
-            if (opWorkspaceVisible && activeWsJobId) loadChatSilently(activeWsJobId, 'wsChatContainer', true);
-            else if (modalVisible && activeCorrJobId) loadChatSilently(activeCorrJobId, 'jobTimelineContainer', true);
-        }
-    }, 8000); 
+        }, 800);
+    }
+};
+
+// Bridge function to launch the manager
+function startSilentSyncEngine() {
+    RealtimeManager.init();
 }
 
 
