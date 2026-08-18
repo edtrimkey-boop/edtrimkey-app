@@ -1735,8 +1735,8 @@ let globalPayload = null;
 let popupTimer = null;
 let cropper = null;
 
-const SUPABASE_URL = "https://wjvoetdkkggyhtcoqqcj.supabase.co";
-const SUPABASE_KEY = "sb_publishable_2vqsHul_RHy2Xvbd0P-Isw_Pu-AmrpW";
+const SUPABASE_URL = "https://ypmnsgpohaaavbjdqjye.supabase.co";
+const SUPABASE_KEY = "sb_publishable_A-eYAoVILzcgjGWBbgTjuQ_gGPRHU-n";
 if (typeof window.supabaseInstance === 'undefined') {
   window.supabaseInstance = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false }
@@ -2147,10 +2147,10 @@ async function cropAndUpload() {
         const fileName = `profile_${safeCode}_${Date.now()}.jpg`;
         
         try {
-            const { data, error } = await window.supabaseInstance.storage.from('photo').upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
+            const { data, error } = await window.supabaseInstance.storage.from('profile_pics').upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
             if (error) throw error;
             
-            const { data: pubData } = window.supabaseInstance.storage.from('photo').getPublicUrl(fileName);
+            const { data: pubData } = window.supabaseInstance.storage.from('profile_pics').getPublicUrl(fileName);
             const url = pubData.publicUrl;
             
             globalUser.profilePic = url;
@@ -4789,48 +4789,47 @@ function submitCorrectionAction(btn) {
 }
 
 // ==========================================
-// 🚀 ENTERPRISE REALTIME MANAGER
+// 🚀 ENTERPRISE REALTIME MANAGER (V2 STABLE)
 // ==========================================
 
 const RealtimeManager = {
-    channels: {},
+    systemChannel: null,
+    chatChannel: null,
     debounceTimer: null,
     
     init() {
         if (!window.supabaseInstance || !globalUser) return;
 
-        // 🔥 FIX 1: Set auth globally on the headers to ensure WebSockets never connect anonymously
+        // 1. Securely bind the session to the v2 SDK
         const sessionToken = Memory.getToken();
         if (sessionToken) {
             window.supabaseInstance.realtime.setAuth(sessionToken);
-            window.supabaseInstance.realtime.headers['Authorization'] = `Bearer ${sessionToken}`;
         }
 
-        this.disconnectAll(); 
+        // 2. Disconnect any ghost channels to prevent memory leaks
+        if (this.systemChannel) window.supabaseInstance.removeChannel(this.systemChannel);
         
-        // Use a tiny timeout to guarantee Supabase has processed the token before connecting
-        setTimeout(() => {
-            this.subscribeSystemChannels();
-        }, 100);
+        // 3. Launch the Master WebSocket
+        this.subscribeSystemChannels();
     },
 
     disconnectAll() {
-        Object.values(this.channels).forEach(ch => {
-            if (ch) window.supabaseInstance.removeChannel(ch);
-        });
-        this.channels = {};
+        if (this.systemChannel) window.supabaseInstance.removeChannel(this.systemChannel);
+        if (this.chatChannel) window.supabaseInstance.removeChannel(this.chatChannel);
     },
 
     // 🎯 MASTER SYSTEM CHANNEL (Handles Notifications & Job Queue updates)
     subscribeSystemChannels() {
+        // Create a unique private topic for the logged-in user
         const channelName = `system-events-${globalUser.id}`;
         
-        this.channels.system = window.supabaseInstance.channel(channelName)
-            // Listen for Notifications
+        this.systemChannel = window.supabaseInstance.channel(channelName)
+            
+            // 📡 LISTENER 1: In-App Notifications
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 const notif = payload.new;
                 
-                // 🔥 FIX 2: Ensure empty arrays don't crash the filter
+                // Bulletproof array mapping to prevent JS crashes
                 const safeUsers = Array.isArray(notif.target_users) ? notif.target_users : [];
                 const safeRoles = Array.isArray(notif.target_roles) ? notif.target_roles : [];
                 
@@ -4851,24 +4850,25 @@ const RealtimeManager = {
                     localNotifications.unshift(newNotif);
                     renderNotifications(localNotifications);
                     
-                    // Pull the newest jobs silently to update the queue
+                    // Trigger live UI update instantly
                     this.triggerRecoveryFetch();
                 }
             })
-            // Listen for Job Updates
+            
+            // 📡 LISTENER 2: Live Job Queue
             .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, (payload) => {
-                const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
-                if (activeTag !== 'input' && activeTag !== 'textarea') {
-                    this.triggerRecoveryFetch();
-                }
+                // Focus traps removed! The queue will now update even if you are typing!
+                this.triggerRecoveryFetch();
             })
-            .subscribe((status) => {
+            
+            .subscribe((status, err) => {
+                // Live debugging directly in your Chrome Console
+                console.log("📡 Master Socket Status:", status);
+                if (err) console.error("❌ Socket Error:", err);
+                
                 // Auto-Recovery: If internet drops and reconnects, fetch jobs to catch up!
                 if (status === 'SUBSCRIBED') {
-                    console.log("🔥 SYSTEM CHANNEL ONLINE");
                     this.triggerRecoveryFetch();
-                } else if (status === 'CHANNEL_ERROR') {
-                    console.error("❌ SYSTEM CHANNEL ERROR: Supabase rejected the connection.");
                 }
             });
     },
@@ -4877,11 +4877,10 @@ const RealtimeManager = {
     subscribeChat(jobId) {
         if (!jobId) return;
         
-        // Clean up previous chat channel to save memory and stay under free tier limits
-        if (this.channels.chat) window.supabaseInstance.removeChannel(this.channels.chat);
+        // Clean up previous chat channel to stay under free tier limits
+        if (this.chatChannel) window.supabaseInstance.removeChannel(this.chatChannel);
 
-        const channelName = `chat-${jobId}`;
-        this.channels.chat = window.supabaseInstance.channel(channelName)
+        this.chatChannel = window.supabaseInstance.channel(`chat-${jobId}`)
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'job_communications', filter: `job_code=eq.${jobId}` }, (payload) => {
                 const opWorkspaceVisible = document.getElementById('view-op-workspace')?.classList.contains('active');
                 const modalVisible = document.getElementById('correctionModal')?.classList.contains('active');
@@ -4889,7 +4888,7 @@ const RealtimeManager = {
                 if (opWorkspaceVisible) loadChatSilently(jobId, 'wsChatContainer', true);
                 else if (modalVisible) loadChatSilently(jobId, 'jobTimelineContainer', true);
             })
-            .subscribe();
+            .subscribe((status) => console.log(`💬 Chat Socket [${jobId}]:`, status));
     },
 
     triggerRecoveryFetch() {
@@ -4904,8 +4903,6 @@ const RealtimeManager = {
 function startSilentSyncEngine() {
     RealtimeManager.init();
 }
-
-
 
 </script>
 </body>
