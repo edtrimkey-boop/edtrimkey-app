@@ -2239,7 +2239,8 @@ function renderNotifications(notifs) {
     let readHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
     let unreadCount = 0;
     localNotifications.forEach(n => {
-        let hash = (n.title + n.msg).substring(0,50); 
+        // 🔥 THE FIX: Safely cast to strings so 'null' doesn't crash the substring function
+        let hash = (String(n.title || "") + String(n.msg || "")).substring(0,50); 
         if (readHashes.includes(hash)) n.isRead = true;
         if (!n.isRead) unreadCount++;
     });
@@ -2268,7 +2269,9 @@ function renderNotifications(notifs) {
 
 function markAllNotificationsRead() {
     document.getElementById('notifBadge').style.display = 'none';
-    let readHashes = localNotifications.map(n => (n.title + n.msg).substring(0,50));
+    
+    // 🔥 THE FIX: Safe string casting here as well
+    let readHashes = localNotifications.map(n => (String(n.title || "") + String(n.msg || "")).substring(0,50));
     localStorage.setItem('read_notif_hashes', JSON.stringify(readHashes));
     
     localNotifications.forEach(n => n.isRead = true);
