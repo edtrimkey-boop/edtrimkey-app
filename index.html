@@ -57,8 +57,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
 
 /* === 3. TOP BAR & NOTIFICATIONS === */
 .main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0; overflow-x: hidden; overflow-y: auto; transition: all 0.3s ease; scroll-behavior: smooth; }
-.top-bar { height: 75px; flex-shrink: 0; background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-.brandRow { display: flex; align-items: center; gap: 12px; justify-content: center; }
+.top-bar { height: 75px; flex-shrink: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; padding: 0 30px;  position: sticky; top: 0; z-index: 100;}
 .logo { width: 40px; height: 40px; border-radius: 10px; box-shadow: 0 0 15px var(--brand-glow); object-fit: contain; }
 .brand { font-family: 'Overpass', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: 1px; display: flex; align-items: center; gap: 10px;}
 
@@ -194,14 +193,63 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
 .page-view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-@media (max-width: 768px) { 
-  .sidebar { position: fixed; transform: translateX(-100%); z-index: 3000;} 
-  .sidebar.open { transform: translateX(0); opacity: 1; pointer-events: auto;} 
-  .mobile-close-btn { display: block; } 
-  .desktop-only { display: none !important; }
-  .grid-2 { grid-template-columns: 1fr; }
-  .grid-kpis { grid-template-columns: repeat(2, 1fr); }
-  .checkbox-grid { grid-template-columns: repeat(2, 1fr); }
+/* === RESPONSIVE MOBILE CARDS (Matches Operator Layout) === */
+@media (max-width: 768px) {
+    .tk-sleek-table thead { display: none; }
+    .tk-sleek-table, .tk-sleek-table tbody, .tk-sleek-table tr, .tk-sleek-table td { display: block; width: 100%; }
+    
+    /* The Card Shell */
+    .tk-sleek-table tr { 
+        background: rgba(255,255,255,0.02) !important; 
+        border: 1px solid var(--border) !important; 
+        border-radius: 16px !important; 
+        margin-bottom: 15px; 
+        padding: 16px; 
+        display: flex; 
+        flex-direction: column; 
+        position: relative;
+    }
+    
+    /* Strip away table rendering */
+    .tk-sleek-table td { 
+        border: none !important; 
+        padding: 0 !important; 
+        background: transparent !important; 
+        text-align: left !important;
+    }
+
+    /* 1. Job ID & Status (Top Row) */
+    .tk-sleek-table td:nth-child(1) { margin-bottom: 12px; }
+    .tk-sleek-table td:nth-child(3) { position: absolute; right: 16px; top: 16px; }
+    
+    /* 2. Institute & Class Data */
+    .tk-sleek-table td:nth-child(2) { margin-bottom: 15px; }
+    .tk-sleek-table td:nth-child(2) b { font-size: 14px !important; display: block; margin-bottom: 4px; }
+    
+    /* 3. The Deadline Box */
+    .tk-sleek-table td:nth-child(4) { 
+        background: rgba(0,0,0,0.2); 
+        padding: 12px; 
+        border-radius: 8px; 
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* 4. The Action Buttons */
+    .mobile-action-row { 
+        flex-direction: row !important; 
+        justify-content: stretch !important; 
+        gap: 10px; 
+        width: 100%; 
+    }
+    .mobile-action-row > * { 
+        flex: 1; 
+        text-align: center; 
+        justify-content: center; 
+        padding: 12px 10px !important; /* Larger touch targets for mobile */
+    }
 }
 
 /* 🔥 PREMIUM SLIM EDGE-TO-EDGE GLASS HEADER */
@@ -378,10 +426,97 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
     .op-right-pane { width: 100%; height: 60vh; min-height: 500px; }
 }
 
+/* === THE UNIVERSAL LIQUID GLASS CLASS === */
+.liquid-glass {
+    background: rgba(255, 255, 255, 0); 
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%); /* This alone handles the perfect iOS look */
+    border: 1px solid rgba(255, 255, 255, 0.068); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.1); 
+    border-radius: 50px; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.liquid-glass:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* === THE TOP HEADER GRADIENT SCRIM === */
+.header-scrim {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(to bottom, rgba(11, 17, 30, 0.95) 0%, rgba(11, 17, 30, 0.5) 40%, transparent 100%);
+    pointer-events: none; /* Clicks pass right through it */
+    z-index: 90; /* Sits right behind the top-bar (100) */
+}
+
+/* === ULTRA-PREMIUM DATA GRID (FLAT LIST) === */
+.tk-table-wrapper { width: 100%; overflow-x: auto; padding: 5px; }
+.tk-sleek-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+.tk-sleek-table th { padding: 12px 20px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; border: none; text-align: left; letter-spacing: 0.5px; }
+
+/* The Premium Row Body */
+.tk-sleek-table td { 
+    padding: 18px 22px; 
+    background: linear-gradient(90deg, rgba(255,255,255,0.015) 0%, rgba(255,255,255,0.03) 100%);
+    border-top: 1px solid rgba(255,255,255,0.04); 
+    border-bottom: 1px solid rgba(255,255,255,0.04); 
+    font-size: 13px; font-weight: 600; color: white; vertical-align: middle; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+/* Rounded Edges for the Rows */
+.tk-sleek-table td:first-child { border-left: 1px solid rgba(255,255,255,0.04); border-radius: 16px 0 0 16px; }
+.tk-sleek-table td:last-child { border-right: 1px solid rgba(255,255,255,0.04); border-radius: 0 16px 16px 0; }
+
+/* The Hover Physics */
+.tk-sleek-table tbody tr { transition: all 0.3s ease; cursor: default; }
+.tk-sleek-table tbody tr:hover { transform: scale(1.005) translateY(-2px); box-shadow: 0 12px 35px rgba(0,0,0,0.4); }
+.tk-sleek-table tbody tr:hover td { background: linear-gradient(90deg, rgba(38,195,234,0.05) 0%, rgba(38,195,234,0.02) 100%); border-color: rgba(38,195,234,0.2); }
+
+/* Non-clickable info pills */
+.flat-pill { padding: 6px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
+
+/* Responsive Mobile Cards */
+@media (max-width: 768px) {
+    .tk-sleek-table thead { display: none; }
+    .tk-sleek-table, .tk-sleek-table tbody, .tk-sleek-table tr, .tk-sleek-table td { display: block; width: 100%; }
+    .tk-sleek-table tr { background: rgba(255,255,255,0.02) !important; border: 1px solid var(--border) !important; border-radius: 16px !important; margin-bottom: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+    .tk-sleek-table td { border: none !important; padding: 0; background: transparent !important; display: flex; justify-content: space-between; align-items: center; text-align: right;}
+    .tk-sleek-table td:before { content: attr(data-label); font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+    .mobile-action-row { flex-direction: row !important; justify-content: stretch !important; gap: 10px; margin-top: 10px; width: 100%; }
+    .mobile-action-row > * { flex: 1; text-align: center; justify-content: center; }
+}
+
 </style>
 </head>
 <body>
 
+  
+<!-- TRUE LIQUID REFRACTION ENGINE -->
+<svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+  <filter id="liquid-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    
+    <!-- 1. The Mathematical Lens Map (Neutral gray center, distorted edges) -->
+    <feImage href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cdefs%3E%3CradialGradient id='rg' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='100%25' stop-color='rgb(200,200,200)'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='256' height='256' fill='url(%23rg)'/%3E%3C/svg%3E" result="LENS_MAP" preserveAspectRatio="none"/>
+    
+    <!-- 2. Physically bend the BACKGROUND pixels (SourceGraphic in a backdrop-filter targets the background) -->
+    <feDisplacementMap in="SourceGraphic" in2="LENS_MAP" scale="30" xChannelSelector="R" yChannelSelector="G" result="BENT_PIXELS"/>
+    
+    <!-- 3. Frosted Polish (Blur & Saturation applied strictly to the bent background) -->
+    <feGaussianBlur in="BENT_PIXELS" stdDeviation="8" result="FROSTED"/>
+    <feColorMatrix in="FROSTED" type="saturate" values="1.6" />
+    
+  </filter>
+</svg>
+
+<!-- TOAST CONTAINER -->
 <div id="toastContainer"></div>
 <input type="file" id="profilePicInput" style="display:none;" accept="image/png, image/jpeg, image/jpg">
 
@@ -1090,9 +1225,10 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
 </div>
 
 <div class="main-wrapper">
+  <div class="header-scrim"></div>
   <header class="top-bar">
     <div class="brandRow">
-      <button class="btn-outline btn-icon" onclick="toggleSidebar()" style="border:none; font-size: 22px; color:white; background:rgba(255,255,255,0.05); margin-right: 5px;">☰</button>
+      <button class="liquid-glass btn-icon" onclick="toggleSidebar()" style="border:1px solid rgba(255,255,255,0.15); font-size: 22px; color:white; margin-right: 5px; width:45px; height:45px;">☰</button>
       <div class="brand" style="display: flex; align-items: center; gap: 12px;">
          <img id="headerInstLogo" src="" style="height:36px; width:36px; object-fit:contain; border-radius:8px; display:none; background:white; padding:2px;" />
          <span id="headerInstName" class="desktop-only" style="font-size: 18px; color: var(--text); font-weight: 800; letter-spacing: 0.5px; display:none;"></span>
@@ -1101,7 +1237,7 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
     </div>
     
     <div style="display:flex; align-items:center;">
-      <div class="notification-wrapper" onclick="toggleNotificationDropdown(event)" id="bellWrapper" style="display:none;">
+     <div class="liquid-glass notification-wrapper" onclick="toggleNotificationDropdown(event)" id="bellWrapper" style="display:none; width:45px; height:45px;">
          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
          <span class="notification-badge" id="notifBadge">0</span>
          
@@ -1116,7 +1252,7 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
          </div>
       </div>
 
-      <div class="user-profile-container" onclick="toggleProfileDropdown(event)" id="userHeaderInfo" style="display:none;">
+      <div class="liquid-glass user-profile-container" onclick="toggleProfileDropdown(event)" id="userHeaderInfo" style="display:none; padding: 6px 16px 6px 6px;">
         <div class="avatar-circle" id="userAvatar">?</div>
         <div class="desktop-only" style="display: flex; flex-direction: column; text-align: left;">
           <span style="font-size: 13px; font-weight: 800; color: var(--text);" id="userNameDisplay">Loading...</span>
@@ -1234,13 +1370,14 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
       </div>
     </div>
 
+    <!-- DOCUMENT JOBS QUEUE -->
     <div id="view-documents" class="page-view">
       <div class="panel">
         <div class="panel-header"><h3>Document Jobs Queue</h3></div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
-          <select id="doc-inst-filter" class="filter-select sys-admin" style="display:none;" onchange="applyFilters()"></select>
+          <select id="doc-inst-filter" class="filter-select" style="display:none;" onchange="applyFilters()"><option value="all">All Institutes</option></select>
+          <select id="doc-class-filter" class="filter-select" onchange="applyFilters()"><option value="all">All Classes</option></select>
           <select id="doc-session-filter" class="filter-select" onchange="applyFilters()"></select>
-          <select id="doc-exam-filter" class="filter-select" onchange="applyFilters()"></select>
           <select id="doc-type-filter" class="filter-select" onchange="applyFilters()"></select>
           <select id="doc-status-filter" class="filter-select" onchange="applyFilters()"></select>
         </div>
@@ -1248,13 +1385,14 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
       </div>
     </div>
 
+    <!-- PAPER JOBS QUEUE -->
     <div id="view-papers" class="page-view">
       <div class="panel">
         <div class="panel-header"><h3>Paper Jobs Queue</h3></div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
-          <select id="paper-inst-filter" class="filter-select sys-admin" style="display:none;" onchange="applyFilters()"></select>
+          <select id="paper-inst-filter" class="filter-select" style="display:none;" onchange="applyFilters()"><option value="all">All Institutes</option></select>
+          <select id="paper-class-filter" class="filter-select" onchange="applyFilters()"><option value="all">All Classes</option></select>
           <select id="paper-session-filter" class="filter-select" onchange="applyFilters()"></select>
-          <select id="paper-exam-filter" class="filter-select" onchange="applyFilters()"></select>
           <select id="paper-subject-filter" class="filter-select" onchange="applyFilters()"></select>
           <select id="paper-status-filter" class="filter-select" onchange="applyFilters()"></select>
         </div>
@@ -1848,16 +1986,21 @@ window.onload = () => {
 // ==========================================
 function getDeadlineHTML(deadlineStr, nowTime) {
     let safeDateStr = deadlineStr.replace(' ', 'T');
-    if (!safeDateStr.endsWith('Z')) {
-        safeDateStr += 'Z';
-    }
+    if (!safeDateStr.endsWith('Z')) safeDateStr += 'Z';
 
     const deadTime = new Date(safeDateStr).getTime();
     const diff = deadTime - nowTime;
 
+    // 🔥 FIX: Stop ticking if the time is negative
+    if (diff < 0) {
+        return `<div style="font-size:11px; font-weight:800; color:var(--danger); line-height:1.4; white-space:nowrap;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    DEADLINE PASSED
+                </div>`;
+    }
+
     let color = "#10b981"; 
-    if (diff < 0) color = "#991b1b"; 
-    else if (diff <= 12 * 3600000) color = "#ef4444"; 
+    if (diff <= 12 * 3600000) color = "#ef4444"; 
     else if (diff <= 24 * 3600000) color = "#f59e0b"; 
 
     const dObj = new Date(safeDateStr);
@@ -1869,8 +2012,7 @@ function getDeadlineHTML(deadlineStr, nowTime) {
     const hours = Math.floor(absDiff / (1000 * 60 * 60));
     const mins = Math.floor((absDiff % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((absDiff % (1000 * 60)) / 1000);
-    const sign = diff < 0 ? "-" : "";
-    const countStr = `${sign}${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const countStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
     return `<div style="font-size:11px; font-weight:700; color:${color}; line-height:1.4; white-space:nowrap;">
                 <div>⏱ Due: ${countStr}</div>
@@ -2885,125 +3027,122 @@ function getSessionFromDate(dateStr) {
   let m = d.getMonth(); return m >= 3 ? y + "-" + (y+1) : (y-1) + "-" + y;
 }
 
+// ==========================================
+// 1. THE BULLETPROOF FILTER POPULATOR
+// ==========================================
 function populateFilters() {
   if(!globalPayload) return;
   const userRole = String(globalUser.role).trim().toLowerCase();
-  const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
-  let docSessions = new Set(), docExams = new Set(), docTypes = new Set(), docStatuses = new Set(), docInsts = new Set();
-  let paperSessions = new Set(), paperExams = new Set(), paperSubjects = new Set(), paperStatuses = new Set(), paperInsts = new Set();
-  let studentClasses = new Set();
+  const showInstFilter = (userRole === "super admin" || userRole === "system admin" || userRole === "all" || userRole === "operator");
+
+  let docSessions = new Set(), docExams = new Set(), docTypes = new Set(), docStatuses = new Set(), docInsts = new Set(), docClasses = new Set();
+  let paperSessions = new Set(), paperExams = new Set(), paperSubjects = new Set(), paperStatuses = new Set(), paperInsts = new Set(), paperClasses = new Set();
   
   let rawDocs = Array.isArray(globalPayload.data?.docs) ? globalPayload.data.docs : [];
   rawDocs.forEach(r => {
     if(r.date) docSessions.add(getSessionFromDate(r.date));
-    if(r.exam && r.exam.trim() !== "-" && r.exam.trim() !== "") docExams.add(r.exam.trim());
-    if(r.type && r.type.trim() !== "") docTypes.add(r.type.trim());
-    if(r.status && r.status.trim() !== "") docStatuses.add(r.status.trim());
-    if(isSuperAdmin && r.inst) docInsts.add(r.inst.trim());
+    if(r.exam && String(r.exam).trim() !== "-") docExams.add(String(r.exam).trim());
+    if(r.type) docTypes.add(String(r.type).trim());
+    if(r.status) docStatuses.add(String(r.status).trim());
+    if(r.class) docClasses.add(String(r.class).trim());
+    if(showInstFilter && r.inst) docInsts.add(String(r.inst).trim());
   });
+  
   let rawPapers = Array.isArray(globalPayload.data?.papers) ? globalPayload.data.papers : [];
   rawPapers.forEach(r => {
     if(r.date) paperSessions.add(getSessionFromDate(r.date));
-    if(r.exam && r.exam.trim() !== "-" && r.exam.trim() !== "") paperExams.add(r.exam.trim());
-    if(r.subject && r.subject.trim() !== "-" && r.subject.trim() !== "") paperSubjects.add(r.subject.trim());
-    if(r.status && r.status.trim() !== "") paperStatuses.add(r.status.trim());
-    if(isSuperAdmin && r.inst) paperInsts.add(r.inst.trim());
+    if(r.exam && String(r.exam).trim() !== "-") paperExams.add(String(r.exam).trim());
+    if(r.subject) paperSubjects.add(String(r.subject).trim());
+    if(r.status) paperStatuses.add(String(r.status).trim());
+    if(r.class) paperClasses.add(String(r.class).trim());
+    if(showInstFilter && r.inst) paperInsts.add(String(r.inst).trim());
   });
-  let rawStudents = Array.isArray(globalPayload.data?.instStudents) ? globalPayload.data.instStudents : [];
-  rawStudents.forEach(s => { if(s[2]) studentClasses.add(String(s[2]).trim()); });
-  const buildOptions = (set, defaultText) => { 
-      return "<option value='all'>[ " + defaultText + " ]</option>" + Array.from(set).sort().map(val => "<option value='" + val + "'>" + val + "</option>").join('');
+
+  const updateDropdown = (id, set, defaultText) => {
+      let el = document.getElementById(id);
+      if(el) {
+          let currentVal = el.value || 'all'; 
+          let html = `<option value='all'>[ ${defaultText} ]</option>`;
+          Array.from(set).sort().forEach(val => {
+              if(val === "") return;
+              let safeVal = String(val).replace(/"/g, "&quot;");
+              let isSelected = (String(val).trim().toLowerCase() === String(currentVal).trim().toLowerCase()) ? "selected" : "";
+              html += `<option value="${safeVal}" ${isSelected}>${val}</option>`;
+          });
+          el.innerHTML = html;
+      }
   };
 
-  let dsFilter = document.getElementById('doc-session-filter'), deFilter = document.getElementById('doc-exam-filter');
-  let dtFilter = document.getElementById('doc-type-filter'), dStatFilter = document.getElementById('doc-status-filter'), dInstFilter = document.getElementById('doc-inst-filter');
-  let psFilter = document.getElementById('paper-session-filter'), peFilter = document.getElementById('paper-exam-filter');
-  let pSubFilter = document.getElementById('paper-subject-filter'), pStatFilter = document.getElementById('paper-status-filter'), pInstFilter = document.getElementById('paper-inst-filter');
-  let scFilter = document.getElementById('student-class-filter');
+  updateDropdown('doc-session-filter', docSessions, "All Sessions");
+  updateDropdown('doc-type-filter', docTypes, "All Types");
+  updateDropdown('doc-status-filter', docStatuses, "All Statuses");
+  updateDropdown('doc-class-filter', docClasses, "All Classes");
   
-  if(dsFilter) dsFilter.innerHTML = buildOptions(docSessions, "All Sessions");
-  if(deFilter) deFilter.innerHTML = buildOptions(docExams, "All Exams");
-  if(dtFilter) dtFilter.innerHTML = buildOptions(docTypes, "All Types");
-  if(dStatFilter) dStatFilter.innerHTML = buildOptions(docStatuses, "All Statuses");
-  if(dInstFilter && isSuperAdmin) { dInstFilter.innerHTML = buildOptions(docInsts, "All Institutes"); dInstFilter.style.display = "inline-block"; }
-  
-  if(psFilter) psFilter.innerHTML = buildOptions(paperSessions, "All Sessions");
-  if(peFilter) peFilter.innerHTML = buildOptions(paperExams, "All Exams/Types");
-  if(pSubFilter) pSubFilter.innerHTML = buildOptions(paperSubjects, "All Subjects");
-  if(pStatFilter) pStatFilter.innerHTML = buildOptions(paperStatuses, "All Statuses");
-  if(pInstFilter && isSuperAdmin) { pInstFilter.innerHTML = buildOptions(paperInsts, "All Institutes"); pInstFilter.style.display = "inline-block"; }
-  
-  if(scFilter) { scFilter.innerHTML = buildOptions(studentClasses, "All Classes"); }
+  updateDropdown('paper-session-filter', paperSessions, "All Sessions");
+  updateDropdown('paper-subject-filter', paperSubjects, "All Subjects");
+  updateDropdown('paper-status-filter', paperStatuses, "All Statuses");
+  updateDropdown('paper-class-filter', paperClasses, "All Classes");
 
-  if(isSuperAdmin && globalPayload.superAdmin) {
-    let instStatuses = new Set(), instPlans = new Set();
-    let billInsts = new Set(), billServices = new Set(), billModes = new Set(), billStatuses = new Set(), billSessions = new Set();
-    let opRoles = new Set(), opStatuses = new Set();
-
-    let saInsts = Array.isArray(globalPayload.superAdmin.institutes) ? globalPayload.superAdmin.institutes : [];
-    saInsts.forEach(r => { if(r.status) instStatuses.add(r.status.trim()); if(r.plan) instPlans.add(r.plan.trim()); });
-    
-    let saTxns = Array.isArray(globalPayload.superAdmin.transactions) ? globalPayload.superAdmin.transactions : [];
-    saTxns.forEach(r => {
-      if(r.inst) billInsts.add(r.inst.trim()); if(r.service) billServices.add(r.service.trim());
-      if(r.mode) billModes.add(r.mode.trim()); if(r.status) billStatuses.add(r.status.trim()); if(r.date) billSessions.add(getSessionFromDate(r.date));
-    });
-    let saOps = Array.isArray(globalPayload.superAdmin.operatorList) ? globalPayload.superAdmin.operatorList : [];
-    saOps.forEach(r => { if(r.role) opRoles.add(r.role.trim()); if(r.status) opStatuses.add(r.status.trim()); });
-    let isFilter = document.getElementById('inst-status-filter'), ipFilter = document.getElementById('inst-plan-filter');
-    if(isFilter) isFilter.innerHTML = buildOptions(instStatuses, "All Statuses");
-    if(ipFilter) ipFilter.innerHTML = buildOptions(instPlans, "All Plans");
-    let biFilter = document.getElementById('bill-inst-filter'), bsFilter = document.getElementById('bill-service-filter');
-    let bmFilter = document.getElementById('bill-mode-filter'), bStatFilter = document.getElementById('bill-status-filter'), bSessFilter = document.getElementById('bill-session-filter');
-    if(biFilter) biFilter.innerHTML = buildOptions(billInsts, "All Institutes");
-    if(bsFilter) bsFilter.innerHTML = buildOptions(billServices, "All Services");
-    if(bmFilter) bmFilter.innerHTML = buildOptions(billModes, "All Modes");
-    if(bStatFilter) bStatFilter.innerHTML = buildOptions(billStatuses, "All Statuses");
-    if(bSessFilter) bSessFilter.innerHTML = buildOptions(billSessions, "All Sessions");
-    
-    let oRoleFilter = document.getElementById('op-role-filter'), oStatFilter = document.getElementById('op-status-filter');
-    if(oRoleFilter) oRoleFilter.innerHTML = buildOptions(opRoles, "All Roles");
-    if(oStatFilter) oStatFilter.innerHTML = buildOptions(opStatuses, "All Statuses");
+  let dInstFilter = document.getElementById('doc-inst-filter');
+  if(dInstFilter && showInstFilter) { 
+      updateDropdown('doc-inst-filter', docInsts, "All Institutes"); 
+      dInstFilter.style.display = "inline-block"; 
+  }
+  
+  let pInstFilter = document.getElementById('paper-inst-filter');
+  if(pInstFilter && showInstFilter) { 
+      updateDropdown('paper-inst-filter', paperInsts, "All Institutes"); 
+      pInstFilter.style.display = "inline-block"; 
   }
 }
 
+// ==========================================
+// 2. THE STRICT FILTER APPLIER
+// ==========================================
 function applyFilters() {
   if(!globalPayload) return;
-  const userRole = String(globalUser.role).trim().toLowerCase();
-  const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
-  let docSession = document.getElementById('doc-session-filter') ? document.getElementById('doc-session-filter').value : 'all';
-  let docExam = document.getElementById('doc-exam-filter') ? document.getElementById('doc-exam-filter').value : 'all';
-  let docType = document.getElementById('doc-type-filter') ? document.getElementById('doc-type-filter').value : 'all';
-  let docStatus = document.getElementById('doc-status-filter') ? document.getElementById('doc-status-filter').value : 'all';
-  let docInst = (isSuperAdmin && document.getElementById('doc-inst-filter')) ? document.getElementById('doc-inst-filter').value : 'all';
   
-  let paperSession = document.getElementById('paper-session-filter') ? document.getElementById('paper-session-filter').value : 'all';
-  let paperExam = document.getElementById('paper-exam-filter') ? document.getElementById('paper-exam-filter').value : 'all';
-  let paperSubject = document.getElementById('paper-subject-filter') ? document.getElementById('paper-subject-filter').value : 'all';
-  let paperStatus = document.getElementById('paper-status-filter') ? document.getElementById('paper-status-filter').value : 'all';
-  let paperInst = (isSuperAdmin && document.getElementById('paper-inst-filter')) ? document.getElementById('paper-inst-filter').value : 'all';
-  let rawDocs = Array.isArray(globalPayload.data?.docs) ? globalPayload.data.docs : [];
-  let filteredDocs = rawDocs.filter(r => {
-    let matchS = (docSession === 'all' || getSessionFromDate(r.date) === docSession);
-    let matchE = (docExam === 'all' || (r.exam && String(r.exam).toLowerCase() === String(docExam).toLowerCase()));
-    let matchT = (docType === 'all' || (r.type && String(r.type).toLowerCase() === String(docType).toLowerCase()));
-    let matchStat = (docStatus === 'all' || (r.status && String(r.status).toLowerCase() === String(docStatus).toLowerCase()));
-    let matchInst = (docInst === 'all' || (r.inst && String(r.inst).toLowerCase() === String(docInst).toLowerCase()));
-    return matchS && matchE && matchT && matchStat && matchInst;
-  });
+  try {
+      const userRole = String(globalUser.role).trim().toLowerCase();
+      const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
+      const showInstFilter = (isSuperAdmin || userRole === "operator");
+
+      const getVal = (id) => document.getElementById(id) ? String(document.getElementById(id).value).trim().toLowerCase() : 'all';
+
+      let dSess = getVal('doc-session-filter'), dType = getVal('doc-type-filter'), dStat = getVal('doc-status-filter'), dCls = getVal('doc-class-filter'), dInst = showInstFilter ? getVal('doc-inst-filter') : 'all';
+      let pSess = getVal('paper-session-filter'), pSub = getVal('paper-subject-filter'), pStat = getVal('paper-status-filter'), pCls = getVal('paper-class-filter'), pInst = showInstFilter ? getVal('paper-inst-filter') : 'all';
+
+      let rawDocs = Array.isArray(globalPayload.data?.docs) ? globalPayload.data.docs : [];
+      let filteredDocs = rawDocs.filter(r => {
+        let mS = dSess === 'all' || getSessionFromDate(r.date).toLowerCase() === dSess;
+        let mT = dType === 'all' || (r.type && String(r.type).trim().toLowerCase() === dType);
+        let mStat = dStat === 'all' || (r.status && String(r.status).trim().toLowerCase() === dStat);
+        let mC = dCls === 'all' || (r.class && String(r.class).trim().toLowerCase() === dCls);
+        let mInst = dInst === 'all' || (r.inst && String(r.inst).trim().toLowerCase() === dInst);
+        return mS && mT && mStat && mC && mInst;
+      });
+      
+      let rawPapers = Array.isArray(globalPayload.data?.papers) ? globalPayload.data.papers : [];
+      let filteredPapers = rawPapers.filter(r => {
+        let mS = pSess === 'all' || getSessionFromDate(r.date).toLowerCase() === pSess;
+        let mSub = pSub === 'all' || (r.subject && String(r.subject).trim().toLowerCase() === pSub);
+        let mStat = pStat === 'all' || (r.status && String(r.status).trim().toLowerCase() === pStat);
+        let mC = pCls === 'all' || (r.class && String(r.class).trim().toLowerCase() === pCls);
+        let mInst = pInst === 'all' || (r.inst && String(r.inst).trim().toLowerCase() === pInst);
+        return mS && mSub && mStat && mC && mInst;
+      });
+      
+      let dcC = document.getElementById('docs-accordion-container'); 
+      if(dcC) dcC.innerHTML = buildFlatTable(filteredDocs, 'docs', userRole);
+      
+      let pcC = document.getElementById('papers-accordion-container'); 
+      if(pcC) pcC.innerHTML = buildFlatTable(filteredPapers, 'papers', userRole);
+
+      // --- LEAVE YOUR SUPER ADMIN LOGIC BELOW HERE UNTOUCHED ---
+      // if(isSuperAdmin && globalPayload.superAdmin) { ...
+      
   
-  let rawPapers = Array.isArray(globalPayload.data?.papers) ? globalPayload.data.papers : [];
-  let filteredPapers = rawPapers.filter(r => {
-    let matchS = (paperSession === 'all' || getSessionFromDate(r.date) === paperSession);
-    let matchE = (paperExam === 'all' || (r.exam && String(r.exam).toLowerCase() === String(paperExam).toLowerCase()));
-    let matchSub = (paperSubject === 'all' || (r.subject && String(r.subject).toLowerCase() === String(paperSubject).toLowerCase()));
-    let matchStat = (paperStatus === 'all' || (r.status && String(r.status).toLowerCase() === String(paperStatus).toLowerCase()));
-    let matchInst = (paperInst === 'all' || (r.inst && String(r.inst).toLowerCase() === String(paperInst).toLowerCase()));
-    return matchS && matchE && matchSub && matchStat && matchInst;
-  });
-  
-  let dcC = document.getElementById('docs-accordion-container'); if(dcC) dcC.innerHTML = buildAccordionTable(filteredDocs, 'docs', userRole);
-  let pcC = document.getElementById('papers-accordion-container'); if(pcC) pcC.innerHTML = buildAccordionTable(filteredPapers, 'papers', userRole);
+
   
   if(isSuperAdmin && globalPayload.superAdmin) {
     let instStatus = document.getElementById('inst-status-filter') ? document.getElementById('inst-status-filter').value : 'all';
@@ -3185,6 +3324,9 @@ function applyFilters() {
       }
     }
   }
+} catch (error) {
+      console.error("Filter Engine Crashed:", error);
+  }
 }
 
 // 🔥 LIVE DISPATCHER MODAL LOGIC
@@ -3218,99 +3360,110 @@ function openAssignModal(jobId, jobType) {
   openModal('assignModal');
 }
 
-function buildAccordionTable(dataArray, type, userRole) {
+// ==========================================
+// 3. THE PREMIUM FLAT TABLE GENERATOR
+// ==========================================
+function buildFlatTable(dataArray, type, userRole) {
   if(!Array.isArray(dataArray) || dataArray.length === 0) return "<div style='text-align:center; padding:40px; background:rgba(0,0,0,0.2); border-radius:12px;'><p style='color:var(--text-muted); font-size:14px; font-weight:700;'>No records found for selected filters.</p></div>";
   
   const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
-  const escapeHtml = (str) => String(str ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const showInst = isSuperAdmin || userRole === "operator"; 
   
-  const getStatusBadge = (st, noteText = '') => {
+  const escapeHtml = (str) => String(str ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  // Clean Status Pill Generator (Emojis Removed)
+  const getStatusBadge = (st) => {
     let s = String(st).trim();
-    if(s === 'Pending Revision' || noteText) return `<span class="badge" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid var(--danger);">🔴 REVISION</span>`;
-    if(s === 'Pending') return `<span class="badge" style="background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent);">🟡 AWAITING</span>`;
-    if(s === 'Assigned') return `<span class="badge" style="background:rgba(139, 92, 246, 0.1); color:var(--purple); border:1px solid var(--purple);">🟣 ASSIGNED</span>`;
-    if(s === 'In Progress' || s === 'Accepted') return `<span class="badge" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">🔵 FORMATTING</span>`;
-    if(s === 'Completed' || s === 'Delivered' || s === 'Generated' || s === 'PAID') return `<span class="badge bg-success">🟢 COMPLETED</span>`;
-    return `<span class='badge bg-warning'>${s}</span>`;
+    if(s === 'Pending Revision') return `<span class="flat-pill" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid var(--danger);">REVISION</span>`;
+    if(s === 'Pending') return `<span class="flat-pill" style="background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent);">AWAITING</span>`;
+    if(s === 'Assigned') return `<span class="flat-pill" style="background:rgba(139, 92, 246, 0.1); color:var(--purple); border:1px solid var(--purple);">ASSIGNED</span>`;
+    if(s === 'In Progress' || s === 'Accepted') return `<span class="flat-pill" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">DRAFTING</span>`;
+    if(s === 'Completed' || s === 'Delivered' || s === 'Generated' || s === 'PAID') return `<span class="flat-pill bg-success">COMPLETED</span>`;
+    return `<span class='flat-pill bg-warning'>${s}</span>`;
   };
 
-  let groups = {};
-  dataArray.forEach(item => { let cls = item.class || "General"; if(!groups[cls]) groups[cls] = []; groups[cls].push(item); });
-  
-  let html = '';
-  for (let cls in groups) {
-    let cleanCls = String(cls).replace(/^class\s*/i, '').trim();
-    html += "<button class='accordion' onclick='this.classList.toggle(\"active\"); let panel = this.nextElementSibling; if (panel.style.maxHeight) { panel.style.maxHeight = null; } else { panel.style.maxHeight = panel.scrollHeight + \"px\"; }'><span style=\"color:white;\">Class: " + cleanCls + "</span> <span style=\"font-size:11px;\ncolor:var(--text-muted); font-weight:600; margin-left:8px;\">(" + groups[cls].length + " Jobs)</span></button>";
-    html += "<div class='accordion-panel'><div style='overflow-x:auto; margin: 15px 0;'><table>";
-    
-    if(type === 'docs') {
-      html += "<thead><tr><th>Job ID</th><th>Institute</th><th>Type</th><th>Exam</th><th>Students</th><th>Status</th><th>Action</th></tr></thead><tbody>";
-      groups[cls].forEach(r => {
-        let action = '';
-        let st = String(r.status).trim();
-        const revisionNote = r.latestCorrectionNote || r.latest_correction_note || r.meta_data?.latest_correction_note || '';
-        const isRevision = st === 'Pending Revision' || Boolean(revisionNote);
-        const statusCell = `${getStatusBadge(st, revisionNote)}${isRevision && revisionNote ? `<div style="margin-top:6px; font-size:11px; color:var(--accent); max-width:260px; line-height:1.4;">📝 ${escapeHtml(revisionNote)}</div>` : ''}`;
-        
-        // Base Actions (Everyone)
-        if(st === 'Completed' || st === 'Delivered') { 
-            action = `<button class='btn-sm btn-outline' style='color:var(--brand); border-color:var(--brand);' onclick="downloadFile('${r.row}', 'documents', this)">DOWNLOAD</button>`;
-            if (userRole !== "operator") {
-                action += `<button class='btn-sm btn-outline' style='color:var(--danger); border-color:var(--danger); margin-left: 8px;' onclick="openCorrectionModal('${r.id}', 'revision')">EDIT</button>`; 
-            }
-        } else { 
-            action = getDeadlineUI(r.deadline); 
-            // 🔥 FIX: Note button is appended for EVERYONE on active jobs
-            action += `<button class="btn-outline btn-sm" style="border-color:var(--brand); color:var(--brand); margin-left:10px; padding:4px 8px; font-size:10px;" onclick="openCorrectionModal('${r.id}', 'note')">📝 Comms</button>`;
-        }
-        
-        // Role Specific Overrides
-        if(userRole === "operator" && (st === "Pending" || st === "Assigned" || st === "Pending Revision")) {
-          let appUrl = String(r.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL";
-          // 🔥 FIX: Append the PROCESS button instead of overwriting the action string
-          action += `<button class='btn-sm btn-warning' style='margin-left:8px;' onclick="triggerBtnAnim(this); window.open('${appUrl}?jobId=${r.id}')">PROCESS</button>`;
-        } else if (isSuperAdmin) { 
-          let assignBtn = (st === "Pending" || st === "Pending Revision") ? `<button class='btn-sm btn-outline' style='margin-left:8px; border-color:var(--purple); color:var(--purple);' onclick="openAssignModal('${r.id}', 'docs')">Assign</button>` : "";
-          action = getStatusBadge(st) + assignBtn;
-        }
-        
-        html += `<tr><td>${r.id}</td><td><b style='color:white;'>${r.inst}</b></td><td><b style='color:var(--brand);'>${r.type}</b></td><td>${r.exam || '-'}</td><td>${r.students}</td><td><div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">${statusCell}</div></td><td><div style="display:flex; align-items:center;">${action}</div></td></tr>`;
-      });
-    } else if (type === 'papers') {
-      html += "<thead><tr><th>Job ID</th><th>Institute</th><th>Type/Exam</th><th>Subject</th><th>Status</th><th>Action</th></tr></thead><tbody>";
-      groups[cls].forEach(r => {
-        let action = '';
-        let st = String(r.status).trim();
-        const revisionNote = r.latestCorrectionNote || r.latest_correction_note || r.meta_data?.latest_correction_note || '';
-        const isRevision = st === 'Pending Revision' || Boolean(revisionNote);
-        const statusCell = `${getStatusBadge(st, revisionNote)}${isRevision && revisionNote ? `<div style="margin-top:6px; font-size:11px; color:var(--accent); max-width:260px; line-height:1.4;">📝 ${escapeHtml(revisionNote)}</div>` : ''}`;
-        
-        // Base Actions (Everyone)
-        if(st === 'Completed' || st === 'Delivered') { 
-            action = `<button class='btn-sm btn-outline' style='color:var(--brand); border-color:var(--brand);' onclick="downloadFile('${r.row}', 'documents', this)">DOWNLOAD</button>`;
-            if (userRole !== "operator") {
-               action += `<button class='btn-sm btn-outline' style='color:var(--danger); border-color:var(--danger); margin-left: 8px;' onclick="openCorrectionModal('${r.id}', 'revision')">EDIT</button>`; 
-            }
-        } else { 
-            action = getDeadlineUI(r.deadline); 
-            // 🔥 FIX: Note button is appended for EVERYONE on active jobs
-            action += `<button class="btn-outline btn-sm" style="border-color:var(--brand); color:var(--brand); margin-left:10px; padding:4px 8px; font-size:10px;" onclick="openCorrectionModal('${r.id}', 'note')">📝 Comms</button>`;
-        }
+  // SVGs for Table Headers
+  const idSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>`;
+  const detailsSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+  const statusSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`;
+  const deadlineSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+  const actionSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
-        // Role Specific Overrides
-        if(userRole === "operator" && (st === "Pending" || st === "Assigned" || st === "Pending Revision")) { 
-          // 🔥 FIX: Append the PROCESS button
-          action += `<button class='btn-sm btn-warning' style='margin-left:8px;' onclick="triggerBtnAnim(this); window.open('YOUR_FORMAT_APP_URL?jobId=${r.id}')">FORMAT</button>`; 
-        } else if (isSuperAdmin) { 
-          let assignBtn = (st === "Pending" || st === "Pending Revision") ? `<button class='btn-sm btn-outline' style='margin-left:8px; border-color:var(--purple); color:var(--purple);' onclick="openAssignModal('${r.id}', 'papers')">Assign</button>` : "";
-          action = getStatusBadge(st) + assignBtn;
-        }
-        
-        html += `<tr><td>${r.id}</td><td><b style='color:white;'>${r.inst}</b></td><td><b style='color:var(--brand);'>${r.exam || '-'}</b></td><td>${r.subject}</td><td><div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">${statusCell}</div></td><td><div style="display:flex; align-items:center;">${action}</div></td></tr>`;
-      });
-    }
-    html += "</tbody></table></div></div>";
-  }
+  let html = `<div class='tk-table-wrapper' style='margin: 15px 0;'><table class='tk-sleek-table'>`;
+  html += `<thead><tr>
+      <th>${idSvg} JOB ID</th>
+      <th>${detailsSvg} ${showInst ? 'INSTITUTE & DETAILS' : 'CLASS & DETAILS'}</th>
+      <th>${statusSvg} STATUS</th>
+      <th>${deadlineSvg} DEADLINE</th>
+      <th style="text-align:right;">${actionSvg} ACTIONS</th>
+  </tr></thead><tbody>`;
+
+  const limitedData = dataArray.slice(0, 30);
+
+  limitedData.forEach(r => {
+      let st = String(r.status).trim();
+      let appUrl = (type === 'papers') ? "YOUR_FORMAT_APP_URL" : (String(r.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
+
+      // Dynamic Class Formatter
+      let rawClass = String(r.class || '-').toUpperCase();
+      let classString = rawClass;
+      if (!["PRE-NURSERY", "NURSERY", "LKG", "UKG"].includes(rawClass)) {
+          classString = rawClass.includes("CLASS") ? rawClass : `CLASS ${rawClass}`;
+      }
+
+      let subDetail = type === 'papers' ? r.subject : r.type;
+      let detailLine = `${subDetail} | ${classString}`; // Emojis removed
+      
+      let col2Html = "";
+      if (showInst) {
+          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:11px; font-weight:600; text-transform:uppercase;">${r.inst}</b><br><span style="color:var(--brand); font-size:10px; font-weight:700; text-transform:uppercase;">${detailLine}</span></div>`;
+      } else {
+          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:11px; font-weight:600;text-transform:uppercase;">${detailLine}</b><br><span style="color:var(--text-muted); font-size:10px; font-weight:700; text-transform:uppercase;">${r.exam || r.session}</span></div>`;
+      }
+
+      const statusCell = getStatusBadge(st);
+
+      // Button SVGs
+      const btnWorkspaceSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+      const btnDownloadSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+      const btnRevisionSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>`;
+      const btnAssignSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>`;
+      const btnChatSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+
+      let actionHtml = `<div class="mobile-action-row" style="display:flex; gap:10px; justify-content:flex-end; align-items:center;">`;
+      
+      if (userRole === "operator") {
+          if (st === "Pending" || st === "Assigned" || st === "Pending Revision" || st === "In Progress") {
+              actionHtml += `<button class='liquid-glass' style='color:var(--success); border-color:var(--success); padding:8px 14px; font-size:10px;' onclick="triggerBtnAnim(this); window.open('${appUrl}?jobId=${r.id}')">${btnWorkspaceSvg} WORKSPACE</button>`;
+          } else if (st === 'Completed' || st === 'Delivered' || st === 'Generated') {
+              actionHtml += `<button class='liquid-glass' style='color:var(--brand); border-color:var(--brand); padding:8px 14px; font-size:10px;' onclick="downloadFile('${r.row}', '${type}', this)">${btnDownloadSvg} DOWNLOAD</button>`;
+          }
+      } 
+      else {
+          if (st === 'Completed' || st === 'Delivered' || st === 'Generated') { 
+              actionHtml += `<button class='liquid-glass' style='color:var(--brand); border-color:var(--brand); padding:8px 14px; font-size:10px;' onclick="downloadFile('${r.row}', '${type}', this)">${btnDownloadSvg} DOWNLOAD</button>`;
+              actionHtml += `<button class='liquid-glass' style='color:var(--danger); border-color:var(--danger); padding:8px 14px; font-size:10px;' onclick="openCorrectionModal('${r.id}', 'revision')">${btnRevisionSvg} REVISION</button>`; 
+          } else { 
+              if (isSuperAdmin && (st === "Pending" || st === "Pending Revision")) {
+                  actionHtml += `<button class='liquid-glass' style='color:var(--purple); border-color:var(--purple); padding:8px 14px; font-size:10px;' onclick="openAssignModal('${r.id}', '${type}')">${btnAssignSvg} ASSIGN</button>`;
+              }
+              actionHtml += `<button class="liquid-glass" style="color:var(--brand); border-color:var(--brand); padding:8px 14px; font-size:10px;" onclick="openCorrectionModal('${r.id}', 'note')">${btnChatSvg} CHAT</button>`;
+          }
+      }
+      actionHtml += `</div>`;
+      
+      let deadLineHtml = (st === 'Completed' || st === 'Delivered') ? '<span style="color:var(--text-muted); font-size:11px;">--</span>' : getDeadlineUI(r.deadline);
+
+      html += `<tr>
+          <td data-label="JOB ID"><span class="flat-pill" style="background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border); font-family:monospace;">${r.id}</span></td>
+          <td data-label="DETAILS" style="text-transform:uppercase;">${col2Html}</td>
+          <td data-label="STATUS"><div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">${statusCell}</div></td>
+          <td data-label="DEADLINE" style="text-align:left;">${deadLineHtml}</td>
+          <td data-label="ACTIONS">${actionHtml}</td>
+      </tr>`;
+  });
+  
+  html += "</tbody></table></div>";
   return html;
 }
 
@@ -3397,7 +3550,16 @@ function operatorAction(type, name, btn) {
 function downloadFile(row, type, btn) {
   triggerBtnAnim(btn);
   let currentRole = globalUser ? globalUser.role : "unknown";
-  serverCall('download', { row: row, type: type, userRole: currentRole })
+  
+  // 🔥 FIX: Tell the backend NOT to change the status if it's an operator
+  let preventChange = (String(currentRole).trim().toLowerCase() === "operator");
+
+  serverCall('download', { 
+      row: row, 
+      type: type, 
+      userRole: currentRole,
+      preventStatusChange: preventChange 
+  })
     .then(res => { if(res.url){ window.open(res.url); location.reload(); } else { showPopup("Error: No valid Drive link found."); } })
     .catch(err => { showPopup("Download Failed: " + err.message); });
 }
@@ -4581,40 +4743,41 @@ function renderOperatorWorkspace() {
         const deadTime = new Date(job.deadline).getTime();
         const hoursLeft = (deadTime - nowTime) / (1000 * 60 * 60);
         
-        // 🔥 FIX 1: Map Urgency for Card Border Only
         let urgClass = 'urg-safe';
-        if (hoursLeft < 0 || hoursLeft <= 3) urgClass = 'urg-critical'; // Light Red Border
-        else if (hoursLeft <= 12) urgClass = 'urg-warning'; // Yellow Border
+        if (hoursLeft < 0 || hoursLeft <= 3 || job.status === 'Pending Revision') urgClass = 'urg-critical';
+        else if (hoursLeft <= 12) urgClass = 'urg-warning';
 
-        if (job.status === 'Pending Revision') urgClass = 'urg-critical';
-        
-       // 🔥 FIX 2: Dynamic Badge Radars mapped correctly to status
-        let badgeClass = 'bg-warning';
-        let pulseClass = '';
+        let badgeClass = 'bg-warning'; let pulseClass = '';
         if (job.status === 'Pending Revision') { badgeClass = 'bg-danger'; pulseClass = 'badge-pulse-revision'; }
         else if (job.status === 'Pending') { badgeClass = 'bg-warning'; pulseClass = 'badge-pulse-pending'; }
-        else if (job.status === 'Assigned') { badgeClass = 'bg-purple'; pulseClass = ''; } // Purple, no pulse
-        else if (job.status === 'In Progress') { badgeClass = 'bg-info'; pulseClass = 'badge-pulse-assigned'; } // Blue Pulse means actively formatting
+        else if (job.status === 'Assigned') { badgeClass = 'bg-purple'; } 
+        else if (job.status === 'In Progress') { badgeClass = 'bg-info'; pulseClass = 'badge-pulse-assigned'; }
 
-        // 🔥 FIX 3: Submission Date Formatting
         const submitDate = new Date(job.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
-        
-        const typeLabel = job.subject ? `Paper • ${job.subject} (${job.class})` : `Doc • ${job.type} (${job.class})`;
+        const typeLabel = job.subject ? `${job.subject} (${job.class})` : `${job.type} (${job.class})`;
+        const appUrl = job.subject ? "YOUR_PAPER_FORMAT_APP_URL" : (String(job.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
 
         return `
         <div class="op-job-card ${urgClass}" id="opCard_${job.id}" onclick="selectWorkspaceJob('${encodeURIComponent(JSON.stringify(job))}')">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <span style="color:var(--brand); font-size:12px; font-weight:900; font-family:monospace;">${job.id}</span>
-                <span class="badge ${badgeClass} ${pulseClass}" style="font-size:8px; padding:3px 6px;">${job.status}</span>
-            </div>
-            <div style="font-size:11px; color:var(--text); font-weight:700;">${job.inst}</div>
-            <div style="font-size:10px; color:var(--text-muted); font-weight:600;">${typeLabel}</div>
-            <div style="font-size:9px; color:rgba(255,255,255,0.4); font-weight:600; margin-top:2px;">Submitted: ${submitDate}</div>
             
-            <div style="margin-top:4px;">
-                <!-- 🔥 FIX 1: getDeadlineUI generates the class that triggers live ticking seconds -->
-                ${getDeadlineUI(job.deadline)}
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+                <span class="flat-pill" style="background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border); font-family:monospace;">${job.id}</span>
+                <span class="flat-pill ${badgeClass} ${pulseClass}">${job.status}</span>
             </div>
+            
+            <div style="font-size:13px; color:white; font-weight:800; text-transform:uppercase; margin-bottom:4px;">🏫 ${job.inst}</div>
+            <div style="font-size:12px; color:var(--brand); font-weight:700; text-transform:uppercase; margin-bottom:12px;">📄 ${typeLabel}</div>
+            
+            <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-bottom: 15px; display:flex; justify-content:space-between; align-items:center;">
+                ${getDeadlineUI(job.deadline)}
+                <div style="font-size:9px; color:var(--text-muted); font-weight:700; text-align:right;">📅 ${submitDate.toUpperCase()}</div>
+            </div>
+
+            <div style="display:flex; gap:10px; width:100%;">
+                <button class="liquid-glass" style="flex:2; padding:10px; font-size:11px; color:var(--success); border-color:var(--success);" onclick="event.stopPropagation(); triggerBtnAnim(this); window.open('${appUrl}?jobId=${job.id}')">⚡ WORKSPACE</button>
+                <button class="liquid-glass" style="flex:1; padding:10px; font-size:11px; color:var(--brand); border-color:var(--brand);" onclick="event.stopPropagation(); selectWorkspaceJob('${encodeURIComponent(JSON.stringify(job))}');">💬 CHAT</button>
+            </div>
+
         </div>`;
     }).join('');
 }
