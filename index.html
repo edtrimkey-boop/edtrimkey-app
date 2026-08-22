@@ -444,6 +444,27 @@ input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
     transform: scale(1.05);
 }
 
+/* 🔥 FIX: Perfect Centering for Top Bar Icons */
+.liquid-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-icon {
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+.notification-wrapper {
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+}
+.notification-wrapper svg {
+    margin: 0 !important;
+}
+
 /* === THE TOP HEADER GRADIENT SCRIM === */
 .header-scrim {
     position: fixed;
@@ -2015,8 +2036,8 @@ function getDeadlineHTML(deadlineStr, nowTime) {
     const countStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
     return `<div style="font-size:11px; font-weight:700; color:${color}; line-height:1.4; white-space:nowrap;">
-                <div>⏱ Due: ${countStr}</div>
-                <div>🗓️ ${finalDateStr}</div>
+                <div><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${countStr}</div>
+                <div><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${finalDateStr}</div>
             </div>`;
 }
 
@@ -3369,15 +3390,13 @@ function buildFlatTable(dataArray, type, userRole) {
   const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
   const showInst = isSuperAdmin || userRole === "operator"; 
   
-  const escapeHtml = (str) => String(str ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-
   // Clean Status Pill Generator (Emojis Removed)
   const getStatusBadge = (st) => {
     let s = String(st).trim();
     if(s === 'Pending Revision') return `<span class="flat-pill" style="background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid var(--danger);">REVISION</span>`;
     if(s === 'Pending') return `<span class="flat-pill" style="background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent);">AWAITING</span>`;
     if(s === 'Assigned') return `<span class="flat-pill" style="background:rgba(139, 92, 246, 0.1); color:var(--purple); border:1px solid var(--purple);">ASSIGNED</span>`;
-    if(s === 'In Progress' || s === 'Accepted') return `<span class="flat-pill" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">DRAFTING</span>`;
+    if(s === 'In Progress' || s === 'Accepted') return `<span class="flat-pill" style="background:rgba(38, 195, 234, 0.1); color:var(--brand); border:1px solid var(--brand); box-shadow: 0 0 8px var(--brand-glow);">FORMATTING</span>`;
     if(s === 'Completed' || s === 'Delivered' || s === 'Generated' || s === 'PAID') return `<span class="flat-pill bg-success">COMPLETED</span>`;
     return `<span class='flat-pill bg-warning'>${s}</span>`;
   };
@@ -3404,23 +3423,28 @@ function buildFlatTable(dataArray, type, userRole) {
       let st = String(r.status).trim();
       let appUrl = (type === 'papers') ? "YOUR_FORMAT_APP_URL" : (String(r.type).toLowerCase().includes("report") ? "YOUR_REPORT_APP_URL" : "YOUR_ADMIT_APP_URL");
 
-      // Dynamic Class Formatter
-      let rawClass = String(r.class || '-').toUpperCase();
+      // 🔥 Dynamic Class Formatter (Removes 'CLASS' prefix from pre-nursery, nursery, lkg, ukg)
+      let rawClass = String(r.class || '-').toUpperCase().trim();
       let classString = rawClass;
-      if (!["PRE-NURSERY", "NURSERY", "LKG", "UKG"].includes(rawClass)) {
+      if (["PRE-NURSERY", "NURSERY", "LKG", "UKG"].includes(rawClass)) {
+          classString = rawClass; 
+      } else {
           classString = rawClass.includes("CLASS") ? rawClass : `CLASS ${rawClass}`;
       }
 
       let subDetail = type === 'papers' ? r.subject : r.type;
-      let detailLine = `${subDetail} | ${classString}`; // Emojis removed
+      
+      // Clean format: MATHEMATICS | PRE-NURSERY (Emojis removed)
+      let detailLine = `${subDetail} | ${classString}`.toUpperCase();
       
       let col2Html = "";
       if (showInst) {
-          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:11px; font-weight:600; text-transform:uppercase;">${r.inst}</b><br><span style="color:var(--brand); font-size:10px; font-weight:700; text-transform:uppercase;">${detailLine}</span></div>`;
+          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:13px; text-transform:uppercase;">${r.inst}</b><br><span style="color:var(--brand); font-size:10px; font-weight:700; text-transform:uppercase;">${detailLine}</span></div>`;
       } else {
-          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:11px; font-weight:600;text-transform:uppercase;">${detailLine}</b><br><span style="color:var(--text-muted); font-size:10px; font-weight:700; text-transform:uppercase;">${r.exam || r.session}</span></div>`;
+          col2Html = `<div style="text-align:left;"><b style="color:white; font-size:13px; text-transform:uppercase;">${detailLine}</b><br><span style="color:var(--text-muted); font-size:10px; font-weight:700; text-transform:uppercase;">${r.exam || r.session}</span></div>`;
       }
 
+      // Pure Status Badge (NO LAST MESSAGE ATTACHED)
       const statusCell = getStatusBadge(st);
 
       // Button SVGs
@@ -3436,7 +3460,7 @@ function buildFlatTable(dataArray, type, userRole) {
           if (st === "Pending" || st === "Assigned" || st === "Pending Revision" || st === "In Progress") {
               actionHtml += `<button class='liquid-glass' style='color:var(--success); border-color:var(--success); padding:8px 14px; font-size:10px;' onclick="triggerBtnAnim(this); window.open('${appUrl}?jobId=${r.id}')">${btnWorkspaceSvg} WORKSPACE</button>`;
           } else if (st === 'Completed' || st === 'Delivered' || st === 'Generated') {
-              actionHtml += `<button class='liquid-glass' style='color:var(--brand); border-color:var(--brand); padding:8px 14px; font-size:10px;' onclick="downloadFile('${r.row}', '${type}', this)">${btnDownloadSvg} DOWNLOAD</button>`;
+              actionHtml += `<span style="color:var(--text-muted); font-size:10px; font-weight:800; text-transform:uppercase;">NO ACTION REQUIRED</span>`;
           }
       } 
       else {
