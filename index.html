@@ -494,14 +494,14 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 <div id="passwordModal" class="glass-overlay">
   <div class="glass-box" style="text-align: center; max-width:400px; padding: 40px;">
     <button type="button" class="close-minimal" onclick="closeModal('passwordModal')">✖</button>
-    <h3 style="color:var(--brand); margin-bottom:15px; font-size:20px; font-weight: 800;">Change Password</h3>
+    <h3 style="color:var(--brand); margin-bottom:15px; font-size:20px; font-weight: 800;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-middle; margin-right:8px;"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Change Password</h3>
     <p style="font-size:12px; color:var(--text-muted); margin-bottom:25px; font-weight:600;">Update your security credentials.</p>
     
     <input type="password" id="oldPwInput" class="form-input" placeholder="Current Password" required>
     <input type="password" id="newPwInput" class="form-input" placeholder="New Password" required>
     <input type="password" id="confirmPwInput" class="form-input" placeholder="Confirm New Password" required>
     
-    <button onclick="actionChangePassword(this)" style="width:100%; margin-top:15px; background:linear-gradient(135deg, var(--brand), #1A9CBF); color:black;">Update Security</button>
+    <button onclick="actionChangePassword(this)" style="width:100%; margin-top:15px; background:linear-gradient(135deg, var(--brand), #1A9CBF); color:black;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:8px;"><path d="M20 9.807V6a1 1 0 00-1-1c-2 0-4.49-1.19-6.24-2.72a1.17 1.17 0 00-1.52 0C9.5 3.8 7 5 5 5a1 1 0 00-1 1v7c0 3.88 2.107 6.254 5 7.796"/><path d="M19 17v-2a2 2 0 00-4 0v2"/><rect x="13" y="17" width="8" height="5" rx="1"/></svg>Update Security</button>
   </div>
 </div>
 
@@ -953,7 +953,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 <div id="teacherRegModal" class="glass-overlay">
   <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
     <button type="button" class="close-minimal" onclick="closeModal('teacherRegModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand); margin-top:0; margin-bottom:25px;">👨‍🏫 Register Teacher</h2>
+    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand); margin-top:0; margin-bottom:25px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Register Teacher</h2>
     <form id="teacherRegForm" onsubmit="handleTeacherRegSubmit(event)">
       
       <div class="grid-2" style="margin-bottom: 15px;">
@@ -1148,8 +1148,11 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
     <button class="mobile-close-btn" onclick="toggleSidebar()">❯</button>
   </div>
   
-  <div id="nav-overview" class="nav-item active" onclick="switchTab('overview')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>Dashboard Overview</div>
-  <div id="nav-documents" class="nav-item" onclick="switchTab('documents')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M16 22a4 4 0 0"/></svg>Documents System</div>
+  <div id="nav-overview" class="nav-item active" onclick="switchTab('overview')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>Dashboard Overview</div>
+  
+  <!-- 🔥 THIS WAS THE BROKEN SVG. IT IS NOW FIXED: -->
+  <div id="nav-documents" class="nav-item" onclick="switchTab('documents')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Documents System</div>
+  
   <div id="nav-papers" class="nav-item" onclick="switchTab('papers')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Paper System</div>
   
   <div id="sidebar-dynamic-apps"></div>
@@ -1166,8 +1169,9 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   <div id="nav-reports" class="nav-item sys-admin" style="display:none;" onclick="switchTab('reports')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0px;"><path d="M12 16v5"/><path d="M16 14.639V21"/><path d="M20 10.656V21"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18.463V21"/><path d="M8 14.656V21"/></svg>Analytics Console</div>
   <!-- 🔥 NEW: OPERATOR WORKSPACE TAB -->
   <div id="nav-op-workspace" class="nav-item" style="display:none;" onclick="switchTab('op-workspace')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> Production Workspace</div>
-  <div id="nav-settings" class="nav-item" onclick="switchTab('settings')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Master Settings</div>
-  
+  <div id="nav-op-finance" class="nav-item" style="display:none;" onclick="switchTab('op-finance')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Financial Ledger</div>
+  <div id="nav-settings" class="nav-item" onclick="switchTab('settings')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Master Settings</div>
+    
   <div style="margin-top: auto; padding: 20px 30px; font-size: 11px; color: var(--text-muted); font-weight: 600; border-top: 1px solid var(--border);">
     Version V2.9.2 (ED TRIMKEY OS)
   </div>
@@ -1175,16 +1179,17 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 
 <div class="main-wrapper">
   <div class="header-scrim"></div>
+  
+  <!-- 🔥 1. THE REPAIRED TOP HEADER -->
   <header class="top-bar">
     <div class="brandRow">
-      <!-- THE HAMBURGER BUTTON -->
-<button class="liquid-glass glass-circle-btn" onclick="toggleSidebar()" style="margin-right: 15px;">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-</button>
+      <button class="liquid-glass glass-circle-btn" onclick="toggleSidebar()" style="margin-right: 15px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+      </button>
       
       <div class="brand" style="display: flex; align-items: center; gap: 12px;">
          <img id="headerInstLogo" src="" style="height:36px; width:36px; object-fit:contain; border-radius:8px; display:none; background:white; padding:2px;" />
@@ -1194,23 +1199,22 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
     </div>
     
     <div style="display:flex; align-items:center;">
-     <!-- THE BELL ICON -->
-<div class="liquid-glass glass-circle-btn notification-wrapper" onclick="toggleNotificationDropdown(event)" id="bellWrapper" style="display:none; border-color:transparent;">
-    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-    </svg>
-    <span class="notification-badge" id="notifBadge">0</span>
-    
-    <div class="notif-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
-        <div class="notif-header">
-            <span>Alerts</span>
-            <span style="font-size:10px; color:var(--brand); cursor:pointer;" onclick="markAllNotificationsRead()">Mark all read</span>
-        </div>
-        <div class="notif-list" id="notifList">
-            <div style="padding:25px; text-align:center; color:var(--text-muted); font-size:12px; font-weight:600;">No alerts</div>
-        </div>
-    </div>
-</div>
+      <div class="liquid-glass glass-circle-btn notification-wrapper" onclick="toggleNotificationDropdown(event)" id="bellWrapper" style="display:none; border-color:transparent;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+          </svg>
+          <span class="notification-badge" id="notifBadge">0</span>
+          
+          <div class="notif-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
+              <div class="notif-header">
+                  <span>Alerts</span>
+                  <span style="font-size:10px; color:var(--brand); cursor:pointer;" onclick="markAllNotificationsRead()">Mark all read</span>
+              </div>
+              <div class="notif-list" id="notifList">
+                  <div style="padding:25px; text-align:center; color:var(--text-muted); font-size:12px; font-weight:600;">No alerts</div>
+              </div>
+          </div>
+      </div>
 
       <div class="liquid-glass user-profile-container" onclick="toggleProfileDropdown(event)" id="userHeaderInfo" style="display:none; padding: 6px 16px 6px 6px;">
         <div class="avatar-circle" id="userAvatar">?</div>
@@ -1224,13 +1228,11 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
             <div class="dropdown-email" id="dropEmail">user@email.com</div>
             <div class="dropdown-role" id="dropRole">Role</div>
           </div>
-          
-          <div class="dropdown-menu-item" onclick="document.getElementById('profilePicInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0px;"><path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21"/><path d="m14 19.5 3-3 3 3"/><path d="M17 22v-5.5"/><circle cx="9" cy="9" r="2"/></svg>Upload Photo</div>
-          <div class="dropdown-menu-item text-danger" onclick="removeProfilePic()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0px;"><path d="M21 9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" x2="22" y1="5" y2="5"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>Remove Photo</div>
+          <div class="dropdown-menu-item" onclick="document.getElementById('profilePicInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21"/><path d="m14 19.5 3-3 3 3"/><path d="M17 22v-5.5"/><circle cx="9" cy="9" r="2"/></svg>Upload Photo</div>
+          <div class="dropdown-menu-item text-danger" onclick="removeProfilePic()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M21 9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" x2="22" y1="5" y2="5"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>Remove Photo</div>
           <hr style="border:0; border-bottom: 1px solid var(--border); margin: 12px 0;">
-
           <button class="logout-btn" onclick="confirmLogout()">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:6px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             Secure Sign Out
           </button>
         </div>
@@ -1238,26 +1240,19 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
     </div>
   </header>
 
+  <!-- 🔥 2. THE REPAIRED CONTENT AREA -->
   <div class="content-area">
+    
     <div id="view-overview" class="page-view active">
+      <!-- Fixed Action Buttons (No display conflicts) -->
       <div style="display:flex; gap:12px; margin-bottom: 25px; flex-wrap:wrap;" id="action-buttons-row">
-      <button id="btn-submit-paper" style="display:none; display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); actionSubmitPaper()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      Submit Paper</button>
-      <button id="btn-request-doc" style="display:none; background:linear-gradient(135deg, var(--accent), #D97706); color:#000; display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); actionRequestDoc()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
-      Request Document</button>
-      <button id="btn-generated" style="display:none; background:linear-gradient(135deg, var(--purple), #6D28D9); color:white; display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); openGeneratedFolder()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      Generated Papers</button>
-      <button id="btn-op-workspace" style="display:none; background:linear-gradient(135deg, var(--danger), #B91C1C); color:white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); switchTab('op-workspace')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
-      Production Workspace</button>
-      <span id="dynamic-apps-container" style="display:flex; gap:12px; flex-wrap:wrap;"></span>
-      <button id="btn-refresh" class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); initDashboard(globalUser.email)">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 22v-6h6"/></svg>
-      Refresh Data</button>
-    </div>
+        <button id="btn-submit-paper" style="display:none; align-items:center;" onclick="triggerModalBtnAnim(this); actionSubmitPaper()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Submit Paper</button>
+        <button id="btn-request-doc" style="display:none; background:linear-gradient(135deg, var(--accent), #D97706); color:#000; align-items:center;" onclick="triggerModalBtnAnim(this); actionRequestDoc()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Request Document</button>
+        <button id="btn-generated" style="display:none; background:linear-gradient(135deg, var(--purple), #6D28D9); color:white; align-items:center;" onclick="triggerModalBtnAnim(this); openGeneratedFolder()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Generated Papers</button>
+        <button id="btn-op-workspace" style="display:none; background:linear-gradient(135deg, var(--danger), #B91C1C); color:white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); align-items:center;" onclick="triggerModalBtnAnim(this); switchTab('op-workspace')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Production Workspace</button>
+        <span id="dynamic-apps-container" style="display:flex; gap:12px; flex-wrap:wrap;"></span>
+        <button id="btn-refresh" class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); initDashboard(globalUser.email)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 22v-6h6"/></svg>Refresh Data</button>
+      </div>
 
       <div id="sa-kpi-container" class="grid-kpis sys-admin" style="display:none;"></div>
 
@@ -1285,14 +1280,10 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
               <img src="https://wjvoetdkkggyhtcoqqcj.supabase.co/storage/v1/object/public/Ed%20Trim%20Key/Ed-Trim%20Kry%20Logo.png" style="width:40px; height:40px; border-radius:8px; object-fit:contain; background:white; padding:2px;">
               <h2 style="margin:0; font-size:18px; color:var(--text); font-weight:800;">Ed-Trim Key <span style="font-size:12px; color:var(--text-muted);">(Trim Key)</span></h2>
             </div>
-            <p style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600; display:flex; align-items:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Rajmahal, Jharkhand-816108</p>
-            <p style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600; display:flex; align-items:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Md Tousif Raza</p>
-            <p style="margin-bottom:8px; font-size:13px; color:var(--brand); font-weight:700; display:flex; align-items:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>edtrimkey@gmail.com</p>
-            <p style="margin-bottom:0; font-size:13px; color:var(--success); font-weight:700; display:flex; align-items:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>8235400967</p>
+            <p style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600; display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Rajmahal, Jharkhand-816108</p>
+            <p style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600; display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Md Tousif Raza</p>
+            <p style="margin-bottom:8px; font-size:13px; color:var(--brand); font-weight:700; display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>edtrimkey@gmail.com</p>
+            <p style="margin-bottom:0; font-size:13px; color:var(--success); font-weight:700; display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>8235400967</p>
           </div>
         </div>
 
@@ -1309,8 +1300,10 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
         </div>
 
         <div class="grid-kpis" id="operatorKpis" style="display:none;">
-          <div class="kpi-card b-success"><h4>Total Earnings Generated</h4><h2 id="v1-opTotal">₹0</h2></div>
+          <div class="kpi-card b-success"><h4>Earnings Generated</h4><h2 id="v1-opTotal">₹0</h2></div>
           <div class="kpi-card b-accent"><h4>Pending Clearance</h4><h2 id="v1-opPending">₹0</h2></div>
+          <div class="kpi-card b-brand"><h4>Total Delivered</h4><h2 id="v1-opDelivered">0</h2></div>
+          <div class="kpi-card b-danger"><h4>Pending Jobs</h4><h2 id="v1-opPendingJobs">0</h2></div>
         </div>
       </div>
       
@@ -1325,7 +1318,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
-    
+    <!-- NOTIFICATIONS -->
     <div id="view-notifications" class="page-view">
       <div class="panel" style="max-width: 700px; margin: 0 auto; border-left: 4px solid var(--brand);">
         <div class="panel-header">
@@ -1336,12 +1329,12 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
            <select id="broadcastTarget" style="margin-bottom:0;"></select>
            <input type="text" id="broadcastTitle" placeholder="Notification Subject (e.g. Server Maintenance)" style="margin-bottom:0; font-size:14px;">
            <textarea id="broadcastMessage" placeholder="Type your broadcast message here..." style="padding:15px; border-radius:10px; background:var(--card-light); color:white; border:1px solid var(--border); min-height:150px; font-family:inherit; outline:none; resize:vertical; font-weight:600;"></textarea>
-           <button id="btn-send-notif" onclick="sendBroadcast()" class="btn-success" style="width:100%; font-size: 15px; padding: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M15 8h6"/><path d="M18 5v6"/><path d="M20.002 14.464a9 9 0 0 0 .738.863A1 1 0 0 1 20 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 8.75-5.332"/></svg>Launch</button>
+           <button id="btn-send-notif" onclick="sendBroadcast()" class="btn-success" style="width:100%; font-size: 15px; padding: 15px; display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M15 8h6"/><path d="M18 5v6"/><path d="M20.002 14.464a9 9 0 0 0 .738.863A1 1 0 0 1 20 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 8.75-5.332"/></svg>Launch Broadcast</button>
         </div>
       </div>
     </div>
 
-    <!-- DOCUMENT JOBS QUEUE -->
+    <!-- DOCUMENTS -->
     <div id="view-documents" class="page-view">
       <div class="panel">
         <div class="panel-header"><h3>Document Jobs Queue</h3></div>
@@ -1356,7 +1349,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
-    <!-- PAPER JOBS QUEUE -->
+    <!-- PAPERS -->
     <div id="view-papers" class="page-view">
       <div class="panel">
         <div class="panel-header"><h3>Paper Jobs Queue</h3></div>
@@ -1371,8 +1364,8 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
+    <!-- INST BILLING -->
     <div id="view-inst-billing" class="page-view inst-admin">
-      
       <div class="panel" style="border-left:4px solid var(--brand);">
         <div class="panel-header"><h3>My Billing</h3></div>
         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;">
@@ -1475,11 +1468,12 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
+    <!-- INST TEACHERS -->
     <div id="view-inst-teachers" class="page-view inst-admin">
       <div class="panel">
         <div class="panel-header">
           <h3>Teachers Directory</h3>
-          <button class="btn-outline" onclick="actionAddTeacher()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Add Teacher</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionAddTeacher()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Add Teacher</button>
         </div>
         <div style="overflow-x:auto;">
           <table>
@@ -1490,11 +1484,12 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
+    <!-- INST STUDENTS -->
     <div id="view-inst-students" class="page-view inst-admin">
       <div class="panel">
         <div class="panel-header">
           <h3>Students Database</h3>
-          <button class="btn-outline" onclick="triggerModalBtnAnim(this)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>New Admission</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>New Admission</button>
         </div>
         <div style="margin-bottom:25px; display:flex; gap:15px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
            <select id="student-class-filter" class="filter-select" onchange="applyFilters()"></select>
@@ -1503,12 +1498,13 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
+    <!-- INSTITUTES -->
     <div id="view-institutes" class="page-view sys-admin">
       <div class="panel">
         <div class="panel-header">
           <h3>Client Control Center</h3>
-          <button class="btn-outline" onclick="actionRegisterInstitute()"><svg  width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" />
-            <path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg>Register New</button></div>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionRegisterInstitute()"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" /><path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg>Register New</button>
+        </div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
           <select id="inst-status-filter" class="filter-select" onchange="applyFilters()"></select>
           <select id="inst-plan-filter" class="filter-select" onchange="applyFilters()"></select>
@@ -1533,6 +1529,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
     
+    <!-- GLOBAL BILLING -->
     <div id="view-billing" class="page-view sys-admin">
       <div class="panel">
         <div class="panel-header"><h3>Revenue Engine Ledger</h3></div>
@@ -1552,11 +1549,12 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
+    <!-- WORKFORCE OPERATORS -->
     <div id="view-operators" class="page-view sys-admin">
       <div class="panel">
         <div class="panel-header">
           <h3>Operator Workforce Roster</h3>
-          <button class="btn-outline" onclick="actionAddOperator()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Add Operator</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionAddOperator()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Add Operator</button>
         </div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
           <select id="op-role-filter" class="filter-select" onchange="applyFilters()"></select>
@@ -1575,7 +1573,6 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
         </div>
       </div>
 
-
       <div class="panel" style="border-left: 4px solid var(--success);">
         <div class="panel-header"><h3>Operator Financial Ledger</h3></div>
         <div style="overflow-x:auto;">
@@ -1587,10 +1584,14 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
-<!-- 🔥 OPERATOR SPLIT-VIEW COMMAND CENTER -->
+    <!-- REPORTS -->
+    <div id="view-reports" class="page-view sys-admin">
+        <div class="panel"><div class="panel-header"><h3>System Reports</h3></div><p style="color:var(--text-muted); font-weight:600;">Analytics mapping underway.</p></div>
+    </div>
+
+    <!-- PRODUCTION WORKSPACE -->
     <div id="view-op-workspace" class="page-view">
       <div class="op-split-container">
-        
         <!-- LEFT PANE: PRIORITY QUEUE -->
         <div class="op-left-pane">
           <div class="op-queue-header">
@@ -1604,20 +1605,19 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 
         <!-- RIGHT PANE: ACTIVE WORKSPACE & CHAT -->
         <div class="op-right-pane" id="opActiveWorkspace" style="display:none; height: 100%;">
-          
           <!-- Job Info & Actions -->
           <div class="op-ws-header">
             <div class="op-ws-details">
                 <h2 id="wsJobId" style="color:var(--brand); margin:0; font-size:18px; font-weight:900; letter-spacing:1px;">Select a Job</h2>
                 <div style="font-size:11px; color:var(--text-muted); font-weight:600; display:flex; gap:10px;">
-                    <span id="wsInstName">🏢 ---</span>
+                    <span id="wsInstName" style="display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;" ><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg> ---</span>
                     <span id="wsJobDetails">📄 ---</span>
                 </div>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
                 <div id="wsDeadlineTimer" style="margin-right: 15px;"></div>
-                <button id="btnLaunchFormat" class="btn-success" style="box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);">
-                    🚀 Launch Format App
+                <button id="btnLaunchFormat" class="btn-success" style="box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); display:flex; align-items:center;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> Launch Format App
                 </button>
             </div>
           </div>
@@ -1635,39 +1635,93 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
           </div>
         </div>
 
-        <!-- 🔥 FIX: IDLE STATE (When no job is selected) -->
         <div class="op-right-pane" id="opIdleWorkspace" style="display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(0,0,0,0.2); height: 100%;">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" style="margin-bottom:20px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           <h3 style="color:var(--text-muted); font-size:16px; font-weight:800;">No Job Selected</h3>
           <p style="color:var(--border); font-size:12px; font-weight:600;">Select a priority task from the queue to begin.</p>
         </div>
-
       </div>
     </div>
-    
-    <div id="view-reports" class="page-view sys-admin"><div class="panel"><div class="panel-header"><h3>System Reports</h3></div><p style="color:var(--text-muted); font-weight:600;">Analytics mapping underway.</p></div></div>
-    
+
+<!-- OPERATOR FINANCIAL LEDGER -->
+    <div id="view-op-finance" class="page-view">
+      <div class="panel">
+          <div class="panel-header">
+              <h3 style="display:flex; align-items:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> 
+                  Wallet Settings & Payouts
+              </h3>
+          </div>
+          
+          <div class="grid-2">
+              <div style="background: rgba(0,0,0,0.2); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                  <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Automated Payout Method</h4>
+                  <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; font-weight:600; line-height:1.5;">Your earnings are automatically routed to this UPI ID instantly upon job delivery.</p>
+                  <input type="text" id="opMyUpiId" class="form-input" placeholder="e.g. yourname@bank" style="margin-bottom:15px;" />
+                  <button class="btn-outline" onclick="triggerBtnAnim(this); updateOperatorUPI()" style="width:100%; display:flex; align-items:center; justify-content:center;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 
+                      Save UPI ID
+                  </button>
+              </div>
+              
+              <div style="background: rgba(0,0,0,0.2); padding: 25px; border-radius: var(--radius-lg); border: 1px dashed var(--success); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" style="margin-bottom:15px; filter: drop-shadow(0 0 10px rgba(46, 204, 113, 0.4));"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <h3 style="color:white; font-size:22px; font-weight:900; margin-bottom:8px;">Instant Payouts Active</h3>
+                  <p style="font-size:12px; color:var(--success); font-weight:700;">Banking API is connected. The system will automatically clear your dues within seconds of a 'Delivered' status.</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="panel" style="border-left: 4px solid var(--success);">
+          <div class="panel-header">
+              <h3 style="display:flex; align-items:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  Transaction Ledger
+              </h3>
+              <button class="liquid-glass" style="color:var(--brand); border-color:var(--brand); padding:8px 16px; font-size:11px;" onclick="showPopup('Preparing CSV export...', 'info')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  EXPORT CSV
+              </button>
+          </div>
+          <div class="tk-table-wrapper">
+              <table class="tk-sleek-table">
+                  <thead>
+                      <tr>
+                          <th>DATE</th>
+                          <th>JOB ID & TYPE</th>
+                          <th>AMOUNT</th>
+                          <th>PAYOUT STATUS</th>
+                      </tr>
+                  </thead>
+                  <tbody id="table-op-ledger">
+                      <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Loading ledger...</td></tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+    </div> 
+
+    <!-- MASTER SETTINGS -->
     <div id="view-settings" class="page-view">
       <div class="panel">
-        <div class="panel-header"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle; margin-right:0px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Master Settings</h3></div>
+        <div class="panel-header"><h3 style="display:flex; align-items:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Master Settings</h3></div>
         
         <div class="grid-2" style="margin-bottom: 30px;">
            <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px;">
-              <h4 style="color:var(--brand); margin-top:0; margin-bottom:12px; font-weight:800;">Security Options</h4>
-              <button onclick="openModal('passwordModal')" class="btn-outline" style="width:100%; margin-bottom:12px;">Change Password</button>
-              <button onclick="actionLogoutAll()" class="btn-danger" style="width:100%;">Logout All Devices</button>
+              <h4 style="color:var(--brand); margin-top:0; margin-bottom:12px; font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><path d="M11 22c-3.806-1.45-7-3.966-7-9V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v4"/><path d="M14.923 16.547 14 16.164"/><path d="m14.923 18.843-.923.383"/><path d="M16.547 14.923 16.164 14"/><path d="m16.547 20.467-.383.924"/><path d="m18.843 14.923.383-.923"/><path d="m19.225 21.391-.382-.924"/><path d="m20.467 16.547.923-.383"/><path d="m20.467 18.843.923.383"/><circle cx="17.695" cy="17.695" r="3"/></svg>Security Options</h4>
+              <button onclick="openModal('passwordModal')" class="btn-outline" style="width:100%; margin-bottom:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:8px;"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Change Password</button>
+              <button onclick="actionLogoutAll()" class="btn-danger" style="width:100%;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:8px;"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/></svg>Logout All Devices</button>
            </div>
            
            <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px;">
-              <h4 style="color:var(--accent); margin-top:0; margin-bottom:12px; font-weight:800;">Current Device Info</h4>
+              <h4 style="color:var(--accent); margin-top:0; margin-bottom:12px; font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><path d="M12 17v4"/><path d="m14.305 7.53.923-.382"/><path d="m15.228 4.852-.923-.383"/><path d="m16.852 3.228-.383-.924"/><path d="m16.852 8.772-.383.923"/><path d="m19.148 3.228.383-.924"/><path d="m19.53 9.696-.382-.924"/><path d="m20.772 4.852.924-.383"/><path d="m20.772 7.148.924.383"/><path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><path d="M8 21h8"/><circle cx="18" cy="6" r="3"/></svg>Current Device Info</h4>
               <p id="deviceInfoOs" style="font-size:12px; color:var(--text-muted); margin-bottom:6px;"><strong>OS:</strong> Loading...</p>
               <p id="deviceInfoBrowser" style="font-size:12px; color:var(--text-muted); margin-bottom:6px;"><strong>Browser:</strong> Loading...</p>
               <p style="font-size:12px; color:var(--success); font-weight:700;"><strong>Status:</strong> Active Session Connected</p>
            </div>
         </div>
 
-        <div id="settings-content" style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border);">
-           </div>
+        <div id="settings-content" style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border);"></div>
         
         <div class="sys-admin" style="display:none; margin-top:30px; padding-top:20px; border-top:1px solid var(--border);">
            <h4 style="color:var(--danger); margin-bottom:15px; font-weight:800;">Danger Zone (System Admins Only)</h4>
@@ -1676,14 +1730,17 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       </div>
     </div>
 
-  </div>
+    
+
+  </div> <!-- 🔥 CLOSES CONTENT AREA -->
 
   <footer style="text-align: center; padding: 25px 20px; margin-top: auto; border-top: 1px solid var(--border);">
     <div style="font-size: 14px; color: var(--brand); font-weight: 600; margin-bottom: 5px;">Crafted with ❤️ by Trim Key</div>
     <div style="font-size: 12px; color: var(--text-muted);">© <span id="year"></span> Trim Key. All rights reserved.</div>
   </footer>
 
-</div>
+</div> <!-- CLOSES MAIN-WRAPPER -->
+
 
 <div id="correctionModal" class="glass-overlay">
   <!-- 🔥 Flexbox layout locks the header and footer, allowing only the middle to scroll -->
@@ -1939,17 +1996,26 @@ const Memory = {
   }
 };
 
+// =========================================================================================
+// 🔥 BULLETPROOF ONLOAD & SERVICE ENGINE
+// =========================================================================================
 window.onload = () => { 
   let sessionEmail = Memory.getEmail();
   let sessionToken = Memory.getToken();
   
   if(sessionEmail && sessionToken) { 
-    document.getElementById('loginOverlay').style.display = 'none';
+    let loginOverlay = document.getElementById('loginOverlay');
+    if (loginOverlay) loginOverlay.style.display = 'none';
     initDashboard(sessionEmail, sessionToken);
   } else {
-    document.getElementById('loginOverlay').style.display = 'flex';
+    let loginOverlay = document.getElementById('loginOverlay');
+    if (loginOverlay) loginOverlay.style.display = 'flex';
   }
-  setTimeout(handleServiceChange, 500);
+  
+  // Safely trigger the calculation without crashing
+  setTimeout(() => {
+      try { handleServiceChange(); } catch(e) { console.warn("Service calculation deferred."); }
+  }, 500);
 };
 
 // ==========================================
@@ -2211,7 +2277,100 @@ function doLogin() {
     });
 }
 
-function logout() { Memory.clear(); location.reload(); }
+function logout() { 
+  // 1. Grab the premium frosted-glass loader backdrop
+  let loader = document.getElementById('syncLoader');
+  
+  if (loader) {
+      // 2. Inject the Logo, the iOS Spinner, and the Secure text
+      loader.innerHTML = `
+        <div style="text-align:center;">
+          
+          
+          <div class="ios-spinner" style="color: var(--danger); width: 30px; height: 30px; margin-bottom: 20px;">
+              <div></div><div></div><div></div><div></div><div></div><div></div>
+              <div></div><div></div><div></div><div></div><div></div><div></div>
+          </div>
+          
+          <h3 style="color:white; letter-spacing:2px; font-size:13px; margin-bottom:0; font-weight: 800; text-transform: uppercase;">CLOSING SECURE CONNECTION...</h3>
+        </div>
+      `;
+      
+      // 3. Trigger the smooth fade-in and blur animation
+      loader.style.display = 'flex';
+      setTimeout(() => loader.classList.add('active'), 10);
+  }
+  
+  // 4. Clear memory and securely reload after the 1.5s animation finishes
+  setTimeout(() => {
+      Memory.clear(); 
+      location.reload(); 
+  }, 1500);
+}
+
+// =========================================================================================
+// 🔥 1. BULLETPROOF DASHBOARD INITIALIZATION
+// =========================================================================================
+function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent = false) {
+  if (!token) token = Memory.getToken();
+  
+  if (!isSilent) {
+      let lo = document.getElementById('loginOverlay');
+      if (lo) lo.style.display = 'none';
+      showLoader("SYNCING SECURE DATABASE...");
+  }
+  
+  serverCall('getDashboardPayload', { email: email, token: token })
+    .then(payload => {
+      if (!isSilent) hideLoader();
+      
+      if(payload && payload.authFailed) {
+          showPopup("Session expired or logged out from another device.");
+          setTimeout(logout, 2000); 
+          return;
+      }
+    
+      if(!payload || !payload.profile) { logout(); return; }
+      
+      globalUser = payload.profile;
+      globalPayload = payload; 
+      
+      let uhi = document.getElementById('userHeaderInfo');
+      if (uhi) uhi.style.display = 'flex';
+      
+      let uName = globalUser.name || "User";
+      let unD = document.getElementById('userNameDisplay'); if (unD) unD.innerText = uName;
+      let dN = document.getElementById('dropName'); if (dN) dN.innerText = uName;
+      let dE = document.getElementById('dropEmail'); if (dE) dE.innerText = globalUser.email || "";
+      let dR = document.getElementById('dropRole'); if (dR) dR.innerText = globalUser.role || "Role";
+
+      let uA = document.getElementById('userAvatar');
+      if (uA) {
+         if (globalUser.profilePic && globalUser.profilePic.trim() !== "") {
+            uA.innerHTML = `<img src="${globalUser.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+         } else {
+            uA.innerHTML = uName.toUpperCase().charAt(0);
+         }
+      }
+      
+      applyRoleUI(globalUser);
+      renderData(payload);
+      
+      if (!isSilent) {
+          startSilentSyncEngine();
+          setTimeout(requestNotificationPermission, 2000);
+      }
+      
+      if (pendingSuccessMsg && !isSilent) {
+          setTimeout(() => { showPopup(pendingSuccessMsg); }, 350);
+      }
+    })
+    .catch(err => {
+      if (!isSilent) hideLoader();
+      if (!isSilent) showPopup("Server Error during sync: " + err.message);
+      else console.error("Silent background sync failed:", err.message);
+    });
+}
 
 function switchTab(tabId) {
   document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
@@ -2224,7 +2383,7 @@ function switchTab(tabId) {
   if (targetNav) targetNav.classList.add('active');
   
   // Updated dictionary with Production Workspace included
-  let titleMap = { 
+ let titleMap = { 
       'overview': 'Dashboard Overview', 
       'institutes': 'Client Control Center', 
       'billing': 'Global Ledger', 
@@ -2237,7 +2396,8 @@ function switchTab(tabId) {
       'inst-teachers': 'Teachers Directory', 
       'inst-students': 'Students Database', 
       'notifications': 'Broadcast Center',
-      'op-workspace': 'Production Workspace'
+      'op-workspace': 'Production Workspace',
+      'op-finance': 'Financial Ledger' // 🔥 NEW
   };
   
   // Safely grabs the title element and updates the text
@@ -2470,13 +2630,14 @@ function sendBroadcast() {
 
 
 // =========================================================================================
-// 🔥 KPI VISIBILITY & DATA BINDING ENGINE
+// 🔥 2. BULLETPROOF DATA RENDERER
 // =========================================================================================
 function renderData(payload) {
   if(!payload || !payload.data) return;
 
   populateFilters();
   applyFilters();
+  
   if(payload.notifications) { 
       renderNotifications(payload.notifications);
   } else { 
@@ -2484,10 +2645,10 @@ function renderData(payload) {
   }
 
   const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : "unknown";
+  
   if(payload.superAdmin && payload.superAdmin.kpi) {
     let kpi = payload.superAdmin.kpi;
     let kpiContainer = document.getElementById('sa-kpi-container');
-    
     if(kpiContainer && (userRole === "super admin" || userRole === "system admin" || userRole === "all")) {
       kpiContainer.style.display = 'grid';
       kpiContainer.innerHTML = `
@@ -2501,12 +2662,9 @@ function renderData(payload) {
 
   if (payload.stats) {
     if (payload.stats.academic) {
-      let todayEl = document.getElementById('v1-today');
-      let sessionEl = document.getElementById('v1-session');
-      let academicEl = document.getElementById('v1-academic');
-      if(todayEl) todayEl.innerText = payload.stats.academic.today || 0;
-      if(sessionEl) sessionEl.innerText = payload.stats.academic.session || 0;
-      if(academicEl) academicEl.innerText = payload.stats.academic.academic || 0;
+      let td = document.getElementById('v1-today'); if(td) td.innerText = payload.stats.academic.today || 0;
+      let ts = document.getElementById('v1-session'); if(ts) ts.innerText = payload.stats.academic.session || 0;
+      let ta = document.getElementById('v1-academic'); if(ta) ta.innerText = payload.stats.academic.academic || 0;
       
       let stdStats = document.getElementById('standardStats');
       if (stdStats && (userRole === 'teacher' || userRole === 'admin' || userRole === 'all')) {
@@ -2515,10 +2673,8 @@ function renderData(payload) {
     }
 
     if (payload.stats.inst) {
-      let monthEl = document.getElementById('v1-month');
-      let yearEl = document.getElementById('v1-year');
-      if(monthEl) monthEl.innerText = payload.stats.inst.month || 0;
-      if(yearEl) yearEl.innerText = payload.stats.inst.academic || 0;
+      let vm = document.getElementById('v1-month'); if(vm) vm.innerText = payload.stats.inst.month || 0;
+      let vy = document.getElementById('v1-year'); if(vy) vy.innerText = payload.stats.inst.academic || 0;
       
       let instCard = document.getElementById('instituteActivityCard');
       if (instCard && (userRole === 'admin' || userRole === 'all')) {
@@ -2527,19 +2683,62 @@ function renderData(payload) {
     }
 
     if (payload.stats.financial) {
-      let opTotalEl = document.getElementById('v1-opTotal');
-      let opPendingEl = document.getElementById('v1-opPending');
-      if(opTotalEl) opTotalEl.innerText = "₹" + (payload.stats.financial.total || 0).toLocaleString('en-IN');
-      if(opPendingEl) opPendingEl.innerText = "₹" + (payload.stats.financial.pending || 0).toLocaleString('en-IN');
+      let opT = document.getElementById('v1-opTotal'); if(opT) opT.innerText = "₹" + (payload.stats.financial.total || 0).toLocaleString('en-IN');
+      let opP = document.getElementById('v1-opPending'); if(opP) opP.innerText = "₹" + (payload.stats.financial.pending || 0).toLocaleString('en-IN');
+      
       let opCard = document.getElementById('operatorKpis');
       if (opCard && userRole === 'operator') {
           opCard.style.display = 'grid';
+          
+          const safeDocs = Array.isArray(globalPayload.data.docs) ? globalPayload.data.docs : [];
+          const safePapers = Array.isArray(globalPayload.data.papers) ? globalPayload.data.papers : [];
+          const allJobs = [...safePapers, ...safeDocs];
+          
+          let pendingCount = 0;
+          let deliveredCount = 0;
+          let ledgerHtml = "";
+          
+          let myUpi = document.getElementById('opMyUpiId');
+          if (myUpi) myUpi.value = globalUser.upi || "";
+
+          allJobs.forEach(j => {
+              if (j.status === 'Delivered' || j.status === 'Completed' || j.status === 'PAID' || j.status === 'Generated') deliveredCount++;
+              if (j.status === 'Pending' || j.status === 'Assigned' || j.status === 'In Progress' || j.status === 'Pending Revision') pendingCount++;
+              
+              if (j.status !== 'Pending' && j.status !== 'Assigned' && j.status !== 'Pending Revision' && j.status !== 'In Progress') {
+                  const submitDate = new Date(j.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                  const typeLabel = j.subject ? j.subject : j.type;
+                  
+                  let payoutStatus = (j.status === 'Delivered' || j.status === 'Completed' || j.status === 'PAID') 
+                      ? `<span class="flat-pill bg-success">PAID AUTO</span>` 
+                      : `<span class="flat-pill bg-warning">PENDING</span>`;
+                  
+                  let amount = j.subject ? "₹50.00" : "₹5.00"; 
+
+                  ledgerHtml += `
+                  <tr>
+                      <td data-label="DATE">${submitDate}</td>
+                      <td data-label="JOB ID & TYPE">
+                          <b style="color:white; font-size:13px; text-transform:uppercase;">${j.id}</b><br>
+                          <span style="color:var(--text-muted); font-size:10px; font-weight:700; text-transform:uppercase;">${typeLabel}</span>
+                      </td>
+                      <td data-label="AMOUNT"><b style="color:var(--success); font-size:14px;">${amount}</b></td>
+                      <td data-label="PAYOUT STATUS">${payoutStatus}</td>
+                  </tr>`;
+              }
+          });
+          
+          let delEl = document.getElementById('v1-opDelivered'); if (delEl) delEl.innerText = deliveredCount;
+          let penEl = document.getElementById('v1-opPendingJobs'); if (penEl) penEl.innerText = pendingCount;
+          
+          if (ledgerHtml === "") ledgerHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">No completed transactions yet.</td></tr>`;
+          
+          let tOpL = document.getElementById('table-op-ledger');
+          if (tOpL) tOpL.innerHTML = ledgerHtml;
       }
     }
   }
 
-
-  // 🔥 Trigger Priority Queue rendering for the workspace tab
   if (userRole === "operator" || userRole === "super admin" || userRole === "system admin" || userRole === "all") {
       if (typeof renderOperatorWorkspace === "function") {
           renderOperatorWorkspace();
@@ -2547,68 +2746,9 @@ function renderData(payload) {
   }
 }
 
-// 🔥 Added 'isSilent = false' 
-function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent = false) {
-  if (!token) token = Memory.getToken();
-  
-  if (!isSilent) {
-      document.getElementById('loginOverlay').style.display = 'none';
-      showLoader("SYNCING SECURE DATABASE...");
-  }
-  
-  serverCall('getDashboardPayload', { email: email, token: token })
-    .then(payload => {
-      if (!isSilent) hideLoader();
-      
-      if(payload && payload.authFailed) {
-          showPopup("Session expired or logged out from another device.");
-          setTimeout(logout, 2000); 
-          return;
-      }
-    
-      if(!payload || !payload.profile) { logout(); return; }
-      
-      globalUser = payload.profile;
-      globalPayload = payload; 
-      
-      document.getElementById('userHeaderInfo').style.display = 'flex';
-      let uName = globalUser.name || "User";
-      document.getElementById('userNameDisplay').innerText = uName;
-      document.getElementById('dropName').innerText = uName;
-      document.getElementById('dropEmail').innerText = globalUser.email || "";
-      document.getElementById('dropRole').innerText = globalUser.role || "Role";
-
-      if (globalUser.profilePic && globalUser.profilePic.trim() !== "") {
-         document.getElementById('userAvatar').innerHTML = `<img src="${globalUser.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-      } else {
-         document.getElementById('userAvatar').innerHTML = uName.toUpperCase().charAt(0);
-      }
-      
-      applyRoleUI(globalUser);
-      renderData(payload);
-      
-      // 🔥 START THE BACKGROUND SYNC ON LOGIN
-      if (!isSilent) {
-          startSilentSyncEngine();
-          setTimeout(requestNotificationPermission, 2000);
-      }
-      
-      // Do not fire the old blocker popup if we are doing a silent background sync
-      if (pendingSuccessMsg && !isSilent) {
-          setTimeout(() => { showPopup(pendingSuccessMsg); }, 350);
-      }
-    })
-    .catch(err => {
-      if (!isSilent) hideLoader();
-      
-      if (!isSilent) {
-          showPopup("Server Error during sync: " + err.message);
-      } else {
-          console.error("Silent background sync failed:", err.message);
-      }
-    });
-}
-
+// =========================================================================================
+// 🔥 3. BULLETPROOF ROLE UI ASSIGNER
+// =========================================================================================
 function applyRoleUI(p) {
   const userRole = String(p.role).trim().toLowerCase();
   
@@ -2622,13 +2762,9 @@ function applyRoleUI(p) {
       let targetSelect = document.getElementById('broadcastTarget');
       if(targetSelect) {
           if(userRole === "super admin" || userRole === "system admin" || userRole === "all") {
-              targetSelect.innerHTML = `<option value="all_operators">All Operators</option>
-                                        <option value="all_teachers">All Teachers</option>
-                                        <option value="all_admins">All Admins</option>
-                                        <option value="global">Entire System (Global)</option>`;
+              targetSelect.innerHTML = `<option value="all_operators">All Operators</option><option value="all_teachers">All Teachers</option><option value="all_admins">All Admins</option><option value="global">Entire System (Global)</option>`;
           } else {
-              targetSelect.innerHTML = `<option value="inst_teachers">My Institute Teachers</option>
-                                        <option value="inst_students">My Institute Students</option>`;
+              targetSelect.innerHTML = `<option value="inst_teachers">My Institute Teachers</option><option value="inst_students">My Institute Students</option>`;
           }
       }
   }
@@ -2641,66 +2777,78 @@ function applyRoleUI(p) {
       }
       if(el.classList.contains('nav-item')) el.style.display = 'flex';
     });
-    instNameEl.style.display = "none"; logoEl.style.display = "none"; topTitleEl.style.fontSize = "18px"; topTitleEl.style.color = "var(--text)"; topTitleEl.style.background = "transparent"; topTitleEl.style.padding = "0";
+    
+    if(instNameEl) instNameEl.style.display = "none"; 
+    if(logoEl) logoEl.style.display = "none"; 
+    if(topTitleEl) {
+        topTitleEl.style.fontSize = "18px"; 
+        topTitleEl.style.color = "var(--text)"; 
+        topTitleEl.style.background = "transparent"; 
+        topTitleEl.style.padding = "0";
+    }
+
     if(userRole !== "all") {
-       let btnPap = document.getElementById('btn-submit-paper');
-       if(btnPap) btnPap.style.display = 'none';
-       let btnDoc = document.getElementById('btn-request-doc');  if(btnDoc) btnDoc.style.display = 'none';
-       let btnGen = document.getElementById('btn-generated');    if(btnGen) btnGen.style.display = 'none';
+       let b1 = document.getElementById('btn-submit-paper'); if (b1) b1.style.display = 'none';
+       let b2 = document.getElementById('btn-request-doc'); if (b2) b2.style.display = 'none';
+       let b3 = document.getElementById('btn-generated'); if (b3) b3.style.display = 'none';
     }
   } 
 
   if(userRole !== "super admin" && userRole !== "system admin") {
-    document.getElementById('standard-user-dashboard').style.display = 'block';
-    document.getElementById('v1-teacher').innerText = p.name;
-    document.getElementById('v1-subject').innerText = p.subjects || "-";
-    document.getElementById('v1-institute').innerText = p.institute || "-";
+    let sDash = document.getElementById('standard-user-dashboard'); if (sDash) sDash.style.display = 'block';
+    let vT = document.getElementById('v1-teacher'); if (vT) vT.innerText = p.name;
+    let vS = document.getElementById('v1-subject'); if (vS) vS.innerText = p.subjects || "-";
+    let vI = document.getElementById('v1-institute'); if (vI) vI.innerText = p.institute || "-";
 
-    instNameEl.innerText = p.institute || "Ed-Trim Key";
-    instNameEl.style.display = "inline-block";
-    topTitleEl.style.fontSize = "11px";
-    topTitleEl.style.color = "var(--success)";
-    topTitleEl.style.background = "rgba(46,204,113,0.1)";
-    topTitleEl.style.padding = "4px 8px";
-    topTitleEl.style.borderRadius = "6px";
+    if(instNameEl) {
+        instNameEl.innerText = p.institute || "Ed-Trim Key";
+        instNameEl.style.display = "inline-block";
+    }
+    if(topTitleEl) {
+        topTitleEl.style.fontSize = "11px";
+        topTitleEl.style.color = "var(--success)";
+        topTitleEl.style.background = "rgba(46,204,113,0.1)";
+        topTitleEl.style.padding = "4px 8px";
+        topTitleEl.style.borderRadius = "6px";
+    }
     
-    // 🔥 LOGO LOGIC
     let finalLogoUrl = "https://wjvoetdkkggyhtcoqqcj.supabase.co/storage/v1/object/public/Ed%20Trim%20Key/Ed-Trim%20Kry%20Logo.png";
     let isDefaultLogo = true;
 
     if (p.logo && String(p.logo).trim() !== "") {
-        finalLogoUrl = p.logo;
-        isDefaultLogo = false;
+        finalLogoUrl = p.logo; isDefaultLogo = false;
     } else if (p.instDetails && p.instDetails.logoUrl && String(p.instDetails.logoUrl).trim() !== "") {
-        finalLogoUrl = p.instDetails.logoUrl;
-        isDefaultLogo = false;
+        finalLogoUrl = p.instDetails.logoUrl; isDefaultLogo = false;
     } else if (globalPayload && globalPayload.data && globalPayload.data.instituteLogo && String(globalPayload.data.instituteLogo).trim() !== "") {
-        finalLogoUrl = globalPayload.data.instituteLogo;
-        isDefaultLogo = false;
+        finalLogoUrl = globalPayload.data.instituteLogo; isDefaultLogo = false;
     }
     
-    logoEl.src = finalLogoUrl; logoEl.style.display = 'block';
-    if(isDefaultLogo) { logoEl.style.background = "transparent"; logoEl.style.padding = "0"; } 
-    else { logoEl.style.background = "white"; logoEl.style.padding = "2px"; }
+    if(logoEl) {
+        logoEl.src = finalLogoUrl; 
+        logoEl.style.display = 'block';
+        if(isDefaultLogo) { logoEl.style.background = "transparent"; logoEl.style.padding = "0"; } 
+        else { logoEl.style.background = "white"; logoEl.style.padding = "2px"; }
+    }
 
-    let navDoc = document.getElementById('nav-documents'); if(navDoc) navDoc.style.display = 'flex';
-    let navPap = document.getElementById('nav-papers');
-    if(navPap) navPap.style.display = 'flex';
+    let nD = document.getElementById('nav-documents'); if (nD) nD.style.display = 'flex';
+    let nP = document.getElementById('nav-papers'); if (nP) nP.style.display = 'flex';
   }
   
   if(userRole === "operator" || userRole === "super admin" || userRole === "system admin") {
-      document.getElementById('companyInfoCard').style.display = 'block';
+      let cIC = document.getElementById('companyInfoCard'); if (cIC) cIC.style.display = 'block';
   }
 
+  // Teacher / Admin Apps Check
   if(userRole === "teacher" || userRole === "admin" || userRole === "all") {
-    let btnPap = document.getElementById('btn-submit-paper');
-    if(btnPap) btnPap.style.display = 'block';
-    let btnDoc = document.getElementById('btn-request-doc');  if(btnDoc) btnDoc.style.display = 'block';
-    let btnGen = document.getElementById('btn-generated');    if(btnGen) btnGen.style.display = 'block';
+    let b1 = document.getElementById('btn-submit-paper'); if (b1) b1.style.display = 'flex';
+    let b2 = document.getElementById('btn-request-doc'); if (b2) b2.style.display = 'flex';
+    let b3 = document.getElementById('btn-generated'); if (b3) b3.style.display = 'flex';
+    
     let dynContainer = document.getElementById('dynamic-apps-container');
     let sideDynContainer = document.getElementById('sidebar-dynamic-apps');
     if(dynContainer) dynContainer.innerHTML = '';
     if(sideDynContainer) sideDynContainer.innerHTML = '';
+    
     if(Array.isArray(p.dynamicApps)) {
       p.dynamicApps.forEach(app => {
         if(app.targetRole === 'all' || (app.targetRole === 'admin' && (userRole === 'admin' || userRole === 'all'))) {
@@ -2713,29 +2861,21 @@ function applyRoleUI(p) {
             if(app.url) window.open(app.url + "?user=" + encodeURIComponent(p.email) + "&code=" + p.code);
             else showPopup("App URL not configured.");
           };
-          dynContainer.appendChild(btn);
+          if(dynContainer) dynContainer.appendChild(btn);
 
           let sideBtn = document.createElement('div');
           sideBtn.className = "nav-item"; 
-          
-          let svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/></svg>`; // Default Link SVG
-          
-          if(app.name.toLowerCase().includes("attendance")) {
-              svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>`;
-          }
-          if(app.name.toLowerCase().includes("admission")) {
-              svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
-          }
-          if(app.name.toLowerCase().includes("fee")) {
-              svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="12" y1="2" x2="12" y2="6"/></svg>`;
-          }
+          let svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/></svg>`; 
+          if(app.name.toLowerCase().includes("attendance")) svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>`;
+          if(app.name.toLowerCase().includes("admission")) svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+          if(app.name.toLowerCase().includes("fee")) svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="12" y1="2" x2="12" y2="6"/></svg>`;
           
           sideBtn.innerHTML = svgIcon + " " + app.name;
           sideBtn.onclick = function() {
             if(app.url) window.open(app.url + "?user=" + encodeURIComponent(p.email) + "&code=" + p.code);
             else showPopup("App URL not configured.");
           };
-          sideDynContainer.appendChild(sideBtn);
+          if(sideDynContainer) sideDynContainer.appendChild(sideBtn);
         }
       });
     }
@@ -2746,23 +2886,23 @@ function applyRoleUI(p) {
       if(el.classList.contains('nav-item')) el.style.display = 'flex'; 
     });
     if (p.instDetails) {
-        document.getElementById('billPlanType').innerText = p.instDetails.plan || "Standard";
-        document.getElementById('billStartDate').innerText = p.instDetails.startDate || "N/A";
-        document.getElementById('billRenewDate').innerText = p.instDetails.renewal || "N/A";
-        document.getElementById('billPurchaseValue').innerText = p.instDetails.purchaseValue ? "₹" + p.instDetails.purchaseValue : "-";
+        let bPT = document.getElementById('billPlanType'); if(bPT) bPT.innerText = p.instDetails.plan || "Standard";
+        let bSD = document.getElementById('billStartDate'); if(bSD) bSD.innerText = p.instDetails.startDate || "N/A";
+        let bRD = document.getElementById('billRenewDate'); if(bRD) bRD.innerText = p.instDetails.renewal || "N/A";
+        let bPV = document.getElementById('billPurchaseValue'); if(bPV) bPV.innerText = p.instDetails.purchaseValue ? "₹" + p.instDetails.purchaseValue : "-";
         
-        document.getElementById('billPaperTotal').innerText = p.instDetails.papersTotal || 0;
-        document.getElementById('billPaperRemain').innerText = p.instDetails.papersLeft || 0;
+        let bPTot = document.getElementById('billPaperTotal'); if(bPTot) bPTot.innerText = p.instDetails.papersTotal || 0;
+        let bPR = document.getElementById('billPaperRemain'); if(bPR) bPR.innerText = p.instDetails.papersLeft || 0;
         
-        document.getElementById('billRcTotal').innerText = p.instDetails.rcTotal || 0;
-        document.getElementById('billRcRemain').innerText = p.instDetails.rcLeft || 0;
+        let bRT = document.getElementById('billRcTotal'); if(bRT) bRT.innerText = p.instDetails.rcTotal || 0;
+        let bRR = document.getElementById('billRcRemain'); if(bRR) bRR.innerText = p.instDetails.rcLeft || 0;
         
-        document.getElementById('billAcTotal').innerText = p.instDetails.acTotal || 0;
-        document.getElementById('billAcRemain').innerText = p.instDetails.acLeft || 0;
+        let bAT = document.getElementById('billAcTotal'); if(bAT) bAT.innerText = p.instDetails.acTotal || 0;
+        let bAR = document.getElementById('billAcRemain'); if(bAR) bAR.innerText = p.instDetails.acLeft || 0;
         
         let smsLeft = p.instDetails.smsRemaining !== undefined ? p.instDetails.smsRemaining : 0;
-        document.getElementById('billSmsTotal').innerText = p.instDetails.smsTotal || 0;
-        document.getElementById('billSmsRemain').innerText = smsLeft;
+        let bST = document.getElementById('billSmsTotal'); if(bST) bST.innerText = p.instDetails.smsTotal || 0;
+        let bSR = document.getElementById('billSmsRemain'); if(bSR) bSR.innerText = smsLeft;
 
         if (Number(p.instDetails.acLeft) === 0 || Number(p.instDetails.papersLeft) === 0) {
            setTimeout(() => { showPopup("⚠️ You have a quota that is exhausted. Recharge now."); }, 2000);
@@ -2776,18 +2916,15 @@ function applyRoleUI(p) {
            let wrap = document.getElementById('wrap' + elId.replace('bill',''));
            if(!chk) return;
            if(val === "YES") {
-               chk.checked = true;
-               chk.disabled = false; 
+               chk.checked = true; chk.disabled = false; 
                if(req) req.style.display = 'none';
                if(wrap) wrap.classList.remove('disabled-wrapper');
            } else if (val === "Deactivated") {
-               chk.checked = false;
-               chk.disabled = false; 
+               chk.checked = false; chk.disabled = false; 
                if(req) req.style.display = 'none';
                if(wrap) wrap.classList.remove('disabled-wrapper');
            } else { 
-               chk.checked = false;
-               chk.disabled = true; 
+               chk.checked = false; chk.disabled = true; 
                if(req) req.style.display = 'inline-block';
                if(wrap) wrap.classList.add('disabled-wrapper');
            }
@@ -2801,51 +2938,77 @@ function applyRoleUI(p) {
 
   let settingsHtml = "";
   if (userRole === "super admin" || userRole === "system admin" || userRole === "all") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Super Admin Configurations</h4>
-                       <ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;">
-                         <li>Global Master Data Export</li>
-                         <li>System Default Storage Drives</li>
-                         <li>Webhook & API Endpoint Integrations</li>
-                         <li>Global Maintenance Mode Toggle</li>
-                       </ul>`;
+      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Super Admin Configurations</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Global Master Data Export</li><li>System Default Storage Drives</li><li>Webhook & API Endpoint Integrations</li><li>Global Maintenance Mode Toggle</li></ul>`;
   } else if (userRole === "admin") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Institute Administration</h4>
-                       <ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;">
-                         <li>Default SMS Notification Templates</li>
-                         <li>Paper Header/Footer Branding Customizations</li>
-                         <li>Teacher Access Security Levels</li>
-                         <li>Subscription Alerts & Renewal Routing</li>
-                       </ul>`;
+      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Institute Administration</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Default SMS Notification Templates</li><li>Paper Header/Footer Branding Customizations</li><li>Teacher Access Security Levels</li><li>Subscription Alerts & Renewal Routing</li></ul>`;
   } else if (userRole === "teacher") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Teacher Preferences</h4>
-                       <ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;">
-                         <li>Set Default Class & Subject for Submissions</li>
-                         <li>Alert Preferences (Email vs Push Notifications)</li>
-                         <li>Dashboard Layout Theme</li>
-                       </ul>`;
+      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Teacher Preferences</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Set Default Class & Subject for Submissions</li><li>Alert Preferences (Email vs Push Notifications)</li><li>Dashboard Layout Theme</li></ul>`;
   } else if (userRole === "operator") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Operator Controls</h4>
-                       <ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;">
-                         <li>Update UPI / Payout Information</li>
-                         <li>Active Availability Toggle (Online/Busy/Away)</li>
-                         <li>Preferred Work Type Auto-Assignments</li>
-                       </ul>`;
+      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Operator Controls</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Update UPI / Payout Information</li><li>Active Availability Toggle (Online/Busy/Away)</li><li>Preferred Work Type Auto-Assignments</li></ul>`;
   }
-  document.getElementById('settings-content').innerHTML = settingsHtml;
+  let sC = document.getElementById('settings-content');
+  if(sC) sC.innerHTML = settingsHtml;
 
-// 🔥 Activate Operator Workspace Link & Dashboard Button
   let navOpWs = document.getElementById('nav-op-workspace');
   let btnOpWs = document.getElementById('btn-op-workspace');
+  let navOpFin = document.getElementById('nav-op-finance'); 
   
   if (userRole === "operator" || userRole === "super admin" || userRole === "system admin" || userRole === "all") {
       if (navOpWs) navOpWs.style.display = 'flex';
-      if (btnOpWs) btnOpWs.style.display = 'block';
-      // Auto-routing removed: Operators now start on the Dashboard Overview
+      if (btnOpWs) btnOpWs.style.display = 'flex';
+      if (navOpFin && userRole === "operator") navOpFin.style.display = 'flex'; 
   } else {
       if (navOpWs) navOpWs.style.display = 'none';
       if (btnOpWs) btnOpWs.style.display = 'none';
+      if (navOpFin) navOpFin.style.display = 'none'; 
   }
-  
+}
+
+// =========================================================================================
+// 🔥 3. BULLETPROOF NOTIFICATIONS ENGINE
+// =========================================================================================
+function renderNotifications(notifs) {
+    localNotifications = notifs || [];
+    let badge = document.getElementById('notifBadge');
+    let list = document.getElementById('notifList');
+    let bellWrap = document.getElementById('bellWrapper');
+    
+    if(bellWrap) bellWrap.style.display = 'flex';
+    
+    if(localNotifications.length === 0) {
+        if(badge) badge.style.display = 'none';
+        if(list) list.innerHTML = '<div style="padding:25px; text-align:center; color:var(--text-muted); font-size:12px; font-weight:600;">No alerts</div>';
+        return;
+    }
+    
+    let readHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    let unreadCount = 0;
+    localNotifications.forEach(n => {
+        let hash = (String(n.title || "") + String(n.msg || "")).substring(0,50); 
+        if (readHashes.includes(hash)) n.isRead = true;
+        if (!n.isRead) unreadCount++;
+    });
+    
+    if(unreadCount > 0) {
+        if(badge) { badge.innerText = unreadCount; badge.style.display = 'flex'; }
+    } else {
+        if(badge) badge.style.display = 'none';
+    }
+    
+    if(list) {
+        list.innerHTML = localNotifications.map(n => {
+            let safeTitle = (n.title || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            let safeMsg = (n.msg || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            let safeRef = n.refId ? String(n.refId).replace(/'/g, "\\'") : '';
+            
+            return `
+            <div class="notif-item" style="opacity: ${n.isRead ? '0.6' : '1'}; background: ${n.isRead ? 'transparent' : 'rgba(38, 195, 234, 0.05)'};" onclick="handleNotificationClick('${safeTitle}', '${safeMsg}', '${safeRef}')">
+                <div class="notif-title" style="color: ${n.isRead ? 'var(--text-muted)' : 'var(--brand)'};">${n.title || 'System Notice'}</div>
+                <div class="notif-msg">${n.msg || ''}</div>
+                <div class="notif-time">${n.time || 'Just now'}</div>
+            </div>`;
+        }).join('');
+    }
 }
 
 function toggleWebAppCustom(appType, chkBox) {
@@ -2884,7 +3047,10 @@ function handleFeeToggle(el){
 }
 
 function handleServiceChange() {
-   let type = document.getElementById('serviceSelect').value;
+   let serviceSelect = document.getElementById('serviceSelect');
+   if (!serviceSelect) return; // Prevent crashes if the element isn't loaded yet!
+   
+   let type = serviceSelect.value;
    let paperOpts = document.getElementById('paperOptions');
    let subOpts = document.getElementById('subOptions');
    let qtyLabel = document.getElementById('qtyLabel');
@@ -2895,45 +3061,57 @@ function handleServiceChange() {
    let singleAppSelect = document.getElementById('singleAppSelect');
 
    if (type.includes('Paper')) {
-       paperOpts.style.display = 'block';
-       subOpts.style.display = 'none';
-       qtyLabel.innerText = "Quantity (No. of Papers)";
-       qtyInput.placeholder = "Enter number of papers";
-       if (customUnitToggle.checked) {
-           paperUnitInput.disabled = false;
-           if(paperUnitInput.value < 25) paperUnitInput.value = 26; 
-       } else {
-           paperUnitInput.disabled = true;
-           paperUnitInput.value = 25;
+       if(paperOpts) paperOpts.style.display = 'block';
+       if(subOpts) subOpts.style.display = 'none';
+       if(qtyLabel) qtyLabel.innerText = "Quantity (No. of Papers)";
+       if(qtyInput) qtyInput.placeholder = "Enter number of papers";
+       
+       if (customUnitToggle && paperUnitInput) {
+           if (customUnitToggle.checked) {
+               paperUnitInput.disabled = false;
+               if(paperUnitInput.value < 25) paperUnitInput.value = 26; 
+           } else {
+               paperUnitInput.disabled = true;
+               paperUnitInput.value = 25;
+           }
        }
    } else if (type.includes('Card') || type.includes('SMS')) {
-       paperOpts.style.display = 'none';
-       subOpts.style.display = 'none';
-       qtyLabel.innerText = type.includes('SMS') ? "Quantity (No. of SMS)" : "Quantity (No. of Cards)";
-       qtyInput.placeholder = "Enter quantity";
+       if(paperOpts) paperOpts.style.display = 'none';
+       if(subOpts) subOpts.style.display = 'none';
+       if(qtyLabel) qtyLabel.innerText = type.includes('SMS') ? "Quantity (No. of SMS)" : "Quantity (No. of Cards)";
+       if(qtyInput) qtyInput.placeholder = "Enter quantity";
    } else if (type === 'App Subscriptions') {
-       paperOpts.style.display = 'none'; subOpts.style.display = 'block';
-       qtyLabel.innerText = "Period (Years)";
-       qtyInput.placeholder = "Enter number of years";
-       if (singleAppToggle.checked) { singleAppSelect.style.display = 'block';
-       } else { singleAppSelect.style.display = 'none'; }
+       if(paperOpts) paperOpts.style.display = 'none'; 
+       if(subOpts) subOpts.style.display = 'block';
+       if(qtyLabel) qtyLabel.innerText = "Period (Years)";
+       if(qtyInput) qtyInput.placeholder = "Enter number of years";
+       
+       if (singleAppToggle && singleAppSelect) {
+           if (singleAppToggle.checked) singleAppSelect.style.display = 'block';
+           else singleAppSelect.style.display = 'none';
+       }
    }
    calculateValue();
 }
 
 function calculateValue() {
-   let type = document.getElementById('serviceSelect').value;
-   let qty = Number(document.getElementById('rechargeQuantity').value) || 0;
+   let serviceSelect = document.getElementById('serviceSelect');
+   let qtyInput = document.getElementById('rechargeQuantity');
+   if(!serviceSelect || !qtyInput) return; // Crash prevention
+   
+   let type = serviceSelect.value;
+   let qty = Number(qtyInput.value) || 0;
    let planType = globalUser?.instDetails?.plan || "Standard";
    let pricingMaster = (globalPayload && globalPayload.pricingMaster) ? globalPayload.pricingMaster : [];
    let targetService = type;
+   
    if (type === 'MCQ Paper') targetService = 'MCQ';
    if (type === 'Math Paper') targetService = 'Maths';
    if (type === 'App Subscriptions') {
-      let isSingle = document.getElementById('singleAppToggle').checked;
+      let isSingle = document.getElementById('singleAppToggle')?.checked;
       if (isSingle) {
-          let singleType = document.getElementById('singleAppSelect').value;
-          targetService = singleType === "Fee" ? "Fee Collection" : singleType;
+          let singleType = document.getElementById('singleAppSelect')?.value;
+          targetService = singleType === "Fee" ? "Fee Collection" : (singleType || 'Apps');
       } else {
           targetService = 'Apps';
       }
@@ -2946,32 +3124,36 @@ function calculateValue() {
    let discount = pData ? Number(pData.Discount) : 0;
    let finalRate = pData ? Number(pData.FinalRate) : 0;
    let total = 0;
+   
    let pricingBox = document.getElementById('pricingDetailsBox');
-   if (qty > 0 || type.includes("Paper") || type === "App Subscriptions") pricingBox.style.display = 'block';
-   else pricingBox.style.display = 'none';
+   if(pricingBox) {
+       if (qty > 0 || type.includes("Paper") || type === "App Subscriptions") pricingBox.style.display = 'block';
+       else pricingBox.style.display = 'none';
+   }
 
    if (type.includes('Paper')) {
-       let qPerPaper = Number(document.getElementById('paperUnitInput').value) || 25;
+       let paperUnitInput = document.getElementById('paperUnitInput');
+       let qPerPaper = paperUnitInput ? (Number(paperUnitInput.value) || 25) : 25;
        if (baseRate === 0) baseRate = 180; 
        if (finalRate === 0) finalRate = 180;
        let ratePerQuestion = finalRate / 25; 
        let costPerPaper = ratePerQuestion * qPerPaper; 
        
        total = costPerPaper * qty;
-       document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " (Base/25Q)";
-       document.getElementById('uiFinalRate').innerText = "₹" + costPerPaper.toFixed(2) + " (For " + qPerPaper + "Q)";
+       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " (Base/25Q)";
+       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + costPerPaper.toFixed(2) + " (For " + qPerPaper + "Q)";
    } else if (type.includes('Card') || type.includes('SMS')) {
        total = finalRate * qty;
-       document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Unit";
-       document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
+       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Unit";
+       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
    } else if (type === 'App Subscriptions') {
        total = finalRate * qty;
-       document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Year";
-       document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
+       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Year";
+       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
    }
 
-   document.getElementById('uiDiscount').innerText = discount + "%";
-   document.getElementById("calculatedValue").innerText = "₹" + total.toFixed(2);
+   if(document.getElementById('uiDiscount')) document.getElementById('uiDiscount').innerText = discount + "%";
+   if(document.getElementById("calculatedValue")) document.getElementById("calculatedValue").innerText = "₹" + total.toFixed(2);
 }
 
 function payNow(){
@@ -4740,7 +4922,7 @@ function renderOperatorWorkspace() {
     const nowTime = new Date().getTime();
     
     // SVGs for the cards
-    const instSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`;
+    const instSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg>`;
     const docSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
     const wsSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
     const chatSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
@@ -4884,14 +5066,18 @@ function selectWorkspaceJob(encodedJob) {
     const job = JSON.parse(decodeURIComponent(encodedJob));
     document.getElementById('opIdleWorkspace').style.display = 'none';
     document.getElementById('opActiveWorkspace').style.display = 'flex';
-    
+
+    const instSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg>`;
+    const docSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+
+
     document.querySelectorAll('.op-job-card').forEach(el => el.classList.remove('active'));
     const activeCard = document.getElementById(`opCard_${job.id}`);
     if(activeCard) activeCard.classList.add('active');
 
     document.getElementById('wsActiveJobId').value = job.id;
     document.getElementById('wsJobId').innerText = job.id;
-    document.getElementById('wsInstName').innerText = `🏢 ${job.inst}`;
+    document.getElementById('wsInstName').innerText = `${job.inst}`;
     document.getElementById('wsJobDetails').innerText = job.subject ? `📄 ${job.subject} (${job.class})` : `📋 ${job.type} (${job.class})`;
     document.getElementById('wsDeadlineTimer').innerHTML = getDeadlineUI(job.deadline);
     
@@ -5014,16 +5200,23 @@ const RealtimeManager = {
     init() {
         if (!window.supabaseInstance || !globalUser) return;
 
-        // 1. Securely bind the session to the v2 SDK
+        // Securely bind the session to the v2 SDK
         const sessionToken = Memory.getToken();
         if (sessionToken) {
             window.supabaseInstance.realtime.setAuth(sessionToken);
         }
 
-        // 2. Disconnect any ghost channels to prevent memory leaks
-        if (this.systemChannel) window.supabaseInstance.removeChannel(this.systemChannel);
+        // 🔥 FIX: Prevent interrupting a handshake. 
+        // Only kill the channel if it's fully connected, otherwise leave it alone.
+        if (this.systemChannel) {
+            if (this.systemChannel.state === 'SUBSCRIBED') {
+                window.supabaseInstance.removeChannel(this.systemChannel);
+            } else if (this.systemChannel.state === 'JOINING') {
+                return; // Silently exit to avoid the WebSocket console error
+            }
+        }
         
-        // 3. Launch the Master WebSocket
+        // Launch the Master WebSocket
         this.subscribeSystemChannels();
     },
 
@@ -5136,6 +5329,31 @@ const RealtimeManager = {
 // Bridge function to launch the manager
 function startSilentSyncEngine() {
     RealtimeManager.init();
+}
+
+function updateOperatorUPI() {
+    const btn = event.currentTarget;
+    const upiId = document.getElementById('opMyUpiId').value.trim();
+    
+    if(!upiId || !upiId.includes('@')) {
+        resetBtnAnim(btn);
+        return showPopup("Please enter a valid UPI ID.", "warning");
+    }
+    
+    serverCall('updateOperatorUpi', { upi: upiId, email: globalUser.email })
+        .then(res => {
+            resetBtnAnim(btn);
+            if(res.success) {
+                globalUser.upi = upiId; // Update local memory
+                showPopup("UPI ID securely saved for Auto-Payouts.");
+            } else {
+                showPopup("Failed to save UPI: " + res.message, "error");
+            }
+        })
+        .catch(err => {
+            resetBtnAnim(btn);
+            showPopup("Network Error: " + err.message, "error");
+        });
 }
 
 </script>
