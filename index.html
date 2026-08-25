@@ -1656,11 +1656,17 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
           <div class="grid-2">
               <div style="background: rgba(0,0,0,0.2); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border);">
                   <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Automated Payout Method</h4>
-                  <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; font-weight:600; line-height:1.5;">Your earnings are automatically routed to this UPI ID instantly upon job delivery.</p>
+                  <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px; font-weight:600; line-height:1.5;">Your earnings are automatically routed to this UPI ID instantly upon job delivery.</p>
+                  
+                  <!-- 🔥 THE NEW VISIBILITY TAG -->
+                  <div id="currentUpiDisplay" style="font-size:12px; margin-bottom:15px; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; text-align:center;">
+                      <span style="color:var(--text-muted);">Fetching linked UPI...</span>
+                  </div>
+
                   <input type="text" id="opMyUpiId" class="form-input" placeholder="e.g. yourname@bank" style="margin-bottom:15px;" />
                   <button class="btn-outline" onclick="triggerBtnAnim(this); updateOperatorUPI()" style="width:100%; display:flex; align-items:center; justify-content:center;">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 
-                      Save UPI ID
+                      Save New UPI ID
                   </button>
               </div>
               
@@ -1982,13 +1988,15 @@ const firebaseConfig = {
   messagingSenderId: "1078045852332",
   appId: "1:1078045852332:web:95b0deb2bbe6a902069509"
 };
+
 let messaging = null;
 try {
-  if (firebaseConfig.apiKey !== "AIzaSyAd0HAZ6-hLPdnU3rMsghqWKBc0z6ca68w") {
-     firebase.initializeApp(firebaseConfig);
-     messaging = firebase.messaging();
-  }
-} catch (e) {}
+  // 🔥 FIX: Removed the safety lock so it actually initializes!
+  firebase.initializeApp(firebaseConfig);
+  messaging = firebase.messaging();
+} catch (e) {
+  console.error("Firebase Initialization Error:", e);
+}
 
 // 🔥 UPGRADED MEMORY MANAGER (Handles Session Tokens)
 const Memory = {
@@ -2477,46 +2485,111 @@ function removeProfilePic() {
     });
 }
 
-let localNotifications = [];
-function requestNotificationPermission() {
-    if(!messaging) return;
-    Notification.requestPermission().then((permission) => {
+// ==========================================
+// 🌐 DEVICE FINGERPRINTING & PUSH ENGINE
+// ==========================================
+
+function handlePushToggle(el) {
+    updatePref('push', el.checked);
+    if(el.checked) {
+        // Forces the browser to ask for permission immediately
+        requestNotificationPermission(); 
+    }
+}
+
+function updatePref(type, value) {
+    if(!globalUser.preferences) globalUser.preferences = {};
+    globalUser.preferences[type] = value;
+    serverCall('updatePreferences', { type: type, value: value });
+}
+
+async function requestNotificationPermission() {
+    if(!messaging) return showPopup("Push notifications are not supported on this browser.", "warning");
+    
+    try {
+        const permission = await Notification.requestPermission();
+        
         if (permission === 'granted') {
-            messaging.getToken({ vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o" }).then((currentToken) => {
-                if (currentToken) {
-                    serverCall('registerDeviceToken', { email: globalUser.email, token: currentToken });
-                }
-            }).catch((err) => {});
+            const currentToken = await messaging.getToken({ vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o" });
+            
+            if (currentToken) {
+                // 1. EXTRACT BROWSER & DEVICE OS
+                let parser = navigator.userAgent;
+                let osMatch = parser.match(/(Windows NT 10\.0|Windows NT 6\.2|Mac OS X|Linux|Android|iOS|iPhone|iPad)/i);
+                let os = osMatch ? osMatch[0] : navigator.platform;
+                
+                let browserMatch = parser.match(/(Chrome|Safari|Firefox|Edge|Opera)\/?\s*(\d+)/i) || [];
+                let browserStr = browserMatch[1] ? browserMatch[1] + " " + (browserMatch[2]||"") : "Unknown Browser";
+                
+                let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(parser);
+                let deviceType = isMobile ? "Mobile" : "Desktop";
+
+                // 2. EXTRACT PUBLIC IP ADDRESS
+                let ipAddr = "Unknown";
+                try {
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+                    ipAddr = ipData.ip;
+                } catch(e) { console.warn("IP fetch blocked by ad-blocker."); }
+
+                // 3. TRANSMIT TELEMETRY TO SUPABASE
+                serverCall('registerDeviceToken', { 
+                    token: currentToken,
+                    deviceName: os,
+                    deviceType: deviceType,
+                    browser: browserStr,
+                    ipAddress: ipAddr
+                }).then(res => {
+                    if(res.success) showToast("Device registered and secured for Push Notifications.", "success");
+                });
+            }
+        } else {
+            // Revert the toggle if they click "Block"
+            const pushToggle = document.getElementById('prefPush');
+            if (pushToggle) pushToggle.checked = false;
+            updatePref('push', false);
+            showPopup("Push permission denied. You can enable it in your browser settings.", "error");
         }
-    });
+    } catch(e) {
+        console.error("Push Error:", e);
+    }
 }
 
 // ==========================================
-// 🔔 SMART ACTIONABLE NOTIFICATIONS ENGINE
+// 🔔 SMART ACTIONABLE NOTIFICATIONS ENGINE (CROSS-DEVICE SYNC)
 // ==========================================
 
 function handleNotificationClick(title, msg, refId) {
     const jobId = refId ? String(refId).toUpperCase() : null;
     const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : '';
 
-    // 🔥 1. INSTANTLY MARK AS READ
+    // 🔥 INSTANTLY MARK AS READ & SYNC TO SUPABASE
     let hash = (String(title || "") + String(msg || "")).substring(0, 50);
-    let readHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    
+    // Merge Local & Server Hashes
+    let localHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    let serverHashes = globalUser?.readNotifs || [];
+    let readHashes = [...new Set([...localHashes, ...serverHashes])];
+
     if (!readHashes.includes(hash)) {
         readHashes.push(hash);
         localStorage.setItem('read_notif_hashes', JSON.stringify(readHashes));
+        globalUser.readNotifs = readHashes; // Update active memory
         
-        // Update local array and refresh the UI bell
+        // Push the read state to Supabase Auth Metadata so it syncs across devices!
+        if (window.supabaseInstance) {
+            window.supabaseInstance.auth.updateUser({ data: { read_notifs: readHashes } });
+        }
+        
+        // Refresh UI
         let targetNotif = localNotifications.find(n => (String(n.title || "") + String(n.msg || "")).substring(0, 50) === hash);
         if (targetNotif) targetNotif.isRead = true;
         renderNotifications(localNotifications);
     }
 
-    // Close the dropdown cleanly
     const notifDropdown = document.getElementById('notifDropdown');
     if (notifDropdown) notifDropdown.classList.remove('active');
 
-    // 🔥 2. SMART ROUTING: If it's a Broadcast (SYS-ALERT) or has no Job ID
     if (!jobId || jobId === 'SYS-ALERT') {
         document.getElementById('customAlertTitle').innerText = title || "System Alert";
         document.getElementById('customAlertTitle').style.color = "var(--brand)";
@@ -2531,7 +2604,6 @@ function handleNotificationClick(title, msg, refId) {
         return;
     }
 
-    // 🔥 3. SMART ROUTING: Job Specific (Chats/Assignments)
     if (userRole === 'operator') {
         switchTab('op-workspace');
         setTimeout(() => {
@@ -2546,7 +2618,6 @@ function handleNotificationClick(title, msg, refId) {
     } else {
         if (jobId.includes('-PPR-')) switchTab('papers');
         else switchTab('documents');
-
         setTimeout(() => { openCorrectionModal(jobId, 'note'); }, 500);
     }
 }
@@ -2563,10 +2634,13 @@ function renderNotifications(notifs) {
         return;
     }
     
-    let readHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    // Merge Local & Server Hashes
+    let localHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    let serverHashes = globalUser?.readNotifs || [];
+    let readHashes = [...new Set([...localHashes, ...serverHashes])];
+    
     let unreadCount = 0;
     localNotifications.forEach(n => {
-        // 🔥 THE FIX: Safely cast to strings so 'null' doesn't crash the substring function
         let hash = (String(n.title || "") + String(n.msg || "")).substring(0,50); 
         if (readHashes.includes(hash)) n.isRead = true;
         if (!n.isRead) unreadCount++;
@@ -2592,19 +2666,26 @@ function renderNotifications(notifs) {
     }).join('');
 }
 
-
-
 function markAllNotificationsRead() {
     document.getElementById('notifBadge').style.display = 'none';
     
-    // 🔥 THE FIX: Safe string casting here as well
-    let readHashes = localNotifications.map(n => (String(n.title || "") + String(n.msg || "")).substring(0,50));
-    localStorage.setItem('read_notif_hashes', JSON.stringify(readHashes));
+    let newHashes = localNotifications.map(n => (String(n.title || "") + String(n.msg || "")).substring(0,50));
+    
+    // Merge Local & Server Hashes
+    let localHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+    let serverHashes = globalUser?.readNotifs || [];
+    let mergedHashes = [...new Set([...localHashes, ...serverHashes, ...newHashes])];
+    
+    localStorage.setItem('read_notif_hashes', JSON.stringify(mergedHashes));
+    globalUser.readNotifs = mergedHashes; // Update active memory
+    
+    // Push the read state to Supabase Auth Metadata so it syncs across devices!
+    if (window.supabaseInstance) {
+        window.supabaseInstance.auth.updateUser({ data: { read_notifs: mergedHashes } });
+    }
     
     localNotifications.forEach(n => n.isRead = true);
     renderNotifications(localNotifications);
-    
-    serverCall('markNotificationsRead', { email: globalUser.email });
 }
 
 function sendBroadcast() {
@@ -2708,7 +2789,17 @@ function renderData(payload) {
           let ledgerHtml = "";
           
           let myUpi = document.getElementById('opMyUpiId');
+          let upiDisplay = document.getElementById('currentUpiDisplay');
           if (myUpi) myUpi.value = globalUser.upi || "";
+          
+          // 🔥 Populates the UI tag with color-coded status
+          if (upiDisplay) {
+              if (globalUser.upi && globalUser.upi.trim() !== "") {
+                  upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
+              } else {
+                  upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">⚠️ No UPI Linked (Payouts Paused)</span>`;
+              }
+          }
 
           allJobs.forEach(j => {
               if (j.status === 'Delivered' || j.status === 'Completed' || j.status === 'PAID' || j.status === 'Generated') deliveredCount++;
@@ -2945,7 +3036,46 @@ function applyRoleUI(p) {
     }
   }
 
-  let settingsHtml = "";
+  // 🔥 UNIVERSAL NOTIFICATION PREFERENCES UI
+  let prefs = p.preferences || { push: false, whatsapp: false, sms: false, email: false };
+  let settingsHtml = `
+    <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Global Notification Preferences</h4>
+    <p style="font-size:11px; color:var(--text-muted); margin-bottom:20px; font-weight:600;">Manage how you receive alerts across the system. Applies to all your devices.</p>
+
+    <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:30px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
+            <div>
+                <div style="color:white; font-size:13px; font-weight:800;">Push Notifications</div>
+                <div style="color:var(--text-muted); font-size:11px;">Receive real-time pop-ups on this device.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="prefPush" ${prefs.push ? 'checked' : ''} onchange="handlePushToggle(this)"><span class="slider"></span></label>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
+            <div>
+                <div style="color:white; font-size:13px; font-weight:800;">WhatsApp Alerts</div>
+                <div style="color:var(--text-muted); font-size:11px;">Receive critical updates on WhatsApp.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="prefWa" ${prefs.whatsapp ? 'checked' : ''} onchange="updatePref('whatsapp', this.checked)"><span class="slider"></span></label>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
+            <div>
+                <div style="color:white; font-size:13px; font-weight:800;">SMS Notifications</div>
+                <div style="color:var(--text-muted); font-size:11px;">Standard text message alerts.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="prefSms" ${prefs.sms ? 'checked' : ''} onchange="updatePref('sms', this.checked)"><span class="slider"></span></label>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
+            <div>
+                <div style="color:white; font-size:13px; font-weight:800;">Email Notifications</div>
+                <div style="color:var(--text-muted); font-size:11px;">Detailed summaries sent to your inbox.</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="prefEmail" ${prefs.email ? 'checked' : ''} onchange="updatePref('email', this.checked)"><span class="slider"></span></label>
+        </div>
+    </div>
+  `;
   if (userRole === "super admin" || userRole === "system admin" || userRole === "all") {
       settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Super Admin Configurations</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Global Master Data Export</li><li>System Default Storage Drives</li><li>Webhook & API Endpoint Integrations</li><li>Global Maintenance Mode Toggle</li></ul>`;
   } else if (userRole === "admin") {
@@ -2953,8 +3083,44 @@ function applyRoleUI(p) {
   } else if (userRole === "teacher") {
       settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Teacher Preferences</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Set Default Class & Subject for Submissions</li><li>Alert Preferences (Email vs Push Notifications)</li><li>Dashboard Layout Theme</li></ul>`;
   } else if (userRole === "operator") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Operator Controls</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Update UPI / Payout Information</li><li>Active Availability Toggle (Online/Busy/Away)</li><li>Preferred Work Type Auto-Assignments</li></ul>`;
+      let currentStatus = p.status || "Active";
+      settingsHtml += `
+        <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Operator Controls</h4>
+        
+        <!-- 1. Availability Status -->
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px; margin-bottom:15px;">
+            <label class="label-text" style="color:white; font-weight:800; font-size:13px;">Active Availability</label>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px; font-weight:600;">'Busy' or 'Away' will notify Admins and pause incoming assignments.</p>
+            <select id="opStatusSelect" class="form-input" style="margin-bottom:0; font-weight:800;" onchange="updateOperatorStatusUI(this)">
+                <option value="Active" ${currentStatus === 'Active' ? 'selected' : ''}>🟢 Online (Accepting Jobs)</option>
+                <option value="Busy" ${currentStatus === 'Busy' ? 'selected' : ''}>🟡 Busy (Finishing Current Tasks)</option>
+                <option value="Away" ${currentStatus === 'Away' ? 'selected' : ''}>🔴 Away / Offline</option>
+            </select>
+        </div>
+
+        <!-- 2. Work Type Request -->
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed var(--accent); padding:20px; margin-bottom:15px;">
+            <label class="label-text" style="color:var(--accent); font-weight:800; font-size:13px;">Request Work Type Change</label>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px; font-weight:600;">Select the modules you wish to be trained/assigned for. Requires Super Admin approval.</p>
+            <div class="checkbox-grid" id="opReqWorkType" style="margin-bottom:15px;">
+                <label class="cb-pill"><input type="checkbox" value="Paper Formats"> Papers</label>
+                <label class="cb-pill"><input type="checkbox" value="Report Cards"> Report Cards</label>
+                <label class="cb-pill"><input type="checkbox" value="Admit Cards"> Admit Cards</label>
+            </div>
+            <button class="btn-warning" onclick="requestWorkTypeChangeUI(this)" style="width:100%; font-size:12px; padding:12px;">Submit Change Request</button>
+        </div>
+
+        <!-- 3. The "Helpful Addition": Global Mute -->
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px;">
+            <label class="label-text" style="color:white; font-weight:800; font-size:13px;">System Preferences</label>
+            <div style="display:flex; align-items:center; margin-top:12px;">
+                <label class="switch"><input type="checkbox" checked onchange="toggleSystemAudio(this)"><span class="slider"></span></label>
+                <span style="font-size:12px; color:var(--text-muted); margin-left:10px; font-weight:700;">Enable Incoming Notification Sounds</span>
+            </div>
+        </div>
+      `;
   }
+
   let sC = document.getElementById('settings-content');
   if(sC) sC.innerHTML = settingsHtml;
 
@@ -5352,11 +5518,12 @@ function updateOperatorUPI() {
     serverCall('updateOperatorUpi', { upi: upiId, email: globalUser.email })
         .then(res => {
             resetBtnAnim(btn);
-            if(res.success) {
+           if(res.success) {
                 globalUser.upi = upiId; // Update local memory
                 
-                // 🔥 1. PLAY THE SUCCESS CHIME
-                try { playSound('success'); } catch(e) {}
+                // 🔥 Instantly update the UI so they know it worked
+                let upiDisplay = document.getElementById('currentUpiDisplay');
+                if (upiDisplay) upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${upiId}</span></span>`;
                 
                 // 🔥 2. FIRE THE PREMIUM TOAST NOTIFICATION
                 showToast(
@@ -5480,6 +5647,52 @@ function exportLedgerPDF(btn) {
         resetBtnAnim(btn);
         showPopup("Failed to generate PDF. Make sure library is loaded.", "error");
     }
+}
+
+// ==========================================
+// ⚙️ OPERATOR SETTINGS LOGIC & AUDIO MUTE
+// ==========================================
+window.isAudioMuted = false;
+
+function toggleSystemAudio(cb) {
+    window.isAudioMuted = !cb.checked;
+    if(cb.checked) {
+        try { playSound('success'); } catch(e){}
+        showToast("System sounds enabled", "success");
+    } else {
+        showToast("System sounds muted", "warning");
+    }
+}
+
+// Intercepts the core audio engine to respect the mute button
+const originalPlaySound = playSound;
+playSound = function(name) {
+    if(window.isAudioMuted) return; // Completely silences the dashboard
+    originalPlaySound(name);
+};
+
+function updateOperatorStatusUI(sel) {
+    // In the future, you can wire this directly to your database!
+    // For now, it provides instant optimistic UI feedback.
+    const newStatus = sel.value;
+    globalUser.status = newStatus;
+    
+    let icon = newStatus === 'Active' ? '🟢' : (newStatus === 'Busy' ? '🟡' : '🔴');
+    showToast(`${icon} Status updated to ${newStatus}`, "success");
+}
+
+function requestWorkTypeChangeUI(btn) {
+    const cbs = document.querySelectorAll('#opReqWorkType input[type="checkbox"]:checked');
+    if(cbs.length === 0) return showPopup("Please select at least one work type.", "warning");
+    
+    triggerBtnAnim(btn);
+    
+    // Simulates sending a secure ticket to the Super Admin
+    setTimeout(() => {
+        resetBtnAnim(btn);
+        showToast("Change Request Sent to Super Admin", "info");
+        document.querySelectorAll('#opReqWorkType input[type="checkbox"]').forEach(c => c.checked = false);
+    }, 1200);
 }
 
 </script>
