@@ -2513,15 +2513,30 @@ async function updatePref(type, value) {
 }
 
 async function requestNotificationPermission() {
-    if(!messaging) return showPopup("Push notifications are not supported on this browser.", "warning");
+    if (!('Notification' in window) || !messaging) {
+        return showPopup("Push notifications are not supported on this browser.", "warning");
+    }
+    
+    if (Notification.permission === 'denied') {
+        const pushToggle = document.getElementById('prefPush');
+        if (pushToggle) pushToggle.checked = false;
+        updatePref('push', false);
+        return showPopup("Action Required: Click the 🔒 icon next to your URL bar and change Notifications to 'Allow'.", "error");
+    }
     
     try {
         const permission = await Notification.requestPermission();
         
         if (permission === 'granted') {
-            // 🔥 YOUR FIX: Explicitly register the worker before getting the token
+            showToast("Connecting to Firebase...", "info"); // Let user know it's working
+            
+            // 1. Register the worker
             const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
             
+            // 2. 🔥 CRITICAL FIX: Force the browser to wait until the worker is fully active!
+            await navigator.serviceWorker.ready; 
+            
+            // 3. Request the token
             const currentToken = await messaging.getToken({ 
                 vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o",
                 serviceWorkerRegistration: registration 
@@ -2531,21 +2546,25 @@ async function requestNotificationPermission() {
                 let localSessionId = localStorage.getItem('tk_device_session_id');
                 
                 serverCall('registerDeviceToken', { 
-                    token: currentToken,
+                    fcmToken: currentToken,
                     sessionId: localSessionId
                 }).then(res => {
-                    if(res.success) showToast("Device registered and secured for Push Notifications.", "success");
+                    if(res.success) showToast("Push Notifications Secured!", "success");
+                    else showPopup("Token generated but backend failed: " + res.message, "error");
                 });
+            } else {
+                showPopup("Firebase connected, but returned an empty token.", "warning");
             }
         } else {
-            // Revert the toggle visually if they click "Block"
             const pushToggle = document.getElementById('prefPush');
             if (pushToggle) pushToggle.checked = false;
             updatePref('push', false);
-            showPopup("Push permission denied. You can enable it in your browser settings.", "error");
         }
     } catch(e) {
-        console.error("Push Error:", e);
+        // 🔥 CRITICAL FIX: Visually display the exact Firebase Error on screen
+        console.error("Firebase FCM Error:", e);
+        showPopup("FCM Error: " + e.message, "error"); 
+        
         const pushToggle = document.getElementById('prefPush');
         if (pushToggle) pushToggle.checked = false;
     }
