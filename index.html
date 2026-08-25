@@ -1251,6 +1251,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
         <button id="btn-generated" style="display:none; background:linear-gradient(135deg, var(--purple), #6D28D9); color:white; align-items:center;" onclick="triggerModalBtnAnim(this); openGeneratedFolder()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Generated Papers</button>
         <button id="btn-op-workspace" style="display:none; background:linear-gradient(135deg, var(--danger), #B91C1C); color:white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); align-items:center;" onclick="triggerModalBtnAnim(this); switchTab('op-workspace')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Production Workspace</button>
         <span id="dynamic-apps-container" style="display:flex; gap:12px; flex-wrap:wrap;"></span>
+        <button onclick="requestNotificationPermission()" style="margin-right:10px;">🔔 Enable Alerts</button>
         <button id="btn-refresh" class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); initDashboard(globalUser.email)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 22v-6h6"/></svg>Refresh Data</button>
       </div>
 
@@ -2386,7 +2387,10 @@ function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent =
       if (!isSilent) showPopup("Server Error during sync: " + err.message);
       else console.error("Silent background sync failed:", err.message);
     });
-}
+
+    // 🔥 Fire the silent device telemetry tracker
+    setTimeout(() => captureDeviceTelemetry(), 2000); // 2 second delay ensures UI loads quickly first
+} // <--- This is the end of renderData()
 
 function switchTab(tabId) {
   document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
@@ -2497,10 +2501,15 @@ function handlePushToggle(el) {
     }
 }
 
-function updatePref(type, value) {
+async function updatePref(type, value) {
     if(!globalUser.preferences) globalUser.preferences = {};
     globalUser.preferences[type] = value;
-    serverCall('updatePreferences', { type: type, value: value });
+    
+    // Grab the robust session ID that we generate on page load
+    let localSessionId = localStorage.getItem('tk_device_session_id');
+
+    serverCall('updatePreferences', { type: type, value: value, sessionId: localSessionId })
+        .catch(err => console.error("Failed to save preference:", err));
 }
 
 async function requestNotificationPermission() {
@@ -2510,41 +2519,26 @@ async function requestNotificationPermission() {
         const permission = await Notification.requestPermission();
         
         if (permission === 'granted') {
-            const currentToken = await messaging.getToken({ vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o" });
+            // 🔥 YOUR FIX: Explicitly register the worker before getting the token
+            const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+            
+            const currentToken = await messaging.getToken({ 
+                vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o",
+                serviceWorkerRegistration: registration 
+            });
             
             if (currentToken) {
-                // 1. EXTRACT BROWSER & DEVICE OS
-                let parser = navigator.userAgent;
-                let osMatch = parser.match(/(Windows NT 10\.0|Windows NT 6\.2|Mac OS X|Linux|Android|iOS|iPhone|iPad)/i);
-                let os = osMatch ? osMatch[0] : navigator.platform;
+                let localSessionId = localStorage.getItem('tk_device_session_id');
                 
-                let browserMatch = parser.match(/(Chrome|Safari|Firefox|Edge|Opera)\/?\s*(\d+)/i) || [];
-                let browserStr = browserMatch[1] ? browserMatch[1] + " " + (browserMatch[2]||"") : "Unknown Browser";
-                
-                let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(parser);
-                let deviceType = isMobile ? "Mobile" : "Desktop";
-
-                // 2. EXTRACT PUBLIC IP ADDRESS
-                let ipAddr = "Unknown";
-                try {
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipRes.json();
-                    ipAddr = ipData.ip;
-                } catch(e) { console.warn("IP fetch blocked by ad-blocker."); }
-
-                // 3. TRANSMIT TELEMETRY TO SUPABASE
                 serverCall('registerDeviceToken', { 
                     token: currentToken,
-                    deviceName: os,
-                    deviceType: deviceType,
-                    browser: browserStr,
-                    ipAddress: ipAddr
+                    sessionId: localSessionId
                 }).then(res => {
                     if(res.success) showToast("Device registered and secured for Push Notifications.", "success");
                 });
             }
         } else {
-            // Revert the toggle if they click "Block"
+            // Revert the toggle visually if they click "Block"
             const pushToggle = document.getElementById('prefPush');
             if (pushToggle) pushToggle.checked = false;
             updatePref('push', false);
@@ -2552,6 +2546,8 @@ async function requestNotificationPermission() {
         }
     } catch(e) {
         console.error("Push Error:", e);
+        const pushToggle = document.getElementById('prefPush');
+        if (pushToggle) pushToggle.checked = false;
     }
 }
 
@@ -2701,7 +2697,7 @@ function sendBroadcast() {
     serverCall('sendNotification', { senderEmail: globalUser.email, targetRaw: target, title: title, msg: msg })
       .then(res => {
          btn.classList.remove('btn-glass-disabled');
-         btn.innerHTML = '🚀 Launch Broadcast';
+         btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M15 8h6"/><path d="M18 5v6"/><path d="M20.002 14.464a9 9 0 0 0 .738.863A1 1 0 0 1 20 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 8.75-5.332"/></svg> Launch Broadcast';
          
          if (res && res.success === false) { showPopup("Broadcast Failed: " + res.message);
          } else {
@@ -2712,7 +2708,7 @@ function sendBroadcast() {
       })
       .catch(err => {
          btn.classList.remove('btn-glass-disabled');
-         btn.innerHTML = '🚀 Launch Broadcast';
+         btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M15 8h6"/><path d="M18 5v6"/><path d="M20.002 14.464a9 9 0 0 0 .738.863A1 1 0 0 1 20 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 8.75-5.332"/></svg> Launch Broadcast';
          showPopup("Broadcast Error: " + err.message);
       });
 }
@@ -5693,6 +5689,67 @@ function requestWorkTypeChangeUI(btn) {
         showToast("Change Request Sent to Super Admin", "info");
         document.querySelectorAll('#opReqWorkType input[type="checkbox"]').forEach(c => c.checked = false);
     }, 1200);
+}
+
+// ==========================================
+// 🌐 GLOBAL DEVICE TELEMETRY ENGINE
+// ==========================================
+async function captureDeviceTelemetry() {
+    try {
+        let parser = navigator.userAgent;
+        let osMatch = parser.match(/(Windows NT 10\.0|Windows NT 6\.2|Mac OS X|Linux|Android|iOS|iPhone|iPad)/i);
+        let os = osMatch ? osMatch[0] : navigator.platform;
+        
+        let browserMatch = parser.match(/(Chrome|Safari|Firefox|Edge|Opera)\/?\s*(\d+)/i) || [];
+        let browserStr = browserMatch[1] ? browserMatch[1] + " " + (browserMatch[2]||"") : "Unknown Browser";
+        
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(parser);
+        let deviceType = isMobile ? "Mobile" : "Desktop";
+
+        let ipAddr = "Unknown";
+        try {
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+            ipAddr = ipData.ip;
+        } catch(e) { 
+            console.warn("IP fetch blocked, proceeding with Unknown."); 
+        }
+
+        // Check if this specific browser already has an active session ID
+        let localSessionId = localStorage.getItem('tk_device_session_id');
+
+        serverCall('syncDeviceSession', {
+            sessionId: localSessionId,
+            deviceName: os,
+            deviceType: deviceType,
+            browser: browserStr,
+            ipAddress: ipAddr
+        }).then(res => {
+            if(res && res.success) {
+                // 1. Secure the Session ID
+                if(res.sessionId) localStorage.setItem('tk_device_session_id', res.sessionId);
+                
+                // 2. 🔥 INSTANTLY VISUALLY SYNC THE TOGGLES
+                if(res.preferences) {
+                    globalUser.preferences = res.preferences;
+                    
+                    let pPush = document.getElementById('prefPush'); 
+                    if(pPush) pPush.checked = res.preferences.push;
+                    
+                    let pWa = document.getElementById('prefWa'); 
+                    if(pWa) pWa.checked = res.preferences.whatsapp;
+                    
+                    let pSms = document.getElementById('prefSms'); 
+                    if(pSms) pSms.checked = res.preferences.sms;
+                    
+                    let pEmail = document.getElementById('prefEmail'); 
+                    if(pEmail) pEmail.checked = res.preferences.email;
+                }
+            }
+        });
+    } catch(err) {
+        console.error("Telemetry capture failed:", err);
+    }
 }
 
 </script>
