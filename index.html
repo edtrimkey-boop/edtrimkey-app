@@ -5498,6 +5498,39 @@ const RealtimeManager = {
                 this.triggerRecoveryFetch();
             })
             
+            // 📡 LISTENER 3: Live Cross-Device Toggle Sync
+            .on('postgres_changes', { 
+                event: 'UPDATE', 
+                schema: 'public', 
+                table: 'user_sessions', 
+                filter: `user_id=eq.${globalUser.id}` // 🔥 SECURITY: Only listen to THIS user's devices
+            }, (payload) => {
+                console.log("📱 Cross-Device Session Update:", payload.new);
+                
+                if (payload.new && payload.new.preferences) {
+                    const newPrefs = payload.new.preferences;
+                    
+                    // Update the active memory
+                    globalUser.preferences = newPrefs;
+                    
+                    // Instantly snap the UI switches to match the new database state
+                    const syncSwitch = (id, val) => {
+                        let el = document.getElementById(id);
+                        if(el && el.checked !== val) {
+                            el.checked = val;
+                        }
+                    };
+                    
+                    syncSwitch('prefPush', newPrefs.push);
+                    syncSwitch('prefWa', newPrefs.whatsapp);
+                    syncSwitch('prefSms', newPrefs.sms);
+                    syncSwitch('prefEmail', newPrefs.email);
+                    
+                    // Optional: Show a tiny silent indicator that a sync happened
+                    console.log("UI Toggles synced with database instantly.");
+                }
+            })
+
             .subscribe((status, err) => {
                 // Live debugging directly in your Chrome Console
                 console.log("📡 Master Socket Status:", status);
