@@ -2524,66 +2524,81 @@ async function updatePref(type, value) {
 }
 
 async function requestNotificationPermission(isSilent = false) {
+    // 1. Detect if the browser even supports Push (Fails here on iOS Safari if not a PWA)
     if (!('Notification' in window) || !messaging) {
-        return showPopup("Push notifications are not supported on this browser.", "warning");
+        if (!isSilent) {
+            const pushToggle = document.getElementById('prefPush');
+            if (pushToggle) pushToggle.checked = false;
+            updatePref('push', false);
+            showPopup("Push not supported. On iOS, you MUST 'Add to Home Screen' first.", "warning");
+        }
+        return;
     }
     
     if (Notification.permission === 'denied') {
         const pushToggle = document.getElementById('prefPush');
         if (pushToggle) pushToggle.checked = false;
-        updatePref('push', false);
-        return showPopup("Action Required: Click the 🔒 icon next to your URL bar and change Notifications to 'Allow'.", "error");
+        if (!isSilent) {
+            updatePref('push', false);
+            showPopup("Action Required: Check your device settings to allow Notifications.", "error");
+        }
+        return;
     }
     
     try {
-        const permission = await Notification.requestPermission();
+        let permission = Notification.permission;
+
+        // 🔥 THE STRICT GESTURE RULE: Only ask for permission if a human clicked the button!
+        // If it's a silent refresh, do NOT ask. iOS will instantly crash the script.
+        if (!isSilent && permission !== 'granted') {
+            permission = await Notification.requestPermission();
+        }
         
         if (permission === 'granted') {
-            // 🔥 Wrap this toast in the silent check!
             if (!isSilent) showToast("Connecting to Firebase...", "info"); 
             
-            // 1. Register the worker
             const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-            
-            // 2. 🔥 CRITICAL FIX: Force the browser to wait until the worker is fully active!
             await navigator.serviceWorker.ready; 
             
-            // 3. Request the token
             const currentToken = await messaging.getToken({ 
                 vapidKey: "BLCZZHdR6pKwKXhFG1VXU3JAgLi3ZaBFjWTLV9KH3wayHeY-zMmVQr4DM-cXFrSDrO9-YNMxKW_0VbtwhMy0U6o",
                 serviceWorkerRegistration: registration 
             });
             
             if (currentToken) {
-            let storageKey = 'tk_session_' + globalUser.email;
-            let localSessionId = localStorage.getItem(storageKey);
-            
-            serverCall('registerDeviceToken', { 
-                fcmToken: currentToken,
-                sessionId: localSessionId
-            }).then(res => {
-                if (res.success) {
-                    // 🔥 Safely suppress the success toast if it's a silent background sync
-                    if (!isSilent) showToast("Push Notifications Secured!", "success");
-                } else {
-                    showPopup("Token generated but backend failed: " + (res.message || "Unknown Error"), "error");
-                }
-            });
+                let storageKey = 'tk_session_' + globalUser.email;
+                let localSessionId = localStorage.getItem(storageKey);
+                
+                serverCall('registerDeviceToken', { 
+                    fcmToken: currentToken,
+                    sessionId: localSessionId
+                }).then(res => {
+                    if (res.success) {
+                        if (!isSilent) showToast("Push Notifications Secured!", "success");
+                    } else {
+                        if (!isSilent) showPopup("Token generated but backend failed: " + (res.message || "Unknown Error"), "error");
+                    }
+                });
             } else {
-                showPopup("Firebase connected, but returned an empty token.", "warning");
+                if (!isSilent) showPopup("Firebase connected, but returned an empty token.", "warning");
             }
         } else {
+            // If they denied the prompt, revert the UI toggle
+            const pushToggle = document.getElementById('prefPush');
+            if (pushToggle) pushToggle.checked = false;
+            if (!isSilent) updatePref('push', false);
+        }
+    } catch(e) {
+        console.error("Firebase FCM Error:", e);
+        
+        // 🔥 CRITICAL FIX: Only revert the toggle if the user manually triggered the error.
+        // Do not let background errors destroy the user's saved preferences!
+        if (!isSilent) {
             const pushToggle = document.getElementById('prefPush');
             if (pushToggle) pushToggle.checked = false;
             updatePref('push', false);
+            showPopup("FCM Error: " + e.message, "error"); 
         }
-    } catch(e) {
-        // 🔥 CRITICAL FIX: Visually display the exact Firebase Error on screen
-        console.error("Firebase FCM Error:", e);
-        showPopup("FCM Error: " + e.message, "error"); 
-        
-        const pushToggle = document.getElementById('prefPush');
-        if (pushToggle) pushToggle.checked = false;
     }
 }
 
