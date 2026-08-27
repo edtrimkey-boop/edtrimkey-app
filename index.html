@@ -5395,6 +5395,25 @@ function submitCorrectionAction(btn) {
         .catch(err => { showPopup("Network Error: " + err.message, "error"); });
 }
 
+// 🔥 SMART CONTEXT CHECKER: Are they looking at this specific chat?
+function isViewingChat(jobId) {
+    if (!jobId) return false;
+    const safeJobId = String(jobId).toUpperCase();
+
+    // Check Operator Workspace
+    const opWsActive = document.getElementById('view-op-workspace')?.classList.contains('active');
+    const opJobId = document.getElementById('wsActiveJobId')?.value?.toUpperCase();
+
+    // Check Modal (Teachers/Admins)
+    const modalActive = document.getElementById('correctionModal')?.classList.contains('active');
+    const modalJobId = document.getElementById('correctionJobId')?.value?.toUpperCase();
+
+    if (opWsActive && opJobId === safeJobId) return true;
+    if (modalActive && modalJobId === safeJobId) return true;
+
+    return false;
+}
+
 // ==========================================
 // 🚀 ENTERPRISE REALTIME MANAGER (V2 STABLE)
 // ==========================================
@@ -5469,19 +5488,34 @@ const RealtimeManager = {
 
                 // 4. The Final Gate
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
-                    console.log("✅ NOTIFICATION MATCHED! RINGING BELL...");
+                    const refId = notif.reference_id;
+
+                    // 🔥 NEW STRICT RULE: Context-Aware Notification Suppression
+                    if (isViewingChat(refId)) {
+                        console.log("🤫 User is viewing this chat. Suppressing Toast.");
+                        
+                        // Silently mark as read in memory so the bell badge doesn't increase
+                        let hash = (String(notif.title || "") + String(notif.message || "")).substring(0, 50);
+                        let localHashes = JSON.parse(localStorage.getItem('read_notif_hashes') || "[]");
+                        if (!localHashes.includes(hash)) {
+                            localHashes.push(hash);
+                            localStorage.setItem('read_notif_hashes', JSON.stringify(localHashes));
+                        }
+                    } else {
+                        // User is elsewhere in the app -> Show Toast & Play Sound
+                        try { playSound('notification'); } catch(e){} 
+                        
+                        let shortMsg = notif.message.length > 45 ? notif.message.substring(0, 45) + "..." : notif.message;
+                        showToast(`<span style="font-weight:800; font-size:13px;">${notif.title}</span><span style="font-size:11px; font-weight:600; color:var(--text-muted); margin-top:2px;">${shortMsg}</span>`, 'info');
+                    }
                     
-                    try { playSound('notification'); } catch(e){ console.error("Audio blocked by browser."); } 
-                    
-                    // 🔥 NEW: Trigger the Live Toast Popup
-                    let shortMsg = notif.message.length > 45 ? notif.message.substring(0, 45) + "..." : notif.message;
-                    showToast(`<span style="font-weight:800; font-size:13px;">${notif.title}</span><span style="font-size:11px; font-weight:600; color:var(--text-muted); margin-top:2px;">${shortMsg}</span>`, 'info');
-                    
+                    // Add it to the dropdown menu regardless, but mark it read if they are viewing it
                     const newNotif = { 
                         title: notif.title, 
                         msg: notif.message, 
                         time: new Date(notif.created_at).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute:'2-digit', hour12: true }), 
-                        isRead: false, refId: notif.reference_id 
+                        isRead: isViewingChat(refId), 
+                        refId: refId 
                     };
                     
                     localNotifications.unshift(newNotif);
