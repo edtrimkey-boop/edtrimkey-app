@@ -33,6 +33,7 @@
   --radius-md: 12px;   /* Buttons, Dropdowns, Cards */
   --radius-lg: 16px;   /* Main Panels, Modals */
   --radius-pill: 50px; /* Liquid Glass, Rounded Inputs */
+  
 }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
 
@@ -205,14 +206,48 @@ button:not(.liquid-glass):disabled { background: var(--card-light); color: var(-
 .btn-warning:hover:not(:disabled) { background: linear-gradient(135deg, var(--accent), #D97706) !important; color: #000 !important; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3) !important; border-color: transparent !important;}
 .btn-sm { padding: 8px 14px; font-size: 11px; margin-right: 5px; }
 
-/* Toggle Switch */
-.switch { position: relative; display: inline-block; width: 34px; height: 18px; vertical-align: middle; margin-right: 8px;}
+/* =======================================================
+   PREMIUM LIQUID GLASS TOGGLES
+   ======================================================= */
+.switch { position: relative; display: inline-block; width: 38px; height: 20px; vertical-align: middle; margin-right: 8px; }
 .switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--success); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);}
-input:checked + .slider:before { transform: translateX(16px); }
-input:disabled + .slider { cursor: not-allowed; opacity: 0.5; }
+
+.slider { 
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; 
+    background: rgba(255, 255, 255, 0.03); 
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(0,0,0,0.1); 
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    border-radius: 34px; 
+}
+
+.slider:before { 
+    position: absolute; content: ""; 
+    height: 14px; width: 14px; 
+    left: 2px; bottom: 2px; 
+    background: rgba(255, 255, 255, 0.8); 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    border-radius: 50%; 
+}
+
+/* Checked State: Subtle Glow and Tint */
+input:checked + .slider { 
+    background: rgba(46, 204, 113, 0.15); 
+    border-color: rgba(46, 204, 113, 0.4);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 15px rgba(46, 204, 113, 0.3);
+}
+
+input:checked + .slider:before { 
+    transform: translateX(18px); 
+    background: var(--success);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+}
+
+input:disabled + .slider { cursor: not-allowed; opacity: 0.4; filter: grayscale(1); }
+
 .app-toggle-wrapper { display: inline-flex; align-items: center; font-size: 12px; margin-right: 15px; margin-bottom: 8px; font-weight: 700; color: var(--text-muted); transition: 0.3s; }
 .app-toggle-wrapper.disabled-wrapper { opacity: 0.5; }
 
@@ -385,10 +420,16 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       transform: translateX(-100%); 
       z-index: 3000;
       background: var(--bg) !important;
-      box-shadow: 10px 0 30px rgba(0,0,0,0.9);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+      box-shadow: 0 0 0 rgba(0,0,0,0); /* 🔥 FIX: No shadow when closed */
+      /* 🔥 FIX: Apple-style spring animation */
+      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.5s ease, opacity 0.5s ease;
   } 
-  .sidebar.open { transform: translateX(0); opacity: 1; pointer-events: auto; } 
+  .sidebar.open { 
+      transform: translateX(0); 
+      opacity: 1; 
+      pointer-events: auto; 
+      box-shadow: 15px 0 40px rgba(0,0,0,0.4); /* 🔥 FIX: Shadow only applies when open */
+  }
   
   .mobile-close-btn { 
       display: flex; 
@@ -442,6 +483,45 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   .mobile-action-row { display: flex !important; flex-direction: row !important; justify-content: stretch !important; gap: 10px; width: 100%; }
   .mobile-action-row button { flex: 1; padding: 12px 10px !important; font-size: 11px !important; justify-content: center; }
 }
+
+/* =======================================================
+   THEME ENGINE (DARK / LIGHT MODE)
+   ======================================================= */
+[data-theme="light"] {
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --card-light: #F1F5F9;
+    --sidebar: #FFFFFF;
+    --text: #0F172A;
+    --text-muted: #64748B;
+    --border: rgba(0, 0, 0, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+[data-theme="light"] .panel, [data-theme="light"] .glass-box, [data-theme="light"] .kpi-card, [data-theme="light"] .notif-dropdown, [data-theme="light"] .profile-dropdown, [data-theme="light"] .op-left-pane, [data-theme="light"] .op-right-pane { background: var(--card); border-color: var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+[data-theme="light"] input:not([type="checkbox"]), [data-theme="light"] select, [data-theme="light"] textarea { background: var(--card-light) !important; color: var(--text) !important; border-color: var(--border); }
+[data-theme="light"] .tk-sleek-table td { background: var(--card); border-color: var(--border); color: var(--text); }
+[data-theme="light"] .header-scrim { background: linear-gradient(to bottom, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.8) 40%, transparent 100%); }
+[data-theme="light"] .chat-bubble-other { background: var(--card-light); border-color: var(--border); }
+[data-theme="light"] .premium-sticky-header { background: rgba(255, 255, 255, 0.85); border-bottom-color: var(--border); }
+
+[data-theme="light"] .slider {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .slider:before {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Smart Text Inverter: Safely flips inline 'color:white' to dark text, EXCEPT inside buttons or badges where white is needed */
+[data-theme="light"] :not(button):not(.badge):not(.liquid-glass):not(.btn-success):not(.btn-danger):not(.btn-purple) > [style*="color:white"],
+[data-theme="light"] :not(button):not(.badge):not(.liquid-glass):not(.btn-success):not(.btn-danger):not(.btn-purple) > [style*="color: white"] {
+    color: var(--text) !important;
+}
+
 </style>
 </head>
 <body>
@@ -1145,7 +1225,9 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       <img class="logo" style="width:35px; height:35px;" src="https://wjvoetdkkggyhtcoqqcj.supabase.co/storage/v1/object/public/Ed%20Trim%20Key/Ed-Trim%20Kry%20Logo.png">
       <div class="brand" style="font-size: 18px;">Ed-Trim Key</div>
     </div>
-    <button class="mobile-close-btn" onclick="toggleSidebar()">❯</button>
+    <button class="mobile-close-btn liquid-glass glass-circle-btn" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></svg><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>
+    </button>
   </div>
   
   <div id="nav-overview" class="nav-item active" onclick="switchTab('overview')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>Dashboard Overview</div>
@@ -1251,7 +1333,6 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
         <button id="btn-generated" style="display:none; background:linear-gradient(135deg, var(--purple), #6D28D9); color:white; align-items:center;" onclick="triggerModalBtnAnim(this); openGeneratedFolder()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Generated Papers</button>
         <button id="btn-op-workspace" style="display:none; background:linear-gradient(135deg, var(--danger), #B91C1C); color:white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); align-items:center;" onclick="triggerModalBtnAnim(this); switchTab('op-workspace')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Production Workspace</button>
         <span id="dynamic-apps-container" style="display:flex; gap:12px; flex-wrap:wrap;"></span>
-        <button onclick="requestNotificationPermission()" style="margin-right:10px;">🔔 Enable Alerts</button>
         <button id="btn-refresh" class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this); initDashboard(globalUser.email)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 22v-6h6"/></svg>Refresh Data</button>
       </div>
 
@@ -1736,6 +1817,29 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
            </div>
         </div>
 
+        <!-- APPEARANCE & THEME -->
+        <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px; margin-bottom: 30px;">
+           <h4 style="color:var(--brand); margin-top:0; margin-bottom:15px; font-weight:800;">
+               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+               Appearance & Theme
+           </h4>
+           <div style="display:flex; justify-content:space-between; align-items:center;">
+               <div>
+                   <div style="color:var(--text); font-size:13px; font-weight:800;">Global Dark Mode</div>
+                   <div style="color:var(--text-muted); font-size:11px; margin-top:4px;">Toggle system interface between dark and light themes.</div>
+               </div>
+               <div style="display:flex; align-items:center; gap:12px;">
+                   <!-- Light Mode Sun SVG -->
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                   
+                   <label class="switch" style="margin:0;"><input type="checkbox" id="globalThemeToggle" onchange="toggleGlobalTheme(this)"><span class="slider"></span></label>
+                   
+                   <!-- Dark Mode Moon SVG -->
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+               </div>
+           </div>
+        </div>
+
         <div id="settings-content" style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border);"></div>
         
         <div class="sys-admin" style="display:none; margin-top:30px; padding-top:20px; border-top:1px solid var(--border);">
@@ -1880,6 +1984,41 @@ function serverCallWithProgress(action, payloadData, onProgress) {
         xhr.send(JSON.stringify(requestBody));
     });
 }
+
+// =========================================================================================
+// 🌙 SMART SYSTEM-AWARE THEME CONTROLLER
+// =========================================================================================
+
+// 1. Check if the user manually saved a preference before
+let tkSavedTheme = localStorage.getItem('tk_theme');
+
+// 2. If no manual preference exists, read their physical device settings!
+if (!tkSavedTheme) {
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    tkSavedTheme = prefersLight ? 'light' : 'dark';
+}
+
+// 3. Apply the theme instantly
+document.documentElement.setAttribute('data-theme', tkSavedTheme);
+
+window.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('globalThemeToggle');
+    if (themeToggle) themeToggle.checked = (tkSavedTheme === 'dark');
+});
+
+function toggleGlobalTheme(cb) {
+    if (cb.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('tk_theme', 'dark'); // Overrides system default
+        showToast("Dark Mode Enabled", "success");
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('tk_theme', 'light'); // Overrides system default
+        showToast("Light Mode Enabled", "info");
+    }
+}
+
+
 
 function actionChangePassword(btn) {
    let oldPw = document.getElementById('oldPwInput').value;
@@ -3088,7 +3227,7 @@ function applyRoleUI(p) {
   let settingsHtml = `
     <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Global Notification Preferences</h4>
     <p style="font-size:11px; color:var(--text-muted); margin-bottom:20px; font-weight:600;">Manage how you receive alerts across the system. Applies to all your devices.</p>
-
+ <button onclick="requestNotificationPermission()" style="margin-bottom:20px;"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="m15 8 2 2 4-4"/><path d="M16.8607 4.4824A6 6 0 0 0 6 8C6 12.499 4.589 13.956 3.262 15.326"/><path d="M3.262 15.326A1 1 0 0 0 4 17H20A1 1 0 0 0 20.74 15.327C20.209 14.779 19.665 14.218 19.203 13.454"/></svg> Enable Alerts</button>
     <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:30px;">
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
             <div>
