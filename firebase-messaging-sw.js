@@ -13,13 +13,6 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// 🔥 BACKGROUND HANDLER
 messaging.onBackgroundMessage(function(payload) {
-  self.registration.showNotification(
-    payload.notification.title,
-    {
-      body: payload.notification.body,
-      icon: "/favicon.ico" // optional
-    }
-  );
+  console.log("Background message received and handled natively by Firebase FCM.");
 });
