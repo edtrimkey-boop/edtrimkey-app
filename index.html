@@ -128,7 +128,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
 .notification-wrapper { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); transition: 0.3s; border: 1px solid transparent; margin: 0 !important; }
 .notification-wrapper:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); color: var(--brand); }
 .notification-badge { position: absolute; top: -2px; right: -2px; background: var(--danger); color: white; font-size: 9px; font-weight: 900; width: 16px; height: 16px; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2px solid var(--bg); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);}
-.notif-dropdown { position: absolute; top: 60px; right: -60px; background: linear-gradient(145deg, var(--card), #0B111E); width: 320px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 15px 40px rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; cursor: default; }
+.notif-dropdown { position: absolute; top: 60px; right: -90px; background: linear-gradient(145deg, var(--card), #0B111E); width: 320px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: 0 15px 40px rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; cursor: default; }
 .notif-dropdown.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .notif-header { padding: 15px 20px; border-bottom: 1px solid var(--border); font-weight: 800; color: white; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 .notif-list { max-height: 350px; overflow-y: auto; }
@@ -3058,77 +3058,12 @@ function renderData(payload) {
     }
 
     if (payload.stats.financial) {
-      let opT = document.getElementById('v1-opTotal'); if(opT) opT.innerText = "₹" + (payload.stats.financial.total || 0).toLocaleString('en-IN');
-      let opP = document.getElementById('v1-opPending'); if(opP) opP.innerText = "₹" + (payload.stats.financial.pending || 0).toLocaleString('en-IN');
-      let uiEarned = document.getElementById('uiTotalEarnedCard'); if(uiEarned) uiEarned.innerText = "₹" + (payload.stats.financial.total || 0).toLocaleString('en-IN');
-
       let opCard = document.getElementById('operatorKpis');
       if (opCard && userRole === 'operator') {
           opCard.style.display = 'grid';
-          
-          const safeDocs = Array.isArray(globalPayload.data.docs) ? globalPayload.data.docs : [];
-          const safePapers = Array.isArray(globalPayload.data.papers) ? globalPayload.data.papers : [];
-          const allJobs = [...safePapers, ...safeDocs];
-          
-          let pendingCount = 0;
-          let deliveredCount = 0;
-          let ledgerHtml = "";
-          
-          let myUpi = document.getElementById('opMyUpiId');
-          let upiDisplay = document.getElementById('currentUpiDisplay');
-          if (myUpi) myUpi.value = globalUser.upi || "";
-          
-          // 🔥 Populates the UI tag with color-coded status
-          if (upiDisplay) {
-              if (globalUser.upi && globalUser.upi.trim() !== "") {
-                  upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
-              } else {
-                  upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">⚠️ No UPI Linked (Payouts Paused)</span>`;
-              }
-          }
-
-          allJobs.forEach(j => {
-              if (j.status === 'Delivered' || j.status === 'Completed' || j.status === 'PAID' || j.status === 'Generated') deliveredCount++;
-              if (j.status === 'Pending' || j.status === 'Assigned' || j.status === 'In Progress' || j.status === 'Pending Revision') pendingCount++;
-              
-              if (j.status !== 'Pending' && j.status !== 'Assigned' && j.status !== 'Pending Revision' && j.status !== 'In Progress') {
-                  const submitDate = new Date(j.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-                  const typeLabel = j.subject ? j.subject : j.type;
-                  
-                  let payoutStatus = (j.status === 'Delivered' || j.status === 'Completed' || j.status === 'PAID') 
-                      ? `<span class="flat-pill bg-success">PAID AUTO</span>` 
-                      : `<span class="flat-pill bg-warning">PENDING</span>`;
-                  
-                  let amount = j.subject ? "₹50.00" : "₹5.00"; 
-
-                  ledgerHtml += `
-                  <tr>
-                      <td data-label="DATE">${submitDate}</td>
-                      <td data-label="JOB ID & TYPE">
-                          <b style="color:white; font-size:13px; text-transform:uppercase;">${j.id}</b><br>
-                          <span style="color:var(--text-muted); font-size:10px; font-weight:700; text-transform:uppercase;">${typeLabel}</span>
-                      </td>
-                      <td data-label="AMOUNT"><b style="color:var(--success); font-size:14px;">${amount}</b></td>
-                      <td data-label="PAYOUT STATUS">${payoutStatus}</td>
-                  </tr>`;
-              }
-          });
-          
-          let delEl = document.getElementById('v1-opDelivered'); if (delEl) delEl.innerText = deliveredCount;
-          let penEl = document.getElementById('v1-opPendingJobs'); if (penEl) penEl.innerText = pendingCount;
-          
-          if (ledgerHtml === "") ledgerHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">No completed transactions yet.</td></tr>`;
-          
-          let tOpL = document.getElementById('table-op-ledger');
-          if (tOpL) tOpL.innerHTML = ledgerHtml;
+          // All UPI UI and Ledger math is now safely handed over to syncOperatorFinances()!
       }
     }
-  }
-
-  if (userRole === "operator" || userRole === "super admin" || userRole === "system admin" || userRole === "all") {
-      if (typeof renderOperatorWorkspace === "function") {
-          renderOperatorWorkspace();
-      }
   }
 }
 
@@ -3200,6 +3135,34 @@ function applyRoleUI(p) {
     let vT = document.getElementById('v1-teacher'); if (vT) vT.innerText = p.name;
     let vS = document.getElementById('v1-subject'); if (vS) vS.innerText = p.subjects || "-";
     let vI = document.getElementById('v1-institute'); if (vI) vI.innerText = p.institute || "-";
+
+    
+    // 🔥 NEW: Show and Populate the Institute Details Card (EXCEPT FOR OPERATORS)
+    let instDetailsCard = document.getElementById('instDetailsCard');
+    if (instDetailsCard) {
+        if (userRole === "operator") {
+            instDetailsCard.style.display = 'none'; // Hide completely for operators
+        } else {
+            instDetailsCard.style.display = 'block'; // Show for teachers/admins
+            
+            let iName = document.getElementById('inst-name');
+            let iAddr = document.getElementById('inst-address');
+            let iEmail = document.getElementById('inst-email');
+            let iStatus = document.getElementById('inst-status');
+            
+            if (iName) iName.innerText = p.institute || "Not Assigned";
+            
+            if (p.instDetails) {
+                if (iAddr) iAddr.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>` + (p.instDetails.address || "Address not provided");
+                if (iEmail) iEmail.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:text-bottom;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>` + (p.instDetails.adminEmail || "Email not provided");
+                if (iStatus) iStatus.innerText = p.instDetails.plan || "Active";
+            } else {
+                if (iAddr) iAddr.innerText = "Address data unavailable";
+                if (iEmail) iEmail.innerText = "";
+                if (iStatus) iStatus.innerText = "Active";
+            }
+        }
+    }
 
     if(instNameEl) {
         instNameEl.innerText = p.institute || "Ed-Trim Key";
@@ -3424,6 +3387,18 @@ function applyRoleUI(p) {
 
   let sC = document.getElementById('settings-content');
   if(sC) sC.innerHTML = settingsHtml;
+
+  // 🔥 THE NEW KPI SYNC BLOCK FOR OPERATORS
+  if (userRole === "operator") {
+      let oK = document.getElementById('operatorKpis'); if(oK) oK.style.display = 'grid';
+      let bW = document.getElementById('btn-op-workspace'); if(bW) bW.style.display = 'flex';
+      let stdDash = document.getElementById('standard-user-dashboard'); if(stdDash) stdDash.style.display = 'block';
+      
+      let vT = document.getElementById('v1-teacher'); if(vT) vT.innerText = p.name;
+      
+      // Fetch the live financial math on initial load
+      if(typeof syncOperatorFinances === 'function') syncOperatorFinances();
+  }
 
   let navOpWs = document.getElementById('nav-op-workspace');
   let btnOpWs = document.getElementById('btn-op-workspace');
@@ -5708,6 +5683,7 @@ function isViewingChat(jobId) {
 
 const RealtimeManager = {
     systemChannel: null,
+    ledgerChannel: null, // Added to track ledger connections securely
     chatChannel: null,
     debounceTimer: null,
     
@@ -5721,7 +5697,6 @@ const RealtimeManager = {
         }
 
         // 🔥 FIX: Prevent interrupting a handshake. 
-        // Only kill the channel if it's fully connected, otherwise leave it alone.
         if (this.systemChannel) {
             if (this.systemChannel.state === 'SUBSCRIBED') {
                 window.supabaseInstance.removeChannel(this.systemChannel);
@@ -5730,12 +5705,13 @@ const RealtimeManager = {
             }
         }
         
-        // Launch the Master WebSocket
+        // Launch the Master WebSockets
         this.subscribeSystemChannels();
     },
 
     disconnectAll() {
         if (this.systemChannel) window.supabaseInstance.removeChannel(this.systemChannel);
+        if (this.ledgerChannel) window.supabaseInstance.removeChannel(this.ledgerChannel);
         if (this.chatChannel) window.supabaseInstance.removeChannel(this.chatChannel);
     },
 
@@ -5750,7 +5726,6 @@ const RealtimeManager = {
         const channelName = `system-events-${globalUser.id}`;
         
         this.systemChannel = window.supabaseInstance.channel(channelName)
-        // ... (rest of the code stays the same)
             // 📡 LISTENER 1: In-App Notifications
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
                 console.log("🔔 INCOMING RAW NOTIFICATION:", payload.new); // LIVE DIAGNOSTIC
@@ -5850,21 +5825,27 @@ const RealtimeManager = {
                     syncSwitch('prefSms', newPrefs.sms);
                     syncSwitch('prefEmail', newPrefs.email);
                     
-                    // Optional: Show a tiny silent indicator that a sync happened
                     console.log("UI Toggles synced with database instantly.");
                 }
             })
-
             .subscribe((status, err) => {
-                // Live debugging directly in your Chrome Console
                 console.log("📡 Master Socket Status:", status);
                 if (err) console.error("❌ Socket Error:", err);
                 
-                // Auto-Recovery: If internet drops and reconnects, fetch jobs to catch up!
                 if (status === 'SUBSCRIBED') {
                     this.triggerRecoveryFetch();
                 }
             });
+
+        // 🔥 NEW LISTENER 4: Listen for Operator Payouts in the Ledger
+        this.ledgerChannel = window.supabaseInstance.channel('ledger-updates')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'billing_ledger' }, payload => {
+                console.log("💳 New Ledger Transaction Detected!", payload);
+                if (globalUser && globalUser.role === 'operator') {
+                    if(typeof syncOperatorFinances === 'function') syncOperatorFinances();
+                }
+            })
+            .subscribe();
     },
 
     // 🎯 DYNAMIC CHAT CHANNEL (Only connects when viewing a specific job)
@@ -6154,6 +6135,120 @@ async function captureDeviceTelemetry() {
     }
 }
 
+// ============================================================================
+// 💰 OPERATOR FINANCIAL ENGINE (COMBINED JOBS + PAYOUTS)
+// ============================================================================
+async function syncOperatorFinances() {
+    if (!globalUser || globalUser.role !== 'operator') return;
+
+    try {
+        // 1. Fetch Operator's Default Rate
+        const { data: profile } = await window.supabaseInstance.from('operator_profiles').select('rate_per_paper').eq('user_id', globalUser.id).single();
+        const baseRate = profile?.rate_per_paper || 50;
+
+        // 2. Fetch Jobs directly from the existing payload (Lightning Fast!)
+        const safeDocs = Array.isArray(globalPayload?.data?.docs) ? globalPayload.data.docs : [];
+        const safePapers = Array.isArray(globalPayload?.data?.papers) ? globalPayload.data.papers : [];
+        const allJobs = [...safePapers, ...safeDocs];
+
+        let totalEarned = 0;
+        let totalDelivered = 0;
+        let pendingJobsCount = 0;
+        let combinedLedger = []; 
+
+        allJobs.forEach(j => {
+            let st = String(j.status).trim();
+            // Use specific payout if exists, otherwise fallback to baseRate
+            let payout = j.subject ? baseRate : (baseRate / 10); 
+            
+            if (st === 'Completed' || st === 'Delivered' || st === 'PAID' || st === 'Generated') {
+                totalDelivered++;
+                totalEarned += Number(payout);
+                
+                // Push Job to the Unified Ledger
+                combinedLedger.push({
+                    isJob: true,
+                    timestamp: new Date(j.date || new Date()).getTime(),
+                    dateStr: new Date(j.date || new Date()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    id: j.id,
+                    label: j.subject ? j.subject : j.type,
+                    amount: payout,
+                    status: `<span class="flat-pill bg-success">EARNED</span>`
+                });
+            } else if (st === 'In Progress' || st === 'Pending Revision' || st === 'Assigned' || st === 'Pending') {
+                pendingJobsCount++;
+            }
+        });
+
+        // 3. Fetch ONLY Payouts from Supabase
+        const { data: ledger } = await window.supabaseInstance.from('billing_ledger').select('*').eq('user_id', globalUser.id).eq('transaction_type', 'OPERATOR_PAYMENT').eq('status', 'POSTED');
+
+        let totalCleared = 0;
+        if (ledger) {
+            ledger.forEach(row => {
+                totalCleared += Number(row.amount);
+                
+                // Push Payout to the Unified Ledger
+                combinedLedger.push({
+                    isJob: false,
+                    timestamp: new Date(row.created_at).getTime(),
+                    dateStr: new Date(row.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    id: row.ledger_ref,
+                    label: 'UPI PAYOUT',
+                    amount: row.amount,
+                    status: `<span class="flat-pill bg-purple" style="color:white; border-color:var(--purple); background:var(--purple);">CLEARED</span>`
+                });
+            });
+        }
+
+        // 4. Update Math Calculations
+        let pendingClearance = totalEarned - totalCleared;
+
+        // 5. Update DOM Elements
+        const el = (id, val) => { if(document.getElementById(id)) document.getElementById(id).innerHTML = val; };
+        el('v1-opTotal', `₹${totalEarned.toLocaleString('en-IN')}`);
+        el('v1-opPending', `₹${pendingClearance.toLocaleString('en-IN')}`);
+        el('v1-opDelivered', totalDelivered);
+        el('v1-opPendingJobs', pendingJobsCount);
+        el('uiTotalEarnedCard', `₹${totalEarned.toLocaleString('en-IN')}`);
+
+        // 6. 🔥 RESTORE THE UPI UI 🔥
+        let myUpi = document.getElementById('opMyUpiId');
+        let upiDisplay = document.getElementById('currentUpiDisplay');
+        if (myUpi) myUpi.value = globalUser.upi || "";
+        
+        if (upiDisplay) {
+            if (globalUser.upi && globalUser.upi.trim() !== "") {
+                upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
+            } else {
+                upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">⚠️ No UPI Linked (Payouts Paused)</span>`;
+            }
+        }
+
+        // 7. RENDER THE COMBINED TABLE (Sorted by Newest First)
+        combinedLedger.sort((a, b) => b.timestamp - a.timestamp); 
+        
+        let ledgerHtml = "";
+        if (combinedLedger.length > 0) {
+            combinedLedger.forEach(item => {
+                let amtColor = item.isJob ? 'var(--success)' : 'white';
+                let amtSign = item.isJob ? '+' : '-';
+                ledgerHtml += `<tr>
+                    <td data-label="DATE"><span style="font-size:11px; color:var(--text-muted); font-weight:700;">${item.dateStr}</span></td>
+                    <td data-label="JOB ID & TYPE" style="font-weight:700; text-transform:uppercase; font-size:12px;">${item.id} <br> <span style="font-size:10px; color:var(--text-muted);">${item.label}</span></td>
+                    <td data-label="AMOUNT"><span style="color:${amtColor}; font-weight:900;">${amtSign}₹${Number(item.amount).toFixed(2)}</span></td>
+                    <td data-label="PAYOUT STATUS">${item.status}</td>
+                </tr>`;
+            });
+        } else {
+            ledgerHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">No transactions recorded yet.</td></tr>`;
+        }
+        el('table-op-ledger', ledgerHtml);
+
+    } catch (e) {
+        console.error("Finance Sync Error: ", e);
+    }
+}
 
 </script>
 </body>
