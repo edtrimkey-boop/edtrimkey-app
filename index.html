@@ -98,7 +98,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
    3. SIDEBAR NAVIGATION
    ======================================================= */
 .sidebar { 
-    width: 260px; flex-shrink: 0; background: var(--sidebar); height: 100%; padding: 30px 0 0 0; 
+    width: 260px; flex-shrink: 0; background: var(--sidebar); height: 100%; padding: 15px 0 0 0; 
     display: flex; flex-direction: column; z-index: 2000; border-right: 1px solid var(--border); 
     overflow-x: hidden; overflow-y: auto;
     /* 🔥 FIX 2: Animate ALL properties so Width collapses smoothly */
@@ -409,6 +409,81 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 .op-ws-header { flex-shrink: 0; padding: 20px 25px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
 .op-ws-details { display: flex; flex-direction: column; gap: 4px; }
 
+/* =======================================================
+   🔥 PREMIUM COLLAPSED SIDEBAR (DESKTOP MINI-MODE)
+   ======================================================= */
+@media (min-width: 951px) {
+    .sidebar.collapsed { 
+        width: 88px !important; 
+        opacity: 1 !important; 
+        pointer-events: auto !important; 
+        padding: 25px 0 0 0 !important;
+        border-right: 1px solid var(--border);
+    }
+    
+    /* Center the Logo */
+    .sidebar.collapsed .brandRow { 
+        padding: 0 !important; 
+        justify-content: center !important; 
+        margin-bottom: 30px !important;
+    }
+    .sidebar.collapsed .brandRow > div { gap: 0 !important; }
+    .sidebar.collapsed .brandRow .brand { display: none !important; }
+    
+    /* Transform Tabs into App Icons */
+    .sidebar.collapsed .nav-item {
+        min-width: 0 !important;
+        width: 52px !important;
+        height: 52px !important;
+        padding: 0 !important;
+        margin: 8px auto !important;
+        border-radius: 16px !important;
+        border-left: 1px solid transparent !important; 
+        justify-content: center !important;
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        color: transparent !important; /* Hides the text seamlessly */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Center and illuminate the SVG */
+    .sidebar.collapsed .nav-item svg {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--text-muted); 
+        margin: 0 !important;
+        transition: all 0.3s ease;
+    }
+    
+    /* Premium Hover & Active Animations */
+    .sidebar.collapsed .nav-item:hover {
+        background: rgba(255,255,255,0.03);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .sidebar.collapsed .nav-item:hover svg {
+        color: var(--brand);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .sidebar.collapsed .nav-item.active {
+        background: linear-gradient(135deg, rgba(38,195,234,0.15) 0%, rgba(38,195,234,0.05) 100%) !important;
+        box-shadow: inset 0 2px 5px rgba(38,195,234,0.2), 0 4px 15px rgba(0,0,0,0.2) !important;
+        border: 1px solid rgba(38,195,234,0.3) !important;
+    }
+    
+    .sidebar.collapsed .nav-item.active svg {
+        color: var(--brand);
+        filter: drop-shadow(0 0 5px var(--brand-glow));
+    }
+
+    /* Hide the bottom version text block */
+    .sidebar.collapsed > div:last-child { display: none !important; }
+}
 
 /* =======================================================
    11. THE MASTER MOBILE RESPONSIVE ENGINE
@@ -482,7 +557,98 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 
   .mobile-action-row { display: flex !important; flex-direction: row !important; justify-content: stretch !important; gap: 10px; width: 100%; }
   .mobile-action-row button { flex: 1; padding: 12px 10px !important; font-size: 11px !important; justify-content: center; }
+
+  /* =======================================================
+     🍏 PREMIUM iOS LIQUID GLASS MOBILE ENGINE (V2)
+     ======================================================= */
+  .sidebar { display: none !important; } 
+  .top-bar .brandRow button { display: none !important; } 
+  .content-area { padding-bottom: 100px !important; } 
+
+  #mobile-nav-bar {
+      position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
+      padding-bottom: env(safe-area-inset-bottom);
+      background: rgba(11, 17, 30, 0.75);
+      backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; justify-content: space-around; align-items: center;
+      z-index: 5000;
+  }
+
+  /* Bottom Tab: Glowing Desktop-Style Animation */
+  .nav-tab {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--text-muted); font-size: 9px; font-weight: 700; gap: 4px;
+      transition: 0.3s ease; text-decoration: none; -webkit-tap-highlight-color: transparent;
+      height: 100%;
+  }
+  
+  .nav-tab .icon-wrapper {
+      width: 38px; height: 38px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+  }
+  
+  .nav-tab svg { width: 20px; height: 20px; transition: 0.3s ease; }
+  
+  /* 🔥 THE DESKTOP-MATCHING ACTIVE STATE */
+  .nav-tab.active { color: var(--brand); }
+  .nav-tab.active .icon-wrapper {
+      background: linear-gradient(135deg, rgba(38,195,234,0.15) 0%, rgba(38,195,234,0.05) 100%);
+      box-shadow: inset 0 2px 5px rgba(38,195,234,0.2), 0 4px 15px rgba(0,0,0,0.3);
+      border: 1px solid rgba(38,195,234,0.3);
+      transform: translateY(-4px);
+  }
+  .nav-tab.active svg { color: var(--brand); filter: drop-shadow(0 0 5px var(--brand-glow)); }
+
+  /* Center FAB Dock */
+  .fab-dock {
+      position: relative; width: 56px; height: 56px; top: -20px;
+      background: linear-gradient(135deg, var(--brand), #1A9CBF);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 20px rgba(38,195,234,0.4), inset 0 2px 4px rgba(255,255,255,0.5);
+      color: #000; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .fab-dock:active { transform: scale(0.9); }
+  .fab-dock svg { width: 26px; height: 26px; transition: transform 0.4s ease; }
+  .fab-dock.open svg { transform: rotate(45deg); }
+
+  /* 🔥 TRUE LIQUID GLASS ACTION SHEET */
+  #fab-action-sheet {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: rgba(15, 20, 30, 0.6) !important; 
+      backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border-radius: 32px 32px 0 0; 
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 25px 20px 100px 20px; z-index: 4999;
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+  #fab-action-sheet.active { transform: translateY(0); }
+
+  .fab-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 10px; }
+  .fab-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: white; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; }
+  
+  /* Refined, smaller icons */
+  .fab-icon-box {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); color: white;
+  }
+  .fab-icon-box svg { width: 20px; height: 20px; }
+  
+  .fab-item:active .fab-icon-box { 
+      transform: scale(0.9); background: rgba(38,195,234,0.15); 
+      border-color: var(--brand); box-shadow: 0 0 15px rgba(38,195,234,0.3);
+  }
 }
+
+
 
 /* =======================================================
    THEME ENGINE (DARK / LIGHT MODE)
@@ -614,6 +780,15 @@ mark.highlight-match {
 </head>
 <body>
 
+<!-- 🍏 iOS MOBILE NAVIGATION ENGINE (Injected via JS) -->
+<div id="mobile-nav-bar" style="display:none;"></div>
+<div id="fab-overlay" class="glass-overlay" style="z-index:4998;" onclick="toggleFabMenu()"></div>
+<div id="fab-action-sheet">
+    <div style="width:40px; height:5px; background:rgba(255,255,255,0.2); border-radius:10px; margin: 0 auto 25px auto;"></div>
+    <div class="fab-grid" id="fab-grid-container">
+        <!-- Tools injected here -->
+    </div>
+</div>
   
 <!-- TRUE LIQUID REFRACTION ENGINE -->
 <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
@@ -1314,7 +1489,7 @@ mark.highlight-match {
       <div class="brand" style="font-size: 18px;">Ed-Trim Key</div>
     </div>
     <button class="mobile-close-btn liquid-glass glass-circle-btn" onclick="toggleSidebar()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
     </button>
   </div>
   
@@ -1876,17 +2051,36 @@ mark.highlight-match {
       </div>
 
       <div class="panel" style="border-left: 4px solid var(--success);">
-          <div class="panel-header">
-              <h3 style="display:flex; align-items:center;">
+          <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; border-bottom: none; margin-bottom: 10px; padding-bottom: 0;">
+              <h3 style="display:flex; align-items:center; margin:0;">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                   Transaction Ledger
               </h3>
-              <!-- 🔥 UPGRADED PDF EXPORT BUTTON -->
-              <button id="btnExportLedger" class="liquid-glass" style="color:var(--brand); border-color:var(--brand); padding:8px 16px; font-size:11px;" onclick="exportLedgerPDF(this)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                  EXPORT PDF
-              </button>
+              <div style="display:flex; gap:10px;">
+                  <button id="btnExportCSV" class="liquid-glass" style="color:var(--success); border-color:var(--success); padding:8px 16px; font-size:11px;" onclick="exportLedgerCSV(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> EXPORT CSV
+                  </button>
+                  <button id="btnExportLedger" class="liquid-glass" style="color:var(--brand); border-color:var(--brand); padding:8px 16px; font-size:11px;" onclick="exportLedgerPDF(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> EXPORT PDF
+                  </button>
+              </div>
           </div>
+          
+          <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border); align-items:center;">
+              <div class="search-wrapper" style="max-width: 250px; margin-bottom:0;">
+                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                 <input type="text" id="opLedgerSearch" class="search-input" placeholder="Search Job, ID, Subject..." oninput="filterOperatorLedger()">
+              </div>
+              <input type="date" id="opLedgerDateFrom" class="form-input" style="width:auto; margin-bottom:0;" onchange="filterOperatorLedger()">
+              <span style="color:var(--text-muted); font-size:12px; font-weight:700;">TO</span>
+              <input type="date" id="opLedgerDateTo" class="form-input" style="width:auto; margin-bottom:0;" onchange="filterOperatorLedger()">
+              <select id="opLedgerStatus" class="filter-select" onchange="filterOperatorLedger()">
+                  <option value="all">All Statuses</option>
+                  <option value="POSTED">Posted (Paid)</option>
+                  <option value="PENDING">Pending</option>
+              </select>
+          </div>
+
           <div class="tk-table-wrapper">
               <table class="tk-sleek-table">
                   <thead>
@@ -1903,7 +2097,7 @@ mark.highlight-match {
               </table>
           </div>
       </div>
-    </div> 
+    </div>
 
     <!-- MASTER SETTINGS -->
     <div id="view-settings" class="page-view">
@@ -2165,6 +2359,7 @@ let globalUser = null;
 let globalPayload = null; 
 let popupTimer = null;
 let cropper = null;
+let globalOperatorLedgerData = [];
 
 const SUPABASE_URL = "https://ypmnsgpohaaavbjdqjye.supabase.co";
 const SUPABASE_KEY = "sb_publishable_A-eYAoVILzcgjGWBbgTjuQ_gGPRHU-n";
@@ -3065,6 +3260,13 @@ function renderData(payload) {
       }
     }
   }
+
+   if (userRole === "operator" || userRole === "super admin" || userRole === "system admin" || userRole === "all") {
+      if (typeof renderOperatorWorkspace === "function") {
+          renderOperatorWorkspace();
+      }
+  }
+
 }
 
 // =========================================================================================
@@ -3413,6 +3615,10 @@ function applyRoleUI(p) {
       if (btnOpWs) btnOpWs.style.display = 'none';
       if (navOpFin) navOpFin.style.display = 'none'; 
   }
+
+  // Render the iOS Bottom Navigation based on role
+    buildMobileNav(userRole);
+
 }
 
 // =========================================================================================
@@ -5896,7 +6102,7 @@ function updateOperatorUPI() {
                 
                 // 🔥 Instantly update the UI so they know it worked
                 let upiDisplay = document.getElementById('currentUpiDisplay');
-                if (upiDisplay) upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${upiId}</span></span>`;
+                if (upiDisplay) upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Linked: <span style="color:white; font-family:monospace; font-size:14px;">${upiId}</span></span>`;
                 
                 // 🔥 2. FIRE THE PREMIUM TOAST NOTIFICATION
                 showToast(
@@ -5913,113 +6119,6 @@ function updateOperatorUPI() {
             resetBtnAnim(btn);
             showPopup("Network Error: " + err.message, "error");
         });
-}
-
-// ==========================================
-// 📄 ENTERPRISE PDF LEDGER EXPORT
-// ==========================================
-function exportLedgerPDF(btn) {
-    triggerBtnAnim(btn);
-    
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'pt', 'a4');
-        
-        // Add Premium Header
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(22);
-        doc.setTextColor(38, 195, 234); // Brand Blue
-        doc.text("Trim Key Financial Ledger", 40, 50);
-        
-        doc.setFontSize(11);
-        doc.setTextColor(100, 100, 100);
-        doc.setFont("helvetica", "normal");
-        doc.text(`Generated: ${new Date().toLocaleString()}`, 40, 75);
-        doc.text(`Operator ID: ${globalUser.name.toUpperCase()} (${globalUser.email})`, 40, 95);
-        
-        // Draw Table Header
-        let startY = 130;
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(255, 255, 255);
-        
-        doc.setFillColor(11, 17, 30); // Dark BG for header
-        doc.rect(40, startY - 15, 515, 25, 'F');
-        
-        doc.text("DATE", 50, startY);
-        doc.text("JOB ID & TYPE", 150, startY);
-        doc.text("AMOUNT", 380, startY);
-        doc.text("STATUS", 460, startY);
-        
-        // Setup for Table Rows
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(0, 0, 0);
-        let currentY = startY + 20;
-        
-        const rows = document.querySelectorAll('#table-op-ledger tr');
-        
-        if(rows.length === 1 && rows[0].innerText.includes('No completed transactions')) {
-            doc.text("No completed transactions found.", 50, currentY);
-        } else {
-            rows.forEach((row, index) => {
-                const cols = row.querySelectorAll('td');
-                if (cols.length >= 4) {
-                    // Add new page if we run out of room
-                    if (currentY > 780) {
-                        doc.addPage();
-                        currentY = 50;
-                    }
-                    
-                    // Zebra striping for readability
-                    if (index % 2 === 0) {
-                        doc.setFillColor(245, 245, 245);
-                        doc.rect(40, currentY - 15, 515, 30, 'F');
-                    }
-                    
-                    let dateText = cols[0].innerText.trim();
-                    let jobText = cols[1].innerText.trim().replace(/\n/g, ' - ');
-                    let amtText = cols[2].innerText.trim();
-                    let statusText = cols[3].innerText.trim();
-                    
-                    if(jobText.length > 35) jobText = jobText.substring(0, 32) + "..."; // Auto-truncate
-                    
-                    doc.text(dateText, 50, currentY);
-                    doc.text(jobText, 150, currentY);
-                    doc.text(amtText, 380, currentY);
-                    
-                    // Color code the status pill text
-                    if (statusText.includes('PAID')) {
-                        doc.setTextColor(46, 204, 113); // Green
-                    } else {
-                        doc.setTextColor(245, 158, 11); // Orange
-                    }
-                    doc.setFont("helvetica", "bold");
-                    doc.text(statusText, 460, currentY);
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(0, 0, 0);
-                    
-                    currentY += 30;
-                }
-            });
-        }
-        
-        // Add Footer Totals
-        currentY += 20;
-        doc.setFontSize(14);
-        doc.setFont("helvetica", "bold");
-        doc.text(`Total Lifetime Earnings: ₹${(globalPayload.stats?.financial?.total || 0).toLocaleString('en-IN')}`, 40, currentY);
-        
-        // Output the PDF to the browser instantly
-        doc.save(`ED_TrimKey_Ledger_${globalUser.name.split(' ')[0]}.pdf`);
-        
-        resetBtnAnim(btn);
-        showToast("PDF Exported Successfully!", "success");
-        
-    } catch (error) {
-        console.error(error);
-        resetBtnAnim(btn);
-        showPopup("Failed to generate PDF. Make sure library is loaded.", "error");
-    }
 }
 
 // ==========================================
@@ -6136,17 +6235,15 @@ async function captureDeviceTelemetry() {
 }
 
 // ============================================================================
-// 💰 OPERATOR FINANCIAL ENGINE (COMBINED JOBS + PAYOUTS)
+// 💰 OPERATOR FINANCIAL ENGINE & DYNAMIC FILTERING
 // ============================================================================
 async function syncOperatorFinances() {
     if (!globalUser || globalUser.role !== 'operator') return;
 
     try {
-        // 1. Fetch Operator's Default Rate
         const { data: profile } = await window.supabaseInstance.from('operator_profiles').select('rate_per_paper').eq('user_id', globalUser.id).single();
         const baseRate = profile?.rate_per_paper || 50;
 
-        // 2. Fetch Jobs directly from the existing payload (Lightning Fast!)
         const safeDocs = Array.isArray(globalPayload?.data?.docs) ? globalPayload.data.docs : [];
         const safePapers = Array.isArray(globalPayload?.data?.papers) ? globalPayload.data.papers : [];
         const allJobs = [...safePapers, ...safeDocs];
@@ -6154,57 +6251,61 @@ async function syncOperatorFinances() {
         let totalEarned = 0;
         let totalDelivered = 0;
         let pendingJobsCount = 0;
-        let combinedLedger = []; 
+        const jobDictionary = {};
 
         allJobs.forEach(j => {
             let st = String(j.status).trim();
-            // Use specific payout if exists, otherwise fallback to baseRate
             let payout = j.subject ? baseRate : (baseRate / 10); 
+            jobDictionary[String(j.id).trim().toUpperCase()] = j.subject ? j.subject : j.type;
             
             if (st === 'Completed' || st === 'Delivered' || st === 'PAID' || st === 'Generated') {
                 totalDelivered++;
                 totalEarned += Number(payout);
-                
-                // Push Job to the Unified Ledger
-                combinedLedger.push({
-                    isJob: true,
-                    timestamp: new Date(j.date || new Date()).getTime(),
-                    dateStr: new Date(j.date || new Date()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-                    id: j.id,
-                    label: j.subject ? j.subject : j.type,
-                    amount: payout,
-                    status: `<span class="flat-pill bg-success">EARNED</span>`
-                });
             } else if (st === 'In Progress' || st === 'Pending Revision' || st === 'Assigned' || st === 'Pending') {
                 pendingJobsCount++;
             }
         });
 
-        // 3. Fetch ONLY Payouts from Supabase
-        const { data: ledger } = await window.supabaseInstance.from('billing_ledger').select('*').eq('user_id', globalUser.id).eq('transaction_type', 'OPERATOR_PAYMENT').eq('status', 'POSTED');
+        const { data: ledger } = await window.supabaseInstance.from('billing_ledger')
+            .select('*').eq('user_id', globalUser.id).order('created_at', { ascending: false });
 
         let totalCleared = 0;
-        if (ledger) {
+        globalOperatorLedgerData = []; // Clear memory array
+
+        if (ledger && ledger.length > 0) {
             ledger.forEach(row => {
-                totalCleared += Number(row.amount);
+                if (row.transaction_type === 'OPERATOR_PAYMENT' && row.status === 'POSTED') {
+                    totalCleared += Number(row.amount);
+                }
                 
-                // Push Payout to the Unified Ledger
-                combinedLedger.push({
-                    isJob: false,
-                    timestamp: new Date(row.created_at).getTime(),
+                // Map the Reference IDs to actual Subject/Type names
+                let formattedJobsText = "";
+                let rawSearchText = `${row.ledger_ref} ${row.transaction_type}`;
+                
+                if (row.reference_id) {
+                    let jobIds = String(row.reference_id).toUpperCase().split(',').map(s => s.trim());
+                    formattedJobsText = jobIds.map(id => {
+                        let jobName = jobDictionary[id] || "SYSTEM TASK";
+                        rawSearchText += ` ${id} ${jobName}`;
+                        return `<span style="color:var(--text-muted);">${id}</span> <span style="color:var(--brand);">• ${jobName.toUpperCase()}</span>`;
+                    }).join('<br>');
+                } else {
+                    formattedJobsText = `<span style="color:var(--text-muted); text-transform:uppercase;">${row.transaction_type}</span>`;
+                }
+
+                globalOperatorLedgerData.push({
+                    rawDate: new Date(row.created_at),
                     dateStr: new Date(row.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-                    id: row.ledger_ref,
-                    label: 'UPI PAYOUT',
-                    amount: row.amount,
-                    status: `<span class="flat-pill bg-purple" style="color:white; border-color:var(--purple); background:var(--purple);">CLEARED</span>`
+                    ledgerRef: String(row.ledger_ref).toUpperCase(),
+                    displayJobs: formattedJobsText,
+                    amount: Number(row.amount),
+                    status: String(row.status).toUpperCase(),
+                    searchStr: rawSearchText.toLowerCase()
                 });
             });
         }
 
-        // 4. Update Math Calculations
         let pendingClearance = totalEarned - totalCleared;
-
-        // 5. Update DOM Elements
         const el = (id, val) => { if(document.getElementById(id)) document.getElementById(id).innerHTML = val; };
         el('v1-opTotal', `₹${totalEarned.toLocaleString('en-IN')}`);
         el('v1-opPending', `₹${pendingClearance.toLocaleString('en-IN')}`);
@@ -6212,42 +6313,347 @@ async function syncOperatorFinances() {
         el('v1-opPendingJobs', pendingJobsCount);
         el('uiTotalEarnedCard', `₹${totalEarned.toLocaleString('en-IN')}`);
 
-        // 6. 🔥 RESTORE THE UPI UI 🔥
         let myUpi = document.getElementById('opMyUpiId');
         let upiDisplay = document.getElementById('currentUpiDisplay');
         if (myUpi) myUpi.value = globalUser.upi || "";
-        
         if (upiDisplay) {
             if (globalUser.upi && globalUser.upi.trim() !== "") {
-                upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Actively Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
+                upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
             } else {
                 upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">⚠️ No UPI Linked (Payouts Paused)</span>`;
             }
         }
 
-        // 7. RENDER THE COMBINED TABLE (Sorted by Newest First)
-        combinedLedger.sort((a, b) => b.timestamp - a.timestamp); 
-        
-        let ledgerHtml = "";
-        if (combinedLedger.length > 0) {
-            combinedLedger.forEach(item => {
-                let amtColor = item.isJob ? 'var(--success)' : 'white';
-                let amtSign = item.isJob ? '+' : '-';
-                ledgerHtml += `<tr>
-                    <td data-label="DATE"><span style="font-size:11px; color:var(--text-muted); font-weight:700;">${item.dateStr}</span></td>
-                    <td data-label="JOB ID & TYPE" style="font-weight:700; text-transform:uppercase; font-size:12px;">${item.id} <br> <span style="font-size:10px; color:var(--text-muted);">${item.label}</span></td>
-                    <td data-label="AMOUNT"><span style="color:${amtColor}; font-weight:900;">${amtSign}₹${Number(item.amount).toFixed(2)}</span></td>
-                    <td data-label="PAYOUT STATUS">${item.status}</td>
-                </tr>`;
-            });
-        } else {
-            ledgerHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">No transactions recorded yet.</td></tr>`;
-        }
-        el('table-op-ledger', ledgerHtml);
+        filterOperatorLedger(); // Initial Render
+    } catch (e) { console.error("Finance Sync Error: ", e); }
+}
 
-    } catch (e) {
-        console.error("Finance Sync Error: ", e);
+function filterOperatorLedger() {
+    const searchQ = document.getElementById('opLedgerSearch')?.value.toLowerCase().trim() || "";
+    const dateFrom = document.getElementById('opLedgerDateFrom')?.value;
+    const dateTo = document.getElementById('opLedgerDateTo')?.value;
+    const statusQ = document.getElementById('opLedgerStatus')?.value || "all";
+    
+    let filtered = globalOperatorLedgerData.filter(row => {
+        let mSearch = !searchQ || row.searchStr.includes(searchQ);
+        let mStatus = statusQ === "all" || row.status === statusQ;
+        
+        let mDate = true;
+        if (dateFrom || dateTo) {
+            let rTime = row.rawDate.setHours(0,0,0,0);
+            let fTime = dateFrom ? new Date(dateFrom).setHours(0,0,0,0) : -Infinity;
+            let tTime = dateTo ? new Date(dateTo).setHours(23,59,59,999) : Infinity;
+            if (rTime < fTime || rTime > tTime) mDate = false;
+        }
+        return mSearch && mStatus && mDate;
+    });
+
+    const hl = (text, q) => {
+        if (!q) return text;
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return String(text).replace(new RegExp(`(${escapedQ})`, 'gi'), `<mark class="highlight-match">$1</mark>`);
+    };
+
+    let ledgerHtml = "";
+    if (filtered.length > 0) {
+        filtered.forEach(row => {
+            let badgeColor = row.status === 'POSTED' ? 'bg-success' : 'bg-warning';
+            ledgerHtml += `<tr>
+                <td data-label="DATE"><span style="font-size:11px; color:var(--text-muted); font-weight:700;">${row.dateStr}</span></td>
+                <td data-label="JOB ID & TYPE" style="font-weight:700; font-size:12px;">
+                    <b style="color:white; font-size:13px;">${hl(row.ledgerRef, searchQ)}</b>
+                    <div style="margin-top:4px; font-size:10px; font-weight:700; line-height:1.5;">${row.displayJobs}</div>
+                </td>
+                <td data-label="AMOUNT"><span style="color:var(--success); font-weight:900;">₹${row.amount.toFixed(2)}</span></td>
+                <td data-label="PAYOUT STATUS"><span class="flat-pill ${badgeColor}">${row.status}</span></td>
+            </tr>`;
+        });
+    } else {
+        ledgerHtml = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:30px;">No matching transactions found.</td></tr>`;
     }
+    document.getElementById('table-op-ledger').innerHTML = ledgerHtml;
+}
+
+// ==========================================
+// 📄 EXPORT: PREMIUM INVOICE PDF & CSV
+// ==========================================
+function exportLedgerCSV(btn) {
+    triggerBtnAnim(btn);
+    if (globalOperatorLedgerData.length === 0) {
+        resetBtnAnim(btn);
+        return showPopup("No data available to export.", "warning");
+    }
+
+    let csvContent = "DATE,LEDGER REF,JOBS & SUBJECTS,AMOUNT (INR),STATUS\n";
+    globalOperatorLedgerData.forEach(row => {
+        let cleanJobs = row.displayJobs.replace(/<[^>]*>?/gm, ''); // Strip HTML tags
+        let safeJobs = `"${cleanJobs.replace(/"/g, '""')}"`; // Escape CSV quotes
+        csvContent += `${row.dateStr},${row.ledgerRef},${safeJobs},${row.amount},${row.status}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `TrimKey_Ledger_${globalUser.name.split(' ')[0].toUpperCase()}.csv`;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    resetBtnAnim(btn);
+    showToast("CSV Exported", "success");
+}
+
+function exportLedgerPDF(btn) {
+    triggerBtnAnim(btn);
+    
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'pt', 'a4');
+        
+        // 1. Premium Header
+        doc.setFillColor(11, 17, 30);
+        doc.rect(0, 0, 600, 100, 'F');
+        
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(24);
+        doc.setTextColor(38, 195, 234); 
+        doc.text("TRIM KEY FINANCIAL LEDGER", 40, 50);
+        
+        doc.setFontSize(10);
+        doc.setTextColor(200, 200, 200);
+        doc.setFont("helvetica", "normal");
+        doc.text(`STATEMENT GENERATED: ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString()}`, 40, 75);
+        
+        // 2. Operator Info Block
+        doc.setTextColor(0, 0, 0);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.text("OPERATOR DETAILS", 40, 140);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.text(`Name: ${globalUser.name.toUpperCase()}`, 40, 160);
+        doc.text(`Email: ${globalUser.email.toUpperCase()}`, 40, 175);
+        doc.text(`UPI ID: ${(globalUser.upi || "NOT SET").toUpperCase()}`, 40, 190);
+        
+        // 3. Table Header
+        let startY = 230;
+        doc.setFillColor(38, 195, 234);
+        doc.rect(40, startY - 15, 515, 25, 'F');
+        
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(255, 255, 255);
+        doc.text("DATE", 50, startY);
+        doc.text("TRANSACTION REFERENCE", 130, startY);
+        doc.text("AMOUNT", 430, startY);
+        doc.text("STATUS", 495, startY);
+        
+        // 4. Table Rows
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(0, 0, 0);
+        let currentY = startY + 25;
+        
+        if(globalOperatorLedgerData.length === 0) {
+            doc.text("No transactions found in ledger.", 50, currentY);
+        } else {
+            globalOperatorLedgerData.forEach((row, index) => {
+                if (currentY > 750) {
+                    doc.addPage();
+                    currentY = 50;
+                }
+                
+                // Stripe background
+                if (index % 2 === 0) {
+                    doc.setFillColor(245, 247, 250);
+                    doc.rect(40, currentY - 15, 515, 30, 'F');
+                }
+                
+                let cleanJobs = row.displayJobs.replace(/<[^>]*>?/gm, ' ').replace(/&nbsp;/g, ' ').trim();
+                let jobText = `${row.ledgerRef}  |  ${cleanJobs}`;
+                if(jobText.length > 55) jobText = jobText.substring(0, 52) + "..."; 
+                
+                doc.text(row.dateStr, 50, currentY);
+                doc.text(jobText, 130, currentY);
+                
+                // Exact alignment for Amount and Status
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(46, 204, 113); // Always Green for Payouts
+                doc.text(`Rs. ${row.amount.toFixed(2)}`, 430, currentY);
+                
+                if (row.status === 'POSTED') doc.setTextColor(46, 204, 113);
+                else doc.setTextColor(245, 158, 11);
+                
+                doc.text(row.status, 495, currentY);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(0, 0, 0);
+                
+                currentY += 30;
+            });
+        }
+        
+        // 5. Summary Footer 
+        currentY += 20;
+        doc.setLineWidth(1);
+        doc.setDrawColor(200, 200, 200);
+        doc.line(40, currentY, 555, currentY);
+        
+        currentY += 25;
+        let lifetimeEarned = document.getElementById('uiTotalEarnedCard').innerText || "Rs. 0";
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text(`TOTAL LIFETIME EARNINGS: ${lifetimeEarned.replace('₹', 'Rs. ')}`, 40, currentY);
+        
+        doc.save(`TrimKey_Invoice_${globalUser.name.split(' ')[0].toUpperCase()}.pdf`);
+        resetBtnAnim(btn);
+        showToast("Premium Invoice Exported", "success");
+        
+    } catch (error) {
+        console.error(error);
+        resetBtnAnim(btn);
+        showPopup("Failed to generate PDF. Make sure jsPDF is loaded.", "error");
+    }
+}
+
+// ============================================================================
+// 🍏 iOS LIQUID GLASS MOBILE ENGINE (V3 DYNAMIC + SAFE ROUTER)
+// ============================================================================
+
+// 1. Toggles menu when clicking the center + button
+function toggleFabMenu() {
+    const sheet = document.getElementById('fab-action-sheet');
+    const overlay = document.getElementById('fab-overlay');
+    const fabIcon = document.querySelector('.fab-dock');
+    
+    if (!sheet || !overlay) return;
+
+    if (sheet.classList.contains('active')) {
+        closeFabMenu();
+    } else {
+        overlay.style.display = 'flex';
+        setTimeout(() => { overlay.classList.add('active'); sheet.classList.add('active'); }, 10);
+        if(fabIcon) fabIcon.classList.add('open'); 
+    }
+}
+
+// 2. Safely forces the menu to close without toggling it open by mistake
+function closeFabMenu() {
+    const sheet = document.getElementById('fab-action-sheet');
+    const overlay = document.getElementById('fab-overlay');
+    const fabIcon = document.querySelector('.fab-dock');
+    
+    if (sheet && sheet.classList.contains('active')) {
+        sheet.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+        setTimeout(() => { if (overlay) overlay.style.display = 'none'; }, 300);
+        if (fabIcon) fabIcon.classList.remove('open');
+    }
+}
+
+// 3. Handles FAB Grid Clicks
+function executeMobileAction(actionType, param, url = null) {
+    closeFabMenu(); // Force close
+    setTimeout(() => { 
+        if (actionType === 'tab') switchTab(param);
+        else if (actionType === 'func' && typeof window[param] === 'function') window[param]();
+        else if (actionType === 'msg') showPopup(param, 'info');
+        else if (actionType === 'url' && url) {
+            window.open(url + "?user=" + encodeURIComponent(globalUser.email) + "&code=" + globalUser.code);
+        }
+    }, 350); // Wait for slide animation to finish
+}
+
+function buildMobileNav(role) {
+    if (window.innerWidth > 950) return; 
+    
+    const navBar = document.getElementById('mobile-nav-bar');
+    const fabGrid = document.getElementById('fab-grid-container');
+    if(!navBar || !fabGrid) return;
+    
+    navBar.style.display = 'flex';
+
+    const icons = {
+        dash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>`,
+        docs: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>`,
+        paper: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+        settings: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+        students: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>`,
+        workspace: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>`,
+        wallet: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+        inst: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/></svg>`,
+        ops: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16.051 12.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.866l-1.156-1.153a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/><path d="M8 15H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>`,
+        ledger: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>`,
+        attd: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        addAdmin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>`,
+        broadcast: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>`,
+        apps: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`,
+        plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`
+    };
+
+    // Tabs now explicitly call closeFabMenu() so they never toggle the FAB open
+    const buildTab = (id, icon, label) => `<a href="javascript:void(0)" class="nav-tab ${id==='overview'?'active':''}" onclick="closeFabMenu(); switchTab('${id}'); updateMobileActiveTab(this);"><div class="icon-wrapper">${icon}</div><span>${label}</span></a>`;
+    const buildFabItem = (type, param, iconStr, color, label, url='') => {
+        let safeUrl = url ? url.replace(/'/g, "\\'") : '';
+        return `<div class="fab-item" onclick="executeMobileAction('${type}', '${param}', '${safeUrl}')"><div class="fab-icon-box" style="color:${color};">${iconStr}</div><span>${label}</span></div>`;
+    };
+    const fabButton = `<div class="fab-dock" onclick="toggleFabMenu()">${icons.plus}</div>`;
+
+    let tabsHtml = "", menuHtml = "";
+
+    // 🔥 DYNAMIC APPS INJECTOR
+    let dynamicAppsHtml = "";
+    if (globalUser && Array.isArray(globalUser.dynamicApps)) {
+        globalUser.dynamicApps.forEach(app => {
+            if (app.targetRole === 'all' || (app.targetRole === 'admin' && (role === 'admin' || role === 'all'))) {
+                let appIcon = icons.apps;
+                let color = "var(--purple)";
+                
+                // Intelligently assign icons and colors based on the app's name
+                if(app.name.toLowerCase().includes("attendance")) { appIcon = icons.attd; color = "var(--success)"; }
+                if(app.name.toLowerCase().includes("admission")) { appIcon = icons.students; color = "var(--brand)"; }
+                if(app.name.toLowerCase().includes("fee")) { appIcon = icons.wallet; color = "var(--danger)"; }
+                
+                // Route as a URL action
+                dynamicAppsHtml += buildFabItem('url', '', appIcon, color, app.name, app.url);
+            }
+        });
+    }
+
+    if (role === 'teacher') {
+        tabsHtml = buildTab('overview', icons.dash, 'Home') + buildTab('documents', icons.docs, 'Docs') + fabButton + buildTab('papers', icons.paper, 'Papers') + buildTab('settings', icons.settings, 'Settings');
+        menuHtml = dynamicAppsHtml || buildFabItem("msg", "No external apps assigned.", icons.apps, "var(--text-muted)", "No Apps");
+    } 
+    else if (role === 'operator') {
+        tabsHtml = buildTab('overview', icons.dash, 'Home') + buildTab('op-workspace', icons.workspace, 'Workspace') + fabButton + buildTab('op-finance', icons.wallet, 'Wallet') + buildTab('settings', icons.settings, 'Settings');
+        menuHtml = buildFabItem("tab", "papers", icons.paper, "var(--accent)", "Paper Queue") + 
+                   buildFabItem("tab", "documents", icons.docs, "var(--brand)", "Doc Queue");
+    } 
+    else if (role === 'admin') {
+        tabsHtml = buildTab('overview', icons.dash, 'Home') + buildTab('documents', icons.docs, 'Docs') + fabButton + buildTab('papers', icons.paper, 'Papers') + buildTab('settings', icons.settings, 'Settings');
+        menuHtml = buildFabItem("func", "actionAddTeacher", icons.addAdmin, "var(--brand)", "Add Teacher") + 
+                   buildFabItem("tab", "inst-teachers", icons.addAdmin, "var(--accent)", "Directory") + 
+                   buildFabItem("tab", "inst-billing", icons.wallet, "var(--danger)", "Billing") + 
+                   buildFabItem("tab", "notifications", icons.broadcast, "var(--purple)", "Broadcast") +
+                   dynamicAppsHtml; // Dynamically injects Admission, Fees, etc.
+    } 
+    else {
+        // Super Admin
+        tabsHtml = buildTab('overview', icons.dash, 'Home') + buildTab('institutes', icons.inst, 'Clients') + fabButton + buildTab('billing', icons.ledger, 'Ledger') + buildTab('settings', icons.settings, 'Settings');
+        menuHtml = buildFabItem("func", "actionAddOperator", icons.ops, "var(--success)", "Add Operator") + 
+                   buildFabItem("func", "actionRegisterInstitute", icons.inst, "var(--brand)", "Add Client") + 
+                   buildFabItem("tab", "documents", icons.docs, "var(--accent)", "Doc Queue") + 
+                   buildFabItem("tab", "papers", icons.paper, "var(--danger)", "Paper Queue") + 
+                   buildFabItem("tab", "operators", icons.ops, "var(--purple)", "Workforce") +
+                   buildFabItem("tab", "notifications", icons.broadcast, "var(--text)", "Broadcast");
+    }
+
+    navBar.innerHTML = tabsHtml;
+    fabGrid.innerHTML = menuHtml;
+}
+
+function updateMobileActiveTab(clickedEl) {
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    clickedEl.classList.add('active');
 }
 
 </script>
