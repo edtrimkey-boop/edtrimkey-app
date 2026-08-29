@@ -645,7 +645,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   /* 1. Transparent layout wrapper */
   #mobile-nav-bar {
       position: fixed; 
-      bottom: calc(30px + env(safe-area-inset-bottom)); 
+      bottom: calc(20px + env(safe-area-inset-bottom)); 
       left: 15px; 
       width: calc(100% - 30px); 
       height: 65px;
@@ -703,11 +703,16 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   .fab-dock {
       width: 60px !important; height: 60px !important; 
       flex-shrink: 0 !important;
-      background: linear-gradient(135deg, var(--brand), #1A9CBF);
+      
       border-radius: 50% !important; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 10px 25px rgba(38,195,234,0.4), inset 0 2px 4px rgba(255,255,255,0.5);
-      color: #000 !important; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--glass-shadow), var(--glass-highlight);
+      color: var(--brand) !important; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: auto;
+
+      background: var(--glass-bg); 
+      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-highlight);
   }
   .fab-dock:active { transform: scale(0.9); }
   .fab-dock svg { width: 26px !important; height: 26px !important; transition: transform 0.4s ease; stroke: currentColor !important; }
