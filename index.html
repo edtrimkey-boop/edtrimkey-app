@@ -34,7 +34,7 @@
   --radius-lg: 16px;   
   --radius-pill: 50px; 
   
-  /* 🔥 UNIVERSAL APPLE GLASS PHYSICS */
+  /* ðŸ”¥ UNIVERSAL APPLE GLASS PHYSICS */
   --glass-blur: blur(25px) saturate(200%);
   --glass-bg: rgba(15, 20, 30, 10%); 
   --glass-border: 1px solid rgba(255, 255, 255, 0.12);
@@ -47,7 +47,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
 
 /* =======================================================
-   💻 DESKTOP SAFEGUARDS (Hides mobile UI on big screens)
+   ðŸ’» DESKTOP SAFEGUARDS (Hides mobile UI on big screens)
    ======================================================= */
 @media (min-width: 951px) {
     #mobile-nav-bar, 
@@ -143,7 +143,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
     width: 260px; flex-shrink: 0; background: var(--sidebar); height: 100%; padding: 15px 0 0 0; 
     display: flex; flex-direction: column; z-index: 2000; border-right: 1px solid var(--border); 
     overflow-x: hidden; overflow-y: auto;
-    /* 🔥 FIX 2: Animate ALL properties so Width collapses smoothly */
+    /* ðŸ”¥ FIX 2: Animate ALL properties so Width collapses smoothly */
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
 }
 .sidebar.collapsed { width: 0; border: none; opacity: 0; pointer-events: none; padding-left: 0; padding-right: 0; }
@@ -160,7 +160,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
 
 .top-bar { height: 75px; flex-shrink: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; position: sticky; top: 0; z-index: 100;}
 
-/* 🔥 FIX 3: Perfectly Spaced Header Icons */
+/* ðŸ”¥ FIX 3: Perfectly Spaced Header Icons */
 .brandRow { display: flex; align-items: center; gap: 20px !important; }
 .top-bar > div:last-child { display: flex; align-items: center; gap: 20px !important; }
 
@@ -180,6 +180,12 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
 .notif-msg { font-size: 11px; color: var(--text-muted); line-height: 1.5; font-weight: 600; }
 .notif-time { font-size: 9px; color: #64748B; margin-top: 8px; text-align: right; font-weight: 700; }
 
+.user-profile-container:has(.profile-dropdown.active):active,
+.notification-wrapper:has(.notif-dropdown.active):active { transform: translateY(-2px) scale(1.02) !important; /* Locks to hover size */background: rgba(255, 255, 255, 0.08) !important;}
+
+/* Add a subtle, independent tactile click to the menu items instead */
+.dropdown-menu-item:active, 
+.notif-item:active { transform: scale(0.98); transition: transform 0.1s ease;}
 .user-profile-container { position: relative; display: flex; align-items: center; cursor: pointer; padding: 6px 12px; border-radius: var(--radius-md); transition: 0.3s; background: rgba(255,255,255,0.03); border: 1px solid transparent; }
 .user-profile-container:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); }
 .avatar-circle { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--brand), var(--purple)); display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 16px; margin-right: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); overflow: hidden; }
@@ -192,10 +198,10 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
 .dropdown-menu-item:hover { background: rgba(255,255,255,0.05); color: var(--brand); }
 .dropdown-menu-item.text-danger:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 .logout-btn { width: 100%; background: rgba(239, 68, 68, 0.05); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px;}
-.logout-btn:hover { background: linear-gradient(135deg, var(--danger), #B91C1C); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+.logout-btn:hover {background: linear-gradient(135deg, var(--danger), #B91C1C) !important; color: #ffffff !important;border-color: transparent !important;box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);}
 
 /* =======================================================
-   🔥 ISOLATED GLASS TITLE PILL
+   ðŸ”¥ ISOLATED GLASS TITLE PILL
    ======================================================= */
 .glass-title-pill {
     background: rgba(255, 255, 255, 0.04); 
@@ -487,7 +493,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 .op-ws-details { display: flex; flex-direction: column; gap: 4px; }
 
 /* =======================================================
-   🔥 PREMIUM COLLAPSED SIDEBAR (DESKTOP MINI-MODE)
+   ðŸ”¥ PREMIUM COLLAPSED SIDEBAR (DESKTOP MINI-MODE)
    ======================================================= */
 @media (min-width: 951px) {
     .sidebar.collapsed { 
@@ -572,15 +578,15 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       transform: translateX(-100%); 
       z-index: 3000;
       background: var(--bg) !important;
-      box-shadow: 0 0 0 rgba(0,0,0,0); /* 🔥 FIX: No shadow when closed */
-      /* 🔥 FIX: Apple-style spring animation */
+      box-shadow: 0 0 0 rgba(0,0,0,0); /* ðŸ”¥ FIX: No shadow when closed */
+      /* ðŸ”¥ FIX: Apple-style spring animation */
       transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.5s ease, opacity 0.5s ease;
   } 
   .sidebar.open { 
       transform: translateX(0); 
       opacity: 1; 
       pointer-events: auto; 
-      box-shadow: 15px 0 40px rgba(0,0,0,0.4); /* 🔥 FIX: Shadow only applies when open */
+      box-shadow: 15px 0 40px rgba(0,0,0,0.4); /* ðŸ”¥ FIX: Shadow only applies when open */
   }
   
   .mobile-close-btn { 
@@ -636,7 +642,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   .mobile-action-row button { flex: 1; padding: 12px 10px !important; font-size: 11px !important; justify-content: center; }
 
  /* =======================================================
-     🍏 PREMIUM iOS SEPARATED PILL & FLOATING FAB ENGINE
+     ðŸ PREMIUM iOS SEPARATED PILL & FLOATING FAB ENGINE
      ======================================================= */
   .sidebar { display: none !important; } 
   .top-bar .brandRow button { display: none !important; } 
@@ -691,7 +697,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
       transition: 0.3s ease; stroke: currentColor !important; margin: 0 !important; 
   }
   
-  /* 🔥 THE NEW FULL-AREA ACTIVE HIGHLIGHT */
+  /* ðŸ”¥ THE NEW FULL-AREA ACTIVE HIGHLIGHT */
   .nav-tab.active { 
       background: rgba(255, 255, 255, 0.1) !important; /* Highlights the whole button */
       color: var(--brand) !important; 
@@ -721,7 +727,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
   /* 5. Floating List Modal (Replaces Bottom Sheet) */
  #fab-action-sheet {
       position: fixed; 
-      bottom: calc(110px + env(safe-area-inset-bottom)); 
+      bottom: calc(100px + env(safe-area-inset-bottom)); 
       right: 24px; 
       width: 220px;
       border-radius: 20px; 
@@ -808,7 +814,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 .search-icon { 
     position: absolute; 
     left: 16px; 
-    /* 🔥 THE FIX: Absolute margin-auto centering creates a flawless, dedicated physical space */
+    /* ðŸ”¥ THE FIX: Absolute margin-auto centering creates a flawless, dedicated physical space */
     top: 0; 
     bottom: 0; 
     margin: auto; 
@@ -820,7 +826,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
     z-index: 2;
 }
 
-/* 🔥 Added input[type="text"] to beat the global CSS rules */
+/* ðŸ”¥ Added input[type="text"] to beat the global CSS rules */
 input[type="text"].search-input { 
     width: 100%; 
     background: rgba(255, 255, 255, 0.03); 
@@ -829,7 +835,7 @@ input[type="text"].search-input {
     border: 1px solid rgba(255, 255, 255, 0.1); 
     border-radius: var(--radius-pill); 
     
-    /* 🔥 FORCED padding-left so the text clears the icon perfectly */
+    /* ðŸ”¥ FORCED padding-left so the text clears the icon perfectly */
     padding: 12px 20px 12px 44px !important; 
     
     color: white; 
@@ -881,11 +887,95 @@ mark.highlight-match {
     box-shadow: none;
 }
 
+/* =======================================================
+   ðŸ“‹ ADMIN PIPELINE: TRACKING & ACTION BUTTONS
+   ======================================================= */
+.btn-action-download {
+    background: rgba(46, 204, 113, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+.btn-action-download:hover {
+    background: var(--success);
+    color: #000;
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+.btn-action-pending {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: not-allowed;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+/* Status Badges */
+.status-pill {
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-block;
+}
+.status-delivered { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+.status-progress { background: rgba(38, 195, 234, 0.15); color: var(--brand); }
+.status-pending { background: rgba(245, 158, 11, 0.15); color: var(--accent); }
+
+/* --- Chevron Flip Animation --- */
+.profile-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+/* Rotates arrow 180 degrees (points UP) when parent or dropdown is active */
+.user-profile-container.active .profile-chevron,
+.user-profile-container:has(.profile-dropdown.active) .profile-chevron {
+  transform: rotate(180deg);
+}
+
+
+/* --- Responsive Chevron Rotation --- */
+.profile-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.profile-dropdown.active ~ .profile-chevron,
+.user-profile-container.active .profile-chevron {
+  transform: rotate(180deg);
+}
+
+
+.logout-btn:active {
+  filter: brightness(0.92);
+}
+
 </style>
 </head>
 <body>
 
-<!-- 🍏 iOS MOBILE NAVIGATION ENGINE (Injected via JS) -->
+<!-- ðŸ iOS MOBILE NAVIGATION ENGINE (Injected via JS) -->
 <div id="mobile-nav-bar" style="display:none;"></div>
 <div id="fab-overlay" class="glass-overlay" style="z-index:4998;" onclick="toggleFabMenu()"></div>
 <div id="fab-action-sheet">
@@ -941,306 +1031,15 @@ mark.highlight-match {
 
 <div id="passwordModal" class="glass-overlay">
   <div class="glass-box" style="text-align: center; max-width:400px; padding: 40px;">
-    <button type="button" class="close-minimal" onclick="closeModal('passwordModal')">✖</button>
-    <h3 style="color:var(--brand); margin-bottom:15px; font-size:20px; font-weight: 800;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-middle; margin-right:8px;"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Change Password</h3>
-    <p style="font-size:12px; color:var(--text-muted); margin-bottom:25px; font-weight:600;">Update your security credentials.</p>
-    
-    <input type="password" id="oldPwInput" class="form-input" placeholder="Current Password" required>
-    <input type="password" id="newPwInput" class="form-input" placeholder="New Password" required>
-    <input type="password" id="confirmPwInput" class="form-input" placeholder="Confirm New Password" required>
-    
-    <button onclick="actionChangePassword(this)" style="width:100%; margin-top:15px; background:linear-gradient(135deg, var(--brand), #1A9CBF); color:black;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:8px;"><path d="M20 9.807V6a1 1 0 00-1-1c-2 0-4.49-1.19-6.24-2.72a1.17 1.17 0 00-1.52 0C9.5 3.8 7 5 5 5a1 1 0 00-1 1v7c0 3.88 2.107 6.254 5 7.796"/><path d="M19 17v-2a2 2 0 00-4 0v2"/><rect x="13" y="17" width="8" height="5" rx="1"/></svg>Update Security</button>
-  </div>
-</div>
-
-<div id="assignModal" class="glass-overlay">
-  <div class="glass-box">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:20px;">
-      <h3 style="color:white; font-size:18px; margin:0; font-weight: 800;">Live Dispatcher</h3>
-      <button onclick="closeModal('assignModal')" style="background:rgba(255,255,255,0.05); color:var(--text); border:none; padding:6px 12px; width:auto; font-size: 14px; border-radius: 8px;">✖</button>
-    </div>
-    <p style="margin-bottom:20px; font-size:12px; color:var(--text-muted); font-weight:600;">Select an active operator to instantly assign this job.</p>
-    <div id="operatorListContainer" style="max-height: 350px; overflow-y: auto; text-align:left; margin-bottom: 20px;"></div>
-  </div>
-</div>
-
-<div id="payoutModal" class="glass-overlay">
-  <div class="glass-box" style="text-align:center;">
-    <h3 style="color:var(--success); margin-bottom:10px; font-size:18px; font-weight: 800;">Settle Dues</h3>
-    <h2 id="payoutAmount" style="color:white; font-size: 36px; font-weight: 900; margin-bottom:5px;">₹0</h2>
-    <p id="payoutOpName" style="color:var(--brand); font-weight:800; margin-bottom:25px; font-size: 15px;"></p>
-    <div id="qrContainer" style="background:white; padding:15px; border-radius:16px; display:inline-block; margin-bottom:20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-       <img id="upiQrCode" src="" style="width:200px; height:200px; display:none;" />
-       <p id="noUpiMsg" style="color:black; font-weight:bold; font-size:14px; margin: 20px 0; display:none;">No UPI ID Found</p>
-    </div>
-    <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; font-weight: 600;">Scan QR to pay via your banking app, then click Mark as Paid.</p>
-    <div style="display:flex; gap:12px;">
-      <button onclick="closeModal('payoutModal')" class="btn-outline" style="flex:1; border-color:var(--text-muted); color:var(--text-muted);">Cancel</button>
-      <button id="btnConfirmPayout" class="btn-success" style="flex:1;">Mark as Paid</button>
-    </div>
-  </div>
-</div>
-
-<div id="customAlert" class="glass-overlay">
-  <div class="glass-box" style="padding: 35px; text-align: center; max-width:400px;">
-    <div id="customAlertIcon" style="margin-bottom: 15px;"></div> 
-    
-    <h3 id="customAlertTitle" style="color:var(--brand); margin-bottom:15px; font-size:20px; font-weight: 800;">System Notice</h3>
-    <p id="customAlertMsg" style="margin-bottom:25px; line-height:1.6; color:var(--text); font-size:14px; font-weight: 600;"></p>
-    <button onclick="closeModal('customAlert')" style="width:100%;">Acknowledge</button>
-  </div>
-</div>
-
-<div id="paymentModal" class="glass-overlay">
-  <div class="glass-box" style="text-align:center; padding:40px;">
-     <h3 style="color:var(--brand); font-weight:800; margin-bottom:10px;">Complete Payment</h3>
-     <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Ref: <span id="payRefId" style="color:white; font-weight:700;">Loading...</span></p>
-     <h2 id="payAmountDisplay" style="color:var(--success); font-size:36px; font-weight:900; margin-bottom:25px;">₹0</h2>
-     
-     <div style="background:white; padding:15px; border-radius:16px; display:inline-block; margin-bottom:20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-        <img id="payQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_PAYMENT" style="width:200px; height:200px; display:block;" />
-     </div>
-     
-     <p style="font-size:11px; color:var(--text-muted); margin-bottom:25px; font-weight:600; line-height:1.5;">Scan this QR with any UPI app to pay, or use the checkout link sent securely to your email.</p>
-     
-     <div style="display:flex; flex-direction:column; gap:12px;">
-       <button class="btn-success" onclick="verifyPayment()" style="width:100%; padding:14px; font-size:14px;">I Have Paid</button>
-       <button class="btn-outline" onclick="closeModal('paymentModal')" style="width:100%; border-color:var(--danger); color:var(--danger);">Cancel Process</button>
-     </div>
-  </div>
-</div>
-
-<!-- =======================================================
-     PAPER SUBMISSION MODAL
-     ======================================================= -->
-<div id="paperSubmitModal" class="glass-overlay">
-  <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
-    
     <div class="premium-sticky-header">
-        <h2 style="color:var(--brand);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          Submit Question Paper
-        </h2>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <span id="paperDraftUI" style="font-size:10px; color:var(--accent); font-weight:700; display:none;"></span>
-            <button type="button" id="paperFreshBtn" onclick="clearPaperForm()" style="font-size:10px; padding:4px 8px; border-radius:4px; border:1px solid var(--success); background:rgba(239,68,68,0.1); color:var(--success); display:none; cursor:pointer;">Start Fresh</button>
-            <button type="button" class="close-minimal" onclick="closeModal('paperSubmitModal')" style="position:relative; top:0; right:0;">✖</button>
-        </div>
-    </div>
-    
-    <form id="nativePaperForm" onsubmit="handleNativePaperSubmit(event)">
-      <input type="hidden" id="formUserId" />
-      <input type="hidden" id="formInstCode" />
-      <input type="hidden" id="formTeacherName" />
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group">
-          <label class="label-text">Subject <span class="req">*</span></label>
-          <select id="formSubject" class="form-input" required onchange="savePaperDraft()"></select>
-        </div>
-        <div class="form-group">
-          <label class="label-text">Class <span class="req">*</span></label>
-          <select id="formClass" class="form-input" required onchange="savePaperDraft()" name="userClassPref">
-            <option value="" disabled selected>Select Class...</option>
-            <option value="Pre-Nursery">Pre-Nursery</option>
-            <option value="Nursery">Nursery</option>
-            <option value="LKG">LKG</option>
-            <option value="UKG">UKG</option>
-            <option value="Class 1">Class 1</option>
-            <option value="Class 2">Class 2</option>
-            <option value="Class 3">Class 3</option>
-            <option value="Class 4">Class 4</option>
-            <option value="Class 5">Class 5</option>
-            <option value="Class 6">Class 6</option>
-            <option value="Class 7">Class 7</option>
-            <option value="Class 8">Class 8</option>
-            <option value="Class 9">Class 9</option>
-            <option value="Class 10">Class 10</option>
-            <option value="Class 11">Class 11</option>
-            <option value="Class 12">Class 12</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group">
-          <label class="label-text">Test Number <span class="req">*</span></label>
-          <input type="text" id="formTestNumber" class="form-input" required placeholder="e.g. Test 01" oninput="savePaperDraft()" />
-        </div>
-        <div class="form-group">
-          <label class="label-text">Test Type <span class="req">*</span></label>
-          <select id="formTestType" class="form-input" required onchange="savePaperDraft()">
-            <option value="Objective (MCQ)">Objective (MCQ)</option><option value="1st Term Exam">1st Term Exam</option><option value="2nd Term Exam">2nd Term Exam</option>
-            <option value="3rd Term Exam">3rd Term Exam</option><option value="Annual Term Exam">Annual Term Exam</option><option value="Half Year Exam">Half Year Exam</option>
-            <option value="Annual Year Exam">Annual Year Exam</option><option value="Subjective">Subjective</option><option value="Combined (MCQ + Subj)">Combined (MCQ + Subj)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group">
-          <label class="label-text">Test Date <span class="req">*</span></label>
-          <input type="date" id="formTestDate" class="form-input" required oninput="savePaperDraft()" />
-        </div>
-        <div class="form-group">
-          <label class="label-text">Duration <span class="req">*</span></label>
-          <input type="text" id="formDuration" class="form-input" required placeholder="e.g. 1.5 Hours" oninput="savePaperDraft()" />
-        </div>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 15px;">
-        <label class="label-text">How many questions <span class="req">*</span></label>
-        <select id="formNumQuestionsSelect" class="form-input" required onchange="toggleOtherQuestionsField()">
-          <option value="" disabled selected>Select quantity...</option>
-          <option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="Other">Other:</option>
-        </select>
-        <input type="number" id="formNumQuestionsOther" class="form-input" placeholder="Enter custom number of questions" style="display:none; margin-top:8px;" />
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group"><label class="label-text">Full Marks <span class="req">*</span></label><input type="number" id="formFullMarks" class="form-input" required placeholder="e.g. 100" oninput="savePaperDraft()" /></div>
-        <div class="form-group"><label class="label-text">Pass Marks <span class="req">*</span></label><input type="number" id="formPassMarks" class="form-input" required placeholder="e.g. 33" oninput="savePaperDraft()" /></div>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 25px;">
-        <label class="label-text">Upload Question Paper <span class="req">*</span></label>
-        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600;">You can upload a single PDF or snap multiple photos.</p>
-        
-        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-           <button type="button" class="btn-outline" style="flex:1; cursor:pointer;" onclick="document.getElementById('formPdfInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:text-bottom; margin-right:4px;"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M12 12v6"/><path d="m15 15-3-3-3 3"/></svg> Choose PDF</button>
-           <button type="button" class="btn-purple" style="flex:1; background:linear-gradient(135deg, var(--brand), #1A9CBF); border:none; color:#fff; cursor:pointer;" onclick="document.getElementById('formImageInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg> Camera / Photos</button>
-        </div>
-
-        <input type="file" id="formPdfInput" accept="application/pdf" style="display:none;" onchange="handleUniversalSinglePDF(this, 'paper')" />
-        <input type="file" id="formImageInput" accept="image/*" multiple style="display:none;" onchange="handleUniversalMultipleImages(this, 'paper')" />
-        
-        <div id="uploadPreviewZone" style="display:flex; gap:10px; flex-wrap:wrap; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; min-height:50px;">
-           <p style="color:var(--text-muted); font-size:12px; margin:auto; padding:10px;">No files selected.</p>
-        </div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items: center; margin-top:20px;">
-        <button type="button" onclick="clearPaperForm()" style="background:transparent; border:1px solid #EF4444; color:#EF4444; padding:12px 20px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer;"><svg  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/></svg>Clear Form</button>
-        <button type="submit" id="submitFormBtn" style="background:var(--brand); border:none; color:#0B111E; padding:12px 24px; border-radius:6px; font-size:14px; font-weight:800; cursor:pointer; box-shadow:0 0 12px var(--brand-glow);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M11.35 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v5.35"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M14 19h6"/><path d="M17 16v6"/></svg>Submit Paper Securely</button>
-      </div>
-    </form>
-  </div>
+<h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--success);   display:flex; align-items:center; gap:10px;">
+<svg  width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" />
+            <path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg> Register New Institute
+</h2>
+<div style="display:flex; align-items:center; gap:12px;">
+<button type="button" class="close-minimal" onclick="closeModal('passwordModal')" style="position:relative; top:0; right:0;">&#10006;</button>
 </div>
-
-<!-- =======================================================
-     DOCUMENT SUBMISSION MODAL
-     ======================================================= -->
-<div id="docSubmitModal" class="glass-overlay">
-  <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
-    
-    <div class="premium-sticky-header">
-        <h2 style="color:var(--accent);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Submit Document Job</h2>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <span id="docDraftUI" style="font-size:10px; color:var(--accent); font-weight:700; display:none;"></span>
-            <button type="button" id="docFreshBtn" onclick="clearDocForm()" style="font-size:10px; padding:4px 8px; border-radius:4px; border:1px solid var(--success); background:rgba(239,68,68,0.1); color:var(--success); display:none; cursor:pointer;">Start Fresh</button>
-            <button type="button" class="close-minimal" onclick="closeModal('docSubmitModal')" style="position:relative; top:0; right:0;">✖</button>
-        </div>
-    </div>
-    
-   <form id="nativeDocForm" onsubmit="handleNativeDocSubmit(event)">
-      <input type="hidden" id="docUserId" />
-      <input type="hidden" id="docInstId" />
-      
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group">
-          <label class="label-text">Work Type <span class="req">*</span></label>
-          <select id="docType" class="form-input" required onchange="toggleDocDateReq(); saveDocDraft()">
-            <option value="" disabled selected>Select Doc Type...</option>
-            <option value="Report Card">Report Card</option>
-            <option value="Admit Card">Admit Card</option>
-            <option value="ID Card">ID Card</option>
-            <option value="Certificate">Certificate</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="label-text">Announcement Date <span class="req" id="docDateReqStar" style="display:none;">*</span></label>
-          <input type="date" id="docDate" class="form-input" onchange="saveDocDraft()" />
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group">
-          <label class="label-text">Class Name <span class="req">*</span></label>
-          <select id="docClass" class="form-input" required onchange="saveDocDraft()">
-            <option value="" disabled selected>Select Class...</option>
-            <option value="Pre-Nursery">Pre-Nursery</option>
-            <option value="Nursery">Nursery</option>
-            <option value="LKG">LKG</option>
-            <option value="UKG">UKG</option>
-            <option value="Class 1">Class 1</option>
-            <option value="Class 2">Class 2</option>
-            <option value="Class 3">Class 3</option>
-            <option value="Class 4">Class 4</option>
-            <option value="Class 5">Class 5</option>
-            <option value="Class 6">Class 6</option>
-            <option value="Class 7">Class 7</option>
-            <option value="Class 8">Class 8</option>
-            <option value="Class 9">Class 9</option>
-            <option value="Class 10">Class 10</option>
-            <option value="Class 11">Class 11</option>
-            <option value="Class 12">Class 12</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="label-text">Exam Name <span class="req">*</span></label>
-          <select id="docExamName" class="form-input" required onchange="saveDocDraft()">
-            <option value="" disabled selected>Select Exam...</option>
-            <option value="Objective (MCQ)">Objective (MCQ)</option>
-            <option value="1st Term Exam">1st Term Exam</option>
-            <option value="2nd Term Exam">2nd Term Exam</option>
-            <option value="3rd Term Exam">3rd Term Exam</option>
-            <option value="Annual Term Exam">Annual Term Exam</option>
-            <option value="Half Year Exam">Half Year Exam</option>
-            <option value="Annual Year Exam">Annual Year Exam</option>
-            <option value="Subjective">Subjective</option>
-            <option value="Combined (MCQ + Subj)">Combined (MCQs + Subj)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom: 15px;">
-        <div class="form-group"><label class="label-text">Session <span class="req">*</span></label><input type="text" id="docSession" class="form-input" readonly /></div>
-        <div class="form-group"><label class="label-text">Number of Students <span class="req">*</span></label><input type="number" id="docNumStudents" class="form-input" required placeholder="e.g. 45" oninput="saveDocDraft()" /></div>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 25px;">
-        <label class="label-text">Upload Student Data <span class="req">*</span></label>
-        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600;">
-          For admit card: Upload schedule including subjects. <a href="#" style="color:var(--brand);">[Template]</a><br>
-          For Report Card: Upload data sheet of student marks with admission number. <a href="#" style="color:var(--brand);">[Template]</a>
-        </p>
-        
-        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-           <button type="button" class="btn-outline" style="flex:1; cursor:pointer;" onclick="document.getElementById('docPdfInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:text-bottom; margin-right:4px;"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M12 12v6"/><path d="m15 15-3-3-3 3"/></svg> Choose PDF</button>
-           <button type="button" class="btn-purple" style="flex:1; background:linear-gradient(135deg, var(--brand), #1A9CBF); border:none; color:#fff; cursor:pointer;" onclick="document.getElementById('docImageInput').click()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg> Camera / Photos</button>
-        </div>
-
-        <input type="file" id="docPdfInput" accept="application/pdf" style="display:none;" onchange="handleUniversalSinglePDF(this, 'doc')" />
-        <input type="file" id="docImageInput" accept="image/*" multiple style="display:none;" onchange="handleUniversalMultipleImages(this, 'doc')" />
-        
-        <div id="docUploadPreviewZone" style="display:flex; gap:10px; flex-wrap:wrap; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; min-height:50px;">
-           <p style="color:var(--text-muted); font-size:12px; margin:auto; padding:10px;">No files selected.</p>
-        </div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items: center; margin-top:20px;">
-        <button type="button" onclick="clearDocForm()" style="background:transparent; border:1px solid #EF4444; color:#EF4444; padding:12px 20px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer;"><svg  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/></svg>Clear Form</button>
-        <button type="submit" id="submitDocBtn" style="background:var(--accent); border:none; color:#000; padding:12px 24px; border-radius:6px; font-size:14px; font-weight:800; cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M11.35 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v5.35"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M14 19h6"/><path d="M17 16v6"/></svg>Submit Document Securely</button>
-      </div>
-    </form>
-  </div> 
-</div> 
-
-<div id="instRegModal" class="glass-overlay">
-  <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
-    <button type="button" class="close-minimal" onclick="closeModal('instRegModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--success); margin-top:0; margin-bottom:25px; display:flex; align-items:center; gap:10px;"><svg  width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" />
-            <path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg> Register New Institute</h2>
+</div>
     <form id="nativeInstRegForm" onsubmit="handleInstRegSubmit(event)">
       <div class="grid-2" style="margin-bottom: 15px;">
         <div class="form-group"><label class="label-text">Client Name <span class="req">*</span></label><input type="text" id="regClientName" class="form-input" required placeholder="e.g. John Doe" /></div>
@@ -1278,8 +1077,14 @@ mark.highlight-match {
 
 <div id="operatorRegModal" class="glass-overlay">
   <div class="glass-box" style="max-width: 600px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto;">
-    <button type="button" class="close-minimal" onclick="closeModal('operatorRegModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand); margin-top:0; margin-bottom:25px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Register Operator</h2>
+    <div class="premium-sticky-header">
+<h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand);  ">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Register Operator
+</h2>
+<div style="display:flex; align-items:center; gap:12px;">
+<button type="button" class="close-minimal" onclick="closeModal('operatorRegModal')" style="position:relative; top:0; right:0;">&#10006;</button>
+</div>
+</div>
     <form id="opRegForm" onsubmit="handleOpRegSubmit(event)">
       <div class="form-group" style="margin-bottom: 15px;">
         <label class="label-text">Email Address <span class="req">*</span></label>
@@ -1305,9 +1110,9 @@ mark.highlight-match {
       <div class="form-group" style="margin-bottom: 15px; background:rgba(0,0,0,0.2); padding:15px; border-radius:12px; border:1px solid var(--border);">
         <label class="label-text" style="color:var(--accent);">Work Type <span class="req">*</span></label>
         <div class="checkbox-grid" id="opRegWorkType" onchange="toggleOpRates()"> <!-- Do this for editOpWorkType too! -->
-          <label class="cb-pill"><input type="checkbox" value="Paper"> Paper Formats</label> <!-- 🔥 FIXED -->
-          <label class="cb-pill"><input type="checkbox" value="Report Card"> Report Cards</label> <!-- 🔥 FIXED -->
-          <label class="cb-pill"><input type="checkbox" value="Admit Card"> Admit Cards</label> <!-- 🔥 FIXED -->
+          <label class="cb-pill"><input type="checkbox" value="Paper"> Paper Formats</label> <!-- ðŸ”¥ FIXED -->
+          <label class="cb-pill"><input type="checkbox" value="Report Card"> Report Cards</label> <!-- ðŸ”¥ FIXED -->
+          <label class="cb-pill"><input type="checkbox" value="Admit Card"> Admit Cards</label> <!-- ðŸ”¥ FIXED -->
           <label class="cb-pill"><input type="checkbox" value="ID Card"> ID Cards</label>
           <label class="cb-pill"><input type="checkbox" value="Certificate"> Certificates</label>
         </div>
@@ -1343,8 +1148,14 @@ mark.highlight-match {
 
 <div id="operatorEditModal" class="glass-overlay">
   <div class="glass-box" style="max-width: 600px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto;">
-    <button type="button" class="close-minimal" onclick="closeModal('operatorEditModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--accent); margin-top:0; margin-bottom:10px;">⚙️ Edit Operator</h2>
+    <div class="premium-sticky-header">
+<h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--accent);  ">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-pen-icon lucide-user-round-pen"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg> Edit Operator
+</h2>
+<div style="display:flex; align-items:center; gap:12px;">
+<button type="button" class="close-minimal" onclick="closeModal('operatorEditModal')" style="position:relative; top:0; right:0;">&#10006;</button>
+</div>
+</div>
     <p id="editOpNameDisplay" style="color:var(--text-muted); font-weight:600; margin-bottom:25px; font-size:14px;"></p>
     
     <form id="opEditForm" onsubmit="handleOpEditSubmit(event)">
@@ -1391,7 +1202,7 @@ mark.highlight-match {
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items: center;">
-        <button type="button" class="btn-outline" style="color:var(--danger); border-color:var(--danger);" onclick="triggerOpRemoveFromEdit()">🗑 Remove</button>
+        <button type="button" class="btn-outline" style="color:var(--danger); border-color:var(--danger);" onclick="triggerOpRemoveFromEdit()">ðŸ—‘ Remove</button>
         <button type="submit" id="saveOpEditBtn" class="btn-success">Save Changes</button>
       </div>
     </form>
@@ -1400,8 +1211,14 @@ mark.highlight-match {
 
 <div id="teacherRegModal" class="glass-overlay">
   <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
-    <button type="button" class="close-minimal" onclick="closeModal('teacherRegModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand); margin-top:0; margin-bottom:25px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Register Teacher</h2>
+    <div class="premium-sticky-header">
+<h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--brand);  ">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg> Register Teacher
+</h2>
+<div style="display:flex; align-items:center; gap:12px;">
+<button type="button" class="close-minimal" onclick="closeModal('teacherRegModal')" style="position:relative; top:0; right:0;">&#10006;</button>
+</div>
+</div>
     <form id="teacherRegForm" onsubmit="handleTeacherRegSubmit(event)">
       
       <div class="grid-2" style="margin-bottom: 15px;">
@@ -1483,8 +1300,8 @@ mark.highlight-match {
 <div id="uploadProgressModal" class="glass-overlay">
   <div class="glass-box" style="text-align:center; max-width: 400px; padding: 40px; position: relative;">
     
-    <!-- 🔥 THE NEW CANCEL BUTTON -->
-    <button type="button" class="close-minimal" onclick="cancelUpload()" style="z-index: 10;">✖</button>
+    <!-- ðŸ”¥ THE NEW CANCEL BUTTON -->
+    <button type="button" class="close-minimal" onclick="cancelUpload()" style="z-index: 10;">âœ–</button>
 
     <div id="uploadingState">
         <svg class="premium-cloud-icon" viewBox="0 0 60 60">
@@ -1506,12 +1323,12 @@ mark.highlight-match {
         </div>
         
         <div id="upRetryZone" style="display:none; margin-top: 25px;">
-             <!-- 🔥 WIRED THE RETRY BUTTON -->
-             <button id="upRetryBtn" class="btn-outline" style="border-color: var(--danger); color: var(--danger); width: 100%;" onclick="retryLastUpload()">↻ Retry Upload</button>
+             <!-- ðŸ”¥ WIRED THE RETRY BUTTON -->
+             <button id="upRetryBtn" class="btn-outline" style="border-color: var(--danger); color: var(--danger); width: 100%;" onclick="retryLastUpload()">â†» Retry Upload</button>
         </div>
     </div>
 
-    <!-- 🔥 MERGED AND FIXED SUCCESS STATE -->
+    <!-- ðŸ”¥ MERGED AND FIXED SUCCESS STATE -->
     <div id="uploadSuccessState" style="display:none; animation: fadeIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;">
         <div style="margin-bottom: 20px;">
           <svg class="anim-icon" stroke="var(--success)" viewBox="0 0 52 52" style="margin: 0 auto; filter: drop-shadow(0 0 12px var(--success-glow));">
@@ -1600,7 +1417,7 @@ mark.highlight-match {
   
   <div id="nav-overview" class="nav-item active" onclick="switchTab('overview')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>Dashboard Overview</div>
   
-  <!-- 🔥 THIS WAS THE BROKEN SVG. IT IS NOW FIXED: -->
+  <!-- ðŸ”¥ THIS WAS THE BROKEN SVG. IT IS NOW FIXED: -->
   <div id="nav-documents" class="nav-item" onclick="switchTab('documents')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Documents System</div>
   
   <div id="nav-papers" class="nav-item" onclick="switchTab('papers')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Paper System</div>
@@ -1613,11 +1430,11 @@ mark.highlight-match {
   <div id="nav-inst-teachers" class="nav-item inst-admin" style="display:none;" onclick="switchTab('inst-teachers')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>Teachers Directory</div>
   <div id="nav-inst-students" class="nav-item inst-admin" style="display:none;" onclick="switchTab('inst-students')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Students Database</div>
 
-  <div id="nav-institutes" class="nav-item sys-admin" style="display:none;" onclick="switchTab('institutes')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;" ><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg>Global Institutes</div>
+  <div id="nav-institutes" class="nav-item sys-admin" style="display:none;" onclick="switchTab('institutes')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg>Global Institutes</div>
   <div id="nav-billing" class="nav-item sys-admin" style="display:none;" onclick="switchTab('billing')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>Global Ledger</div>
  <div id="nav-operators" class="nav-item sys-admin" style="display:none;" onclick="switchTab('operators')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0px;"><path d="M16.051 12.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.866l-1.156-1.153a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/><path d="M8 15H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>Operations Team</div>
   <div id="nav-reports" class="nav-item sys-admin" style="display:none;" onclick="switchTab('reports')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0px;"><path d="M12 16v5"/><path d="M16 14.639V21"/><path d="M20 10.656V21"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18.463V21"/><path d="M8 14.656V21"/></svg>Analytics Console</div>
-  <!-- 🔥 NEW: OPERATOR WORKSPACE TAB -->
+  <!-- ðŸ”¥ NEW: OPERATOR WORKSPACE TAB -->
   <div id="nav-op-workspace" class="nav-item" style="display:none;" onclick="switchTab('op-workspace')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> Production Workspace</div>
   <div id="nav-op-finance" class="nav-item" style="display:none;" onclick="switchTab('op-finance')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Financial Ledger</div>
   <div id="nav-settings" class="nav-item" onclick="switchTab('settings')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:0px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Master Settings</div>
@@ -1630,7 +1447,7 @@ mark.highlight-match {
 <div class="main-wrapper">
   <div class="header-scrim"></div>
   
-  <!-- 🔥 1. THE REPAIRED TOP HEADER -->
+  <!-- ðŸ”¥ 1. THE REPAIRED TOP HEADER -->
   <header class="top-bar">
     <div class="brandRow">
       <!-- 1. The Isolated Sidebar Menu Button -->
@@ -1678,7 +1495,7 @@ mark.highlight-match {
         <div class="desktop-only" style="display: flex; flex-direction: column; text-align: left;">
           <span style="font-size: 13px; font-weight: 800; color: var(--text);" id="userNameDisplay">Loading...</span>
         </div>
-        <span style="color: var(--text-muted); margin-left: 10px; font-size: 10px;">▼</span>
+        <span style="color: var(--text-muted); margin-left: 10px; font-size: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg></span>
         
         <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
           <div class="dropdown-header">
@@ -1698,7 +1515,7 @@ mark.highlight-match {
     </div>
   </header>
 
-<!-- 🔥 2. THE REPAIRED CONTENT AREA -->
+<!-- ðŸ”¥ 2. THE REPAIRED CONTENT AREA -->
   <div class="content-area">
     
     <div id="view-overview" class="page-view active">
@@ -1719,10 +1536,10 @@ mark.highlight-match {
           
           <div class="panel" id="profileCard" style="flex:1; min-width:320px; margin-bottom:0;">
             <div class="panel-header" style="border:none; padding:0; margin-bottom:15px;"><h3 id="profileCardTitle">Your Profile</h3></div>
-            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);">Name : <span id="v1-teacher" style="color:white; font-weight:800;"></span></p>
-            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);">Subject : <span id="v1-subject" style="color:white; font-weight:800;"></span></p>
-            <p id="profileInstRow" style="margin-bottom:8px; font-weight:600; color:var(--text-muted);">Institute : <span id="v1-institute" style="color:white; font-weight:800;"></span></p>
-            <p class="statusGreen" style="margin-top: 15px;">● User Active</p>
+            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><path d="M17.925 20.056a6 6 0 0 0-11.851.001"/><circle cx="12" cy="11" r="4"/><circle cx="12" cy="12" r="10"/></svg>  <span id="v1-teacher" style="color:white; font-weight:800;"></span></p>
+            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> <span id="v1-subject" style="color:white; font-weight:800;"></span></p>
+            <p id="profileInstRow" style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg><span id="v1-institute" style="color:white; font-weight:800;"></span></p>
+            <p class="statusGreen" style="margin-top: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="8" style="vertical-align:bottom; margin-right:8px;"><circle cx="12" cy="12" r="1"/></svg> User Active</p>
           </div>
           
           <div class="panel" id="instDetailsCard" style="display:none; flex:1; min-width:320px; border-left: 4px solid var(--brand); margin-bottom:0;">
@@ -1730,7 +1547,7 @@ mark.highlight-match {
             <h2 id="inst-name" style="margin-bottom:8px; font-size:20px; color:var(--text); font-weight:800;"></h2>
             <p id="inst-address" style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600;"></p>
             <p id="inst-email" style="margin-bottom:15px; font-size:13px; color:var(--brand); font-weight:700;"></p>
-            <p class="statusGreen" style="margin-top:0;">● Subscription <span id="inst-status"></span></p>
+            <p class="statusGreen" style="margin-top:0;"><svg  width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="8" style="vertical-align:bottom; margin-right:4px;"><circle cx="12" cy="12" r="1"/></svg> Subscription <span id="inst-status"></span></p>
           </div>
 
           <div class="panel" id="companyInfoCard" style="flex:1; min-width:320px; border-left: 4px solid var(--brand); margin-bottom:0; display:none;">
@@ -1778,8 +1595,8 @@ mark.highlight-match {
 
       <!-- FOOTER -->
       <footer style="text-align: center; padding: 25px 20px; margin-top: 20px; border-top: 1px dashed var(--border);">
-        <div style="font-size: 14px; color: var(--brand); font-weight: 600; margin-bottom: 5px;">Crafted with ❤️ by Trim Key</div>
-        <div style="font-size: 12px; color: var(--text-muted);">© <span id="year"></span> Trim Key. All rights reserved.</div>
+        <div style="font-size: 14px; color: var(--brand); font-weight: 600; margin-bottom: 5px;">Crafted with <svg width="20" height="20" viewBox="0 0 24 24" fill="red" style="vertical-align:bottom;"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg> by Trim Key</div>
+        <div style="font-size: 12px; color: var(--text-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom;"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg> <span id="year"></span> Trim Key. All rights reserved.</div>
       </footer>
 
     </div> <!-- CLOSES view-overview -->
@@ -1800,7 +1617,7 @@ mark.highlight-match {
       </div>
     </div>
 
-    <!-- DOCUMENTS -->
+     <!-- DOCUMENTS -->
     <div id="view-documents" class="page-view">
       <div class="panel">
         <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; border-bottom: none; margin-bottom: 10px; padding-bottom: 0;">
@@ -1965,14 +1782,49 @@ mark.highlight-match {
     <!-- INST STUDENTS -->
     <div id="view-inst-students" class="page-view inst-admin">
       <div class="panel">
-        <div class="panel-header">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
           <h3>Students Database</h3>
-          <button class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>New Admission</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="triggerModalBtnAnim(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+            New Admission
+          </button>
         </div>
-        <div style="margin-bottom:25px; display:flex; gap:15px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
-           <select id="student-class-filter" class="filter-select" onchange="applyFilters()"></select>
+        
+        <!-- Controls: Search Bar & Class Filter -->
+        <div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:12px; border: 1px solid var(--border);">
+            <div class="search-wrapper" style="max-width:320px; margin-bottom:0;">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="studentSearchInput" class="search-input" placeholder="Search Adm No, Name, Father..." oninput="handleStudentSearch()">
+            </div>
+            <select id="student-class-filter" class="filter-select" style="margin-bottom:0; width:auto;" onchange="handleStudentClassFilter()"></select>
+            <span id="studentCountBadge" style="font-size:11px; font-weight:700; color:var(--text-muted); margin-left:auto;">Showing 0 records</span>
         </div>
-        <div id="student-accordion-container"></div>
+
+        <!-- Sleek Data Table -->
+        <div class="tk-table-wrapper">
+          <table class="tk-sleek-table">
+            <thead>
+              <tr>
+                <th>Adm No</th>
+                <th>Student & Father Name</th>
+                <th>Class & Roll</th>
+                <th>Contact No</th>
+                <th>Village</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="table-inst-students-body">
+              <tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:25px;">Loading students...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Load More Action -->
+        <div id="studentLoadMoreBox" style="display:none; text-align:center; margin-top:20px;">
+            <button type="button" class="liquid-glass" style="padding:10px 24px; font-size:12px; font-weight:800; color:var(--brand); border-color:var(--brand);" onclick="loadMoreStudents(this)">
+                Load More Students...
+            </button>
+        </div>
       </div>
     </div>
 
@@ -1981,7 +1833,7 @@ mark.highlight-match {
       <div class="panel">
         <div class="panel-header">
           <h3>Client Control Center</h3>
-          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionRegisterInstitute()"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" /><path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg>Register New</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionRegisterInstitute()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg> Register New</button>
         </div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
           <select id="inst-status-filter" class="filter-select" onchange="applyFilters()"></select>
@@ -2089,7 +1941,7 @@ mark.highlight-match {
                 <h2 id="wsJobId" style="color:var(--brand); margin:0; font-size:18px; font-weight:900; letter-spacing:1px;">Select a Job</h2>
                 <div style="font-size:11px; color:var(--text-muted); font-weight:600; display:flex; gap:10px;">
                     <span id="wsInstName" style="display:flex; align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;" ><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg> ---</span>
-                    <span id="wsJobDetails">📄 ---</span>
+                    <span id="wsJobDetails">ðŸ“„ ---</span>
                 </div>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
@@ -2136,7 +1988,7 @@ mark.highlight-match {
                   <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Automated Payout Method</h4>
                   <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px; font-weight:600; line-height:1.5;">Your earnings are automatically routed to this UPI ID instantly upon job delivery.</p>
                   
-                  <!-- 🔥 THE NEW VISIBILITY TAG -->
+                  <!-- ðŸ”¥ THE NEW VISIBILITY TAG -->
                   <div id="currentUpiDisplay" style="font-size:12px; margin-bottom:15px; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; text-align:center;">
                       <span style="color:var(--text-muted);">Fetching linked UPI...</span>
                   </div>
@@ -2148,7 +2000,7 @@ mark.highlight-match {
                   </button>
               </div>
               
-              <!-- 🔥 UPGRADED LIFETIME EARNINGS CARD -->
+              <!-- ðŸ”¥ UPGRADED LIFETIME EARNINGS CARD -->
               <div style="background: rgba(0,0,0,0.2); padding: 25px; border-radius: var(--radius-lg); border: 1px dashed var(--success); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position: relative; overflow: hidden;">
                   <div style="position: absolute; top: -20px; right: -20px; opacity: 0.05;">
                       <svg width="120" height="120" viewBox="0 0 24 24" fill="var(--success)"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -2264,12 +2116,12 @@ mark.highlight-match {
       </div>
     </div>
 
-  </div> <!-- 🔥 CLOSES CONTENT AREA -->
-</div> <!-- 🔥 CLOSES MAIN WRAPPER -->
+  </div> <!-- ðŸ”¥ CLOSES CONTENT AREA -->
+</div> <!-- ðŸ”¥ CLOSES MAIN WRAPPER -->
 
 
 <div id="correctionModal" class="glass-overlay">
-  <!-- 🔥 Flexbox layout locks the header and footer, allowing only the middle to scroll -->
+  <!-- ðŸ”¥ Flexbox layout locks the header and footer, allowing only the middle to scroll -->
   <div class="glass-box" style="max-width: 550px; padding: 0; display: flex; flex-direction: column; height: 85vh; max-height: 800px; overflow: hidden; position: relative;">
     
     <!-- STICKY HEADER (flex-shrink: 0) -->
@@ -2281,7 +2133,7 @@ mark.highlight-match {
             </h2>
             <p id="corrModalDesc" style="font-size:11px; color:var(--text-muted); margin:0; font-weight: 600;"></p>
         </div>
-        <button type="button" class="close-minimal" onclick="closeModal('correctionModal')" style="position:static; padding:8px; font-size:16px;">✖</button>
+        <button type="button" class="close-minimal" onclick="closeModal('correctionModal')" style="position:static; padding:8px; font-size:16px;">âœ–</button>
     </div>
     
     <input type="hidden" id="correctionJobId" />
@@ -2305,7 +2157,7 @@ mark.highlight-match {
 
 <script>
 // =========================================================================================
-// 🔥 NEW DIRECT VERCEL BACKEND ENGINE
+// ðŸ”¥ NEW DIRECT VERCEL BACKEND ENGINE
 // =========================================================================================
 const VERCEL_API_URL = "https://edtrimke-backend.vercel.app/api/gateway";
 
@@ -2325,7 +2177,7 @@ async function serverCall(action, payloadData = {}) {
     
     const data = await response.json();
     
-    // 🔥 THE GLOBAL SECURITY INTERCEPTOR
+    // ðŸ”¥ THE GLOBAL SECURITY INTERCEPTOR
     if (data.authFailed) {
         showPopup("Session expired. Securing connection...", "error");
         setTimeout(logout, 1500); // Forces a clean memory wipe and reload
@@ -2354,12 +2206,12 @@ try {
   document.getElementById('deviceInfoBrowser').innerHTML = `<strong>Browser:</strong> ${browser}`;
 } catch(e) {}
 
-// 🛡️ THE BULLETPROOF NETWORK ENGINE (FIXED URL)
+// ðŸ›¡ï¸ THE BULLETPROOF NETWORK ENGINE (FIXED URL)
 function serverCallWithProgress(action, payloadData, onProgress) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         
-        // 🔥 THE FIX: Use your global API variable instead of typing the URL manually!
+        // ðŸ”¥ THE FIX: Use your global API variable instead of typing the URL manually!
         const apiUrl = typeof VERCEL_API_URL !== 'undefined' ? VERCEL_API_URL : "https://edtrimkey-backend.vercel.app/api/gateway";
         
         xhr.open("POST", apiUrl, true);
@@ -2393,7 +2245,7 @@ function serverCallWithProgress(action, payloadData, onProgress) {
 }
 
 // =========================================================================================
-// 🌙 SMART SYSTEM-AWARE THEME CONTROLLER
+// ðŸŒ™ SMART SYSTEM-AWARE THEME CONTROLLER
 // =========================================================================================
 
 // 1. Check if the user manually saved a preference before
@@ -2483,7 +2335,7 @@ if (typeof window.supabaseInstance === 'undefined') {
 }
 
 // =====================================================================
-// 🔊 ZERO-LATENCY WEB AUDIO API ENGINE
+// ðŸ”Š ZERO-LATENCY WEB AUDIO API ENGINE
 // =====================================================================
 
 // 1. Create the hardware audio context (Cross-browser support)
@@ -2550,14 +2402,14 @@ const firebaseConfig = {
 
 let messaging = null;
 try {
-  // 🔥 FIX: Removed the safety lock so it actually initializes!
+  // ðŸ”¥ FIX: Removed the safety lock so it actually initializes!
   firebase.initializeApp(firebaseConfig);
   messaging = firebase.messaging();
 } catch (e) {
   console.error("Firebase Initialization Error:", e);
 }
 
-// 🔥 UPGRADED MEMORY MANAGER (Handles Session Tokens)
+// ðŸ”¥ UPGRADED MEMORY MANAGER (Handles Session Tokens)
 const Memory = {
   setEmail: function(val) { try { window.localStorage.setItem('etk_email', val); } catch(e) {} },
   setToken: function(val) { try { window.localStorage.setItem('etk_token', val); } catch(e) {} },
@@ -2572,7 +2424,7 @@ const Memory = {
 };
 
 // =========================================================================================
-// 🔥 BULLETPROOF ONLOAD & SERVICE ENGINE
+// ðŸ”¥ BULLETPROOF ONLOAD & SERVICE ENGINE
 // =========================================================================================
 window.onload = () => { 
   let sessionEmail = Memory.getEmail();
@@ -2594,7 +2446,7 @@ window.onload = () => {
 };
 
 // ==========================================
-// ⏱️ GLOBAL LIVE DEADLINE ENGINE
+// â±ï¸ GLOBAL LIVE DEADLINE ENGINE
 // ==========================================
 function getDeadlineHTML(deadlineStr, nowTime) {
     let safeDateStr = deadlineStr.replace(' ', 'T');
@@ -2603,7 +2455,7 @@ function getDeadlineHTML(deadlineStr, nowTime) {
     const deadTime = new Date(safeDateStr).getTime();
     const diff = deadTime - nowTime;
 
-    // 🔥 FIX: Stop ticking if the time is negative
+    // ðŸ”¥ FIX: Stop ticking if the time is negative
     if (diff < 0) {
         return `<div style="font-size:11px; font-weight:700; color:var(--danger); line-height:1.4; white-space:nowrap;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -2673,7 +2525,7 @@ function closeModal(id) {
 }
 
 function showLoader(txt) { 
-    // 🔥 THE MASTER UI LOCK: Prevent old loaders from interrupting the Premium Flow
+    // ðŸ”¥ THE MASTER UI LOCK: Prevent old loaders from interrupting the Premium Flow
     const uploadModal = document.getElementById('uploadProgressModal');
     if (uploadModal && (uploadModal.style.display === 'block' || uploadModal.classList.contains('active'))) {
         return; // Abort instantly! Let the background sync happen invisibly.
@@ -2705,7 +2557,7 @@ function showPopup(msg, explicitType = null) {
   
   let safeMsg = msg.toLowerCase();
   
-  // 🔥 DYNAMIC TYPE DETECTION
+  // ðŸ”¥ DYNAMIC TYPE DETECTION
   let type = 'success';
   if (explicitType) {
       type = explicitType;
@@ -2718,7 +2570,7 @@ function showPopup(msg, explicitType = null) {
       }
   }
 
-  // 🔥 THEME & SOUND ROUTING
+  // ðŸ”¥ THEME & SOUND ROUTING
   if (type === 'error') {
     playSound('error');
     title.innerText = "System Error";
@@ -2797,7 +2649,7 @@ function triggerModalBtnAnim(btn) {
   }, 500);
 }
 
-// 🔥 FIX 2: Synchronized JavaScript Breakpoint
+// ðŸ”¥ FIX 2: Synchronized JavaScript Breakpoint
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   // Changed from 768 to 950 to cover all tablets and large phones perfectly
@@ -2884,7 +2736,7 @@ function logout() {
 }
 
 // =========================================================================================
-// 🔥 1. BULLETPROOF DASHBOARD INITIALIZATION
+// ðŸ”¥ 1. BULLETPROOF DASHBOARD INITIALIZATION
 // =========================================================================================
 function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent = false) {
   if (!token) token = Memory.getToken();
@@ -2945,7 +2797,7 @@ function initDashboard(email, token = null, pendingSuccessMsg = null, isSilent =
       else console.error("Silent background sync failed:", err.message);
     });
 
-    // 🔥 Fire the silent device telemetry tracker
+    // ðŸ”¥ Fire the silent device telemetry tracker
     setTimeout(() => captureDeviceTelemetry(), 2000); // 2 second delay ensures UI loads quickly first
 } // <--- This is the end of renderData()
 
@@ -2960,7 +2812,7 @@ function switchTab(tabId) {
   if (targetNav) targetNav.classList.add('active');
   
   // Updated dictionary with Production Workspace included
- let titleMap = { 
+  let titleMap = { 
       'overview': 'Dashboard Overview', 
       'institutes': 'Client Control Center', 
       'billing': 'Global Ledger', 
@@ -2974,7 +2826,7 @@ function switchTab(tabId) {
       'inst-students': 'Students Database', 
       'notifications': 'Broadcast Center',
       'op-workspace': 'Production Workspace',
-      'op-finance': 'Financial Ledger' // 🔥 NEW
+      'op-finance': 'Financial Ledger'
   };
   
   // Safely grabs the title element and updates the text
@@ -2984,6 +2836,13 @@ function switchTab(tabId) {
   if(window.innerWidth <= 768) { 
       var sb = document.getElementById('sidebar');
       if(sb) sb.classList.remove('open'); 
+  }
+
+  // 🔥 ADD THE TRIGGER HERE:
+  if (tabId === 'inst-teachers' || tabId === 'view-inst-teachers') {
+      loadTeachersDirectory();
+  } else if (tabId === 'inst-students' || tabId === 'view-inst-students') {
+      loadStudentsDatabase();
   }
 }
 
@@ -3047,7 +2906,7 @@ function removeProfilePic() {
 }
 
 // ==========================================
-// 🌐 DEVICE FINGERPRINTING & PUSH ENGINE
+// ðŸŒ DEVICE FINGERPRINTING & PUSH ENGINE
 // ==========================================
 
 function handlePushToggle(el) {
@@ -3062,7 +2921,7 @@ async function updatePref(type, value) {
     if(!globalUser.preferences) globalUser.preferences = {};
     globalUser.preferences[type] = value;
     
-    // 🔥 FIX: Grab the specific session ID for this logged-in user
+    // ðŸ”¥ FIX: Grab the specific session ID for this logged-in user
     let storageKey = 'tk_session_' + globalUser.email;
     let localSessionId = localStorage.getItem(storageKey);
 
@@ -3095,7 +2954,7 @@ async function requestNotificationPermission(isSilent = false) {
     try {
         let permission = Notification.permission;
 
-        // 🔥 THE STRICT GESTURE RULE: Only ask for permission if a human clicked the button!
+        // ðŸ”¥ THE STRICT GESTURE RULE: Only ask for permission if a human clicked the button!
         // If it's a silent refresh, do NOT ask. iOS will instantly crash the script.
         if (!isSilent && permission !== 'granted') {
             permission = await Notification.requestPermission();
@@ -3138,7 +2997,7 @@ async function requestNotificationPermission(isSilent = false) {
     } catch(e) {
         console.error("Firebase FCM Error:", e);
         
-        // 🔥 CRITICAL FIX: Only revert the toggle if the user manually triggered the error.
+        // ðŸ”¥ CRITICAL FIX: Only revert the toggle if the user manually triggered the error.
         // Do not let background errors destroy the user's saved preferences!
         if (!isSilent) {
             const pushToggle = document.getElementById('prefPush');
@@ -3150,14 +3009,14 @@ async function requestNotificationPermission(isSilent = false) {
 }
 
 // ==========================================
-// 🔔 SMART ACTIONABLE NOTIFICATIONS ENGINE (CROSS-DEVICE SYNC)
+// ðŸ”” SMART ACTIONABLE NOTIFICATIONS ENGINE (CROSS-DEVICE SYNC)
 // ==========================================
 
 function handleNotificationClick(title, msg, refId) {
     const jobId = refId ? String(refId).toUpperCase() : null;
     const userRole = globalUser ? String(globalUser.role).trim().toLowerCase() : '';
 
-    // 🔥 INSTANTLY MARK AS READ & SYNC TO SUPABASE
+    // ðŸ”¥ INSTANTLY MARK AS READ & SYNC TO SUPABASE
     let hash = (String(title || "") + String(msg || "")).substring(0, 50);
     
     // Merge Local & Server Hashes
@@ -3313,7 +3172,7 @@ function sendBroadcast() {
 
 
 // =========================================================================================
-// 🔥 2. BULLETPROOF DATA RENDERER
+// ðŸ”¥ 2. BULLETPROOF DATA RENDERER
 // =========================================================================================
 function renderData(payload) {
   if(!payload || !payload.data) return;
@@ -3383,12 +3242,12 @@ function renderData(payload) {
 }
 
 // =========================================================================================
-// 🔥 3. BULLETPROOF ROLE UI ASSIGNER
+// ðŸ”¥ 3. BULLETPROOF ROLE UI ASSIGNER
 // =========================================================================================
 function applyRoleUI(p) {
   const userRole = String(p.role).trim().toLowerCase();
   
-  // 🔥 NEW: Dynamic Profile Card Logic
+  // ðŸ”¥ NEW: Dynamic Profile Card Logic
   let profTitle = document.getElementById('profileCardTitle');
   if (profTitle) {
       profTitle.innerText = `${userRole.toUpperCase()} PROFILE`;
@@ -3452,7 +3311,7 @@ function applyRoleUI(p) {
     let vI = document.getElementById('v1-institute'); if (vI) vI.innerText = p.institute || "-";
 
     
-    // 🔥 NEW: Show and Populate the Institute Details Card (EXCEPT FOR OPERATORS)
+    // ðŸ”¥ NEW: Show and Populate the Institute Details Card (EXCEPT FOR OPERATORS)
     let instDetailsCard = document.getElementById('instDetailsCard');
     if (instDetailsCard) {
         if (userRole === "operator") {
@@ -3615,9 +3474,11 @@ function applyRoleUI(p) {
         checkToggleState(p.toggles.admission, 'billAppAdm');
         checkToggleState(p.toggles.fee, 'billAppFee');
     }
+
+    loadPricingMaster();
   }
 
-  // 🔥 UNIVERSAL NOTIFICATION PREFERENCES UI
+  // ðŸ”¥ UNIVERSAL NOTIFICATION PREFERENCES UI
   let prefs = p.preferences || { push: false, whatsapp: false, sms: false, email: false };
   let settingsHtml = `
     <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Global Notification Preferences</h4>
@@ -3673,9 +3534,9 @@ function applyRoleUI(p) {
             <label class="label-text" style="color:white; font-weight:800; font-size:13px;">Active Availability</label>
             <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px; font-weight:600;">'Busy' or 'Away' will notify Admins and pause incoming assignments.</p>
             <select id="opStatusSelect" class="form-input" style="margin-bottom:0; font-weight:800;" onchange="updateOperatorStatusUI(this)">
-                <option value="Active" ${currentStatus === 'Active' ? 'selected' : ''}>🟢 Online (Accepting Jobs)</option>
-                <option value="Busy" ${currentStatus === 'Busy' ? 'selected' : ''}>🟡 Busy (Finishing Current Tasks)</option>
-                <option value="Away" ${currentStatus === 'Away' ? 'selected' : ''}>🔴 Away / Offline</option>
+                <option value="Active" ${currentStatus === 'Active' ? 'selected' : ''}>ðŸŸ¢ Online (Accepting Jobs)</option>
+                <option value="Busy" ${currentStatus === 'Busy' ? 'selected' : ''}>ðŸŸ¡ Busy (Finishing Current Tasks)</option>
+                <option value="Away" ${currentStatus === 'Away' ? 'selected' : ''}>ðŸ”´ Away / Offline</option>
             </select>
         </div>
 
@@ -3705,7 +3566,7 @@ function applyRoleUI(p) {
   let sC = document.getElementById('settings-content');
   if(sC) sC.innerHTML = settingsHtml;
 
-  // 🔥 THE NEW KPI SYNC BLOCK FOR OPERATORS
+  // ðŸ”¥ THE NEW KPI SYNC BLOCK FOR OPERATORS
   if (userRole === "operator") {
       let oK = document.getElementById('operatorKpis'); if(oK) oK.style.display = 'grid';
       let bW = document.getElementById('btn-op-workspace'); if(bW) bW.style.display = 'flex';
@@ -3737,7 +3598,7 @@ function applyRoleUI(p) {
 }
 
 // =========================================================================================
-// 🔥 3. BULLETPROOF NOTIFICATIONS ENGINE
+// ðŸ”¥ 3. BULLETPROOF NOTIFICATIONS ENGINE
 // =========================================================================================
 function renderNotifications(notifs) {
     localNotifications = notifs || [];
@@ -3785,7 +3646,7 @@ function renderNotifications(notifs) {
 
 function toggleWebAppCustom(appType, chkBox) {
     if(chkBox.disabled) {
-        showPopup("⚠️ This module requires a subscription.");
+        showPopup("âš ï¸ This module requires a subscription.");
         chkBox.checked = false;
         document.getElementById('serviceSelect').value = 'App Subscriptions';
         handleServiceChange();
@@ -3809,7 +3670,7 @@ function toggleWebAppCustom(appType, chkBox) {
 
 function handleFeeToggle(el){
   if(el.disabled) {
-      showPopup("⚠️ This module requires a subscription.");
+      showPopup("âš ï¸ This module requires a subscription.");
       el.checked = false;
       document.getElementById('serviceSelect').value = 'App Subscriptions';
       handleServiceChange();
@@ -3819,113 +3680,116 @@ function handleFeeToggle(el){
 }
 
 function handleServiceChange() {
-   let serviceSelect = document.getElementById('serviceSelect');
-   if (!serviceSelect) return; // Prevent crashes if the element isn't loaded yet!
-   
-   let type = serviceSelect.value;
-   let paperOpts = document.getElementById('paperOptions');
-   let subOpts = document.getElementById('subOptions');
-   let qtyLabel = document.getElementById('qtyLabel');
-   let qtyInput = document.getElementById('rechargeQuantity');
-   let customUnitToggle = document.getElementById('customUnitToggle');
-   let paperUnitInput = document.getElementById('paperUnitInput');
-   let singleAppToggle = document.getElementById('singleAppToggle');
-   let singleAppSelect = document.getElementById('singleAppSelect');
-
-   if (type.includes('Paper')) {
-       if(paperOpts) paperOpts.style.display = 'block';
-       if(subOpts) subOpts.style.display = 'none';
-       if(qtyLabel) qtyLabel.innerText = "Quantity (No. of Papers)";
-       if(qtyInput) qtyInput.placeholder = "Enter number of papers";
-       
-       if (customUnitToggle && paperUnitInput) {
-           if (customUnitToggle.checked) {
-               paperUnitInput.disabled = false;
-               if(paperUnitInput.value < 25) paperUnitInput.value = 26; 
-           } else {
-               paperUnitInput.disabled = true;
-               paperUnitInput.value = 25;
-           }
-       }
-   } else if (type.includes('Card') || type.includes('SMS')) {
-       if(paperOpts) paperOpts.style.display = 'none';
-       if(subOpts) subOpts.style.display = 'none';
-       if(qtyLabel) qtyLabel.innerText = type.includes('SMS') ? "Quantity (No. of SMS)" : "Quantity (No. of Cards)";
-       if(qtyInput) qtyInput.placeholder = "Enter quantity";
-   } else if (type === 'App Subscriptions') {
-       if(paperOpts) paperOpts.style.display = 'none'; 
-       if(subOpts) subOpts.style.display = 'block';
-       if(qtyLabel) qtyLabel.innerText = "Period (Years)";
-       if(qtyInput) qtyInput.placeholder = "Enter number of years";
-       
-       if (singleAppToggle && singleAppSelect) {
-           if (singleAppToggle.checked) singleAppSelect.style.display = 'block';
-           else singleAppSelect.style.display = 'none';
-       }
-   }
-   calculateValue();
+    const serviceType = document.getElementById('serviceSelect').value;
+    const paperOpts = document.getElementById('paperOptions');
+    const subOpts = document.getElementById('subOptions');
+    
+    paperOpts.style.display = (serviceType.includes('Paper')) ? 'block' : 'none';
+    subOpts.style.display = (serviceType === 'App Subscriptions') ? 'block' : 'none';
+    
+    document.getElementById('qtyLabel').style.display = (serviceType === 'App Subscriptions') ? 'none' : 'block';
+    document.getElementById('rechargeQuantity').style.display = (serviceType === 'App Subscriptions') ? 'none' : 'block';
+    
+    calculateValue();
 }
 
+// Dictionary to map HTML dropdowns to your exact Supabase 'service_name' rows
+const dbServiceMap = {
+    'MCQ Paper': 'MCQ',
+    'Math Paper': 'Maths',
+    'Report Card': 'Report Card',
+    'Admit Card': 'Admit Card',
+    'SMS Cost': 'SMS Cost'
+};
+
+// 1. Force Fetch Pricing Data
+async function loadPricingMaster() {
+    try {
+        console.log("Fetching pricing master from Supabase...");
+        const { data, error } = await window.supabaseInstance
+            .from('pricing_master')
+            .select('*')
+            .eq('active', true);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            globalPricingMaster = data;
+            console.log("Pricing data loaded successfully:", globalPricingMaster);
+            
+            // Force a calculation now that data is here
+            calculateValue(); 
+        } else {
+            console.warn("No active pricing rows found in database.");
+        }
+    } catch (error) {
+        console.error("Error loading pricing data:", error);
+    }
+}
+
+
 function calculateValue() {
-   let serviceSelect = document.getElementById('serviceSelect');
-   let qtyInput = document.getElementById('rechargeQuantity');
-   if(!serviceSelect || !qtyInput) return; // Crash prevention
-   
-   let type = serviceSelect.value;
-   let qty = Number(qtyInput.value) || 0;
-   let planType = globalUser?.instDetails?.plan || "Standard";
-   let pricingMaster = (globalPayload && globalPayload.pricingMaster) ? globalPayload.pricingMaster : [];
-   let targetService = type;
-   
-   if (type === 'MCQ Paper') targetService = 'MCQ';
-   if (type === 'Math Paper') targetService = 'Maths';
-   if (type === 'App Subscriptions') {
-      let isSingle = document.getElementById('singleAppToggle')?.checked;
-      if (isSingle) {
-          let singleType = document.getElementById('singleAppSelect')?.value;
-          targetService = singleType === "Fee" ? "Fee Collection" : (singleType || 'Apps');
-      } else {
-          targetService = 'Apps';
-      }
-   }
+    if (!globalPricingMaster || globalPricingMaster.length === 0) return;
 
-   let pData = pricingMaster.find(p => String(p.Service).toLowerCase() === targetService.toLowerCase() && String(p.PlanType).toLowerCase() === planType.toLowerCase());
-   if(!pData) pData = pricingMaster.find(p => String(p.Service).toLowerCase() === targetService.toLowerCase());
-   
-   let baseRate = pData ? Number(pData.BaseRate) : 0;
-   let discount = pData ? Number(pData.Discount) : 0;
-   let finalRate = pData ? Number(pData.FinalRate) : 0;
-   let total = 0;
-   
-   let pricingBox = document.getElementById('pricingDetailsBox');
-   if(pricingBox) {
-       if (qty > 0 || type.includes("Paper") || type === "App Subscriptions") pricingBox.style.display = 'block';
-       else pricingBox.style.display = 'none';
-   }
+    const uiServiceType = document.getElementById('serviceSelect').value;
+    
+    // We default checkQty to 1 so the UI always previews a price tier even before they type
+    let actualQty = Number(document.getElementById('rechargeQuantity').value) || 0;
+    let checkQty = actualQty > 0 ? actualQty : 1; 
+    
+    let matchingRow = null;
 
-   if (type.includes('Paper')) {
-       let paperUnitInput = document.getElementById('paperUnitInput');
-       let qPerPaper = paperUnitInput ? (Number(paperUnitInput.value) || 25) : 25;
-       if (baseRate === 0) baseRate = 180; 
-       if (finalRate === 0) finalRate = 180;
-       let ratePerQuestion = finalRate / 25; 
-       let costPerPaper = ratePerQuestion * qPerPaper; 
-       
-       total = costPerPaper * qty;
-       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " (Base/25Q)";
-       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + costPerPaper.toFixed(2) + " (For " + qPerPaper + "Q)";
-   } else if (type.includes('Card') || type.includes('SMS')) {
-       total = finalRate * qty;
-       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Unit";
-       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
-   } else if (type === 'App Subscriptions') {
-       total = finalRate * qty;
-       if(document.getElementById('uiBaseRate')) document.getElementById('uiBaseRate').innerText = "₹" + baseRate + " / Year";
-       if(document.getElementById('uiFinalRate')) document.getElementById('uiFinalRate').innerText = "₹" + finalRate;
-   }
+    document.getElementById('pricingDetailsBox').style.display = 'block';
 
-   if(document.getElementById('uiDiscount')) document.getElementById('uiDiscount').innerText = discount + "%";
-   if(document.getElementById("calculatedValue")) document.getElementById("calculatedValue").innerText = "₹" + total.toFixed(2);
+    if (uiServiceType === 'App Subscriptions') {
+        const appType = document.getElementById('singleAppSelect').value; // 'Admission', 'Attendance', etc.
+        matchingRow = globalPricingMaster.find(r => r.service_name.includes(appType));
+        actualQty = 1; // Subs are flat rate
+    } else {
+        const dbName = dbServiceMap[uiServiceType] || uiServiceType;
+        
+        // 1. Filter all available tiers for the selected service (e.g., all 3 MCQ tiers)
+        let availableTiers = globalPricingMaster.filter(r => r.service_name === dbName);
+        
+        if(availableTiers.length > 0) {
+            // 2. Find the exact tier where the quantity fits
+            matchingRow = availableTiers.find(r => checkQty >= r.min_quantity && checkQty <= r.max_quantity);
+            
+            // 3. Failsafe: If they order an insanely high number, default to the best available tier
+            if(!matchingRow) {
+                matchingRow = availableTiers.reduce((prev, current) => (prev.max_quantity > current.max_quantity) ? prev : current);
+            }
+        }
+    }
+
+    if (!matchingRow) {
+        document.getElementById('calculatedValue').innerText = "₹0.00";
+        return;
+    }
+
+    // Extract values from the dynamically selected tier
+    let baseRate = Number(matchingRow.base_rate) || 0;
+    let discountPct = Number(matchingRow.discount_percent) || 0;
+    let finalRatePerUnit = Number(matchingRow.final_rate) || 0;
+    let unitMeasure = matchingRow.unit_measure || 'Unit';
+    let planType = matchingRow.plan_type || 'Standard';
+
+    // Apply the >25 Questions custom multiplier if toggled
+    if (uiServiceType.includes('Paper') && document.getElementById('customUnitToggle').checked) {
+        let customUnits = Number(document.getElementById('paperUnitInput').value) || 25;
+        let multiplier = customUnits / 25; 
+        baseRate = baseRate * multiplier;
+        finalRatePerUnit = finalRatePerUnit * multiplier;
+    }
+
+    let finalAmount = finalRatePerUnit * actualQty;
+
+    // Update UI
+    document.getElementById('uiBaseRate').innerText = `₹${baseRate.toFixed(2)} (${unitMeasure})`;
+    document.getElementById('uiDiscount').innerText = `${discountPct}% [${planType} Tier]`;
+    document.getElementById('uiFinalRate').innerText = `₹${finalRatePerUnit.toFixed(2)} (${unitMeasure})`;
+    
+    document.getElementById('calculatedValue').innerText = `₹${finalAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
 }
 
 function payNow(){
@@ -4015,7 +3879,7 @@ function populateFilters() {
       let el = document.getElementById(id);
       if(el) {
           let currentVal = el.value || 'all'; 
-          let html = `<option value='all'>[ ${defaultText} ]</option>`;
+          let html = `<option value='all'> ${defaultText} </option>`;
           Array.from(set).sort().forEach(val => {
               if(val === "") return;
               let safeVal = String(val).replace(/"/g, "&quot;");
@@ -4076,7 +3940,7 @@ function applyFilters() {
         let mC = dCls === 'all' || (r.class && String(r.class).trim().toLowerCase() === dCls);
         let mInst = dInst === 'all' || (r.inst && String(r.inst).trim().toLowerCase() === dInst);
         
-        // 🔥 NEW: Check if the search query matches ANY of the row data
+        // ðŸ”¥ NEW: Check if the search query matches ANY of the row data
         let searchStr = [r.id, r.inst, r.type, r.class, r.status].join(" ").toLowerCase();
         let mSearch = !dSearch || searchStr.includes(dSearch);
 
@@ -4091,7 +3955,7 @@ function applyFilters() {
         let mC = pCls === 'all' || (r.class && String(r.class).trim().toLowerCase() === pCls);
         let mInst = pInst === 'all' || (r.inst && String(r.inst).trim().toLowerCase() === pInst);
         
-        // 🔥 NEW: Check if the search query matches ANY of the row data
+        // ðŸ”¥ NEW: Check if the search query matches ANY of the row data
         let searchStr = [r.id, r.inst, r.subject, r.class, r.status].join(" ").toLowerCase();
         let mSearch = !pSearch || searchStr.includes(pSearch);
 
@@ -4204,7 +4068,7 @@ function applyFilters() {
   }
 
   // =========================================================
-  // 🔥 STRICT ADMIN ONLY VISIBILITY (Teachers, Students, Billing)
+  // ðŸ”¥ STRICT ADMIN ONLY VISIBILITY (Teachers, Students, Billing)
   // =========================================================
   if (userRole === "admin" || userRole === "all") {
     
@@ -4233,69 +4097,18 @@ function applyFilters() {
       }
     }
 
-    let teacherTbody = document.getElementById('table-inst-teachers');
-    let rawTeachers = globalPayload.data?.instTeachers;
-    let instTeachers = Array.isArray(rawTeachers) ? rawTeachers : [];
-    
-    if (teacherTbody) {
-      if (instTeachers.length === 0) {
-        teacherTbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding:30px; color:var(--text-muted); font-weight:600;'>No teachers found in database.</td></tr>";
-      } else {
-        let tHtml = "";
-        instTeachers.forEach(t => {
-          let email = t[0] || ''; let name = t[1] || '-'; let contact = t[2] || '-'; let assignedClass = t[3] || '-'; let subject = t[4] || '-'; let status = t[5] || 'Active';
-          let badgeClass = (String(status).trim() === 'Active' || String(status).trim() === 'Connected') ? 'bg-success' : 'bg-danger'; let actions = '';
-          if(String(status).trim() === 'Inactive' || String(status).trim() === 'Disconnected') {
-            actions = `<button class='btn-success btn-sm' onclick="teacherAction('restore', '${email}', this)">Add</button><button class='btn-danger btn-sm' onclick="teacherAction('delete', '${email}', this)">Delete</button>`;
-          } else {
-             actions = `<button class='btn-warning btn-outline btn-sm' onclick="teacherAction('remove', '${email}', this)">Remove</button>`;
-          }
-          tHtml += `<tr><td><b style='color:white;'>${name}</b></td><td>${subject}</td><td>${contact}</td><td>${assignedClass}</td><td><span class='badge ${badgeClass}'>${status}</span></td><td>${actions}</td></tr>`;
-        });
-        teacherTbody.innerHTML = tHtml;
-      }
-    }
+    // Supabase directly controls table-inst-teachers via loadTeachersDirectory()
+    loadTeachersDirectory();
 
-    let studentContainer = document.getElementById('student-accordion-container');
-    let rawStudents = globalPayload.data?.instStudents;
-    let instStudents = Array.isArray(rawStudents) ? rawStudents : [];
-    let sClassFilter = document.getElementById('student-class-filter') ? document.getElementById('student-class-filter').value : 'all';
-    if (studentContainer) {
-      let filteredStudents = instStudents.filter(s => {
-        let cls = s[2] || "General";
-        return sClassFilter === 'all' || String(cls).trim() === sClassFilter;
-      });
-      if (filteredStudents.length === 0) {
-        studentContainer.innerHTML = "<div style='text-align:center; padding:40px; background:rgba(0,0,0,0.2); border-radius:12px;'><p style='color:var(--text-muted); font-size:14px; font-weight:700;'>No records match the current filters.</p></div>";
-      } else {
-        let stuGroups = {};
-        filteredStudents.forEach(s => { let cls = s[2] || "General"; if(!stuGroups[cls]) stuGroups[cls] = []; stuGroups[cls].push(s); });
-        let stuHtml = '';
-        for (let cls in stuGroups) {
-          let cleanCls = String(cls).replace(/^class\s*/i, '').trim();
-          stuHtml += `<button class='accordion' onclick='this.classList.toggle("active"); let panel = this.nextElementSibling; if (panel.style.maxHeight) { panel.style.maxHeight = null;
-          } else { panel.style.maxHeight = panel.scrollHeight + "px"; }'>
-            <span style="color:white;">Class: ${cleanCls}</span> <span style="font-size:11px; color:var(--text-muted); font-weight:600; margin-left:8px;">(${stuGroups[cls].length} Students)</span>
-          </button>`;
-          stuHtml += `<div class='accordion-panel'><div style='overflow-x:auto; margin: 15px 0;'><table>`;
-          stuHtml += `<thead><tr><th>Name</th><th>Roll No</th><th>Contact No</th><th>Status</th></tr></thead><tbody>`;
-          stuGroups[cls].forEach(s => {
-            let name = s[1] || '-'; let roll = s[3] || '-'; let contact = s[6] || '-'; let status = s[7] || 'Active';
-            let badgeClass = String(status).trim() === 'Active' ? 'bg-success' : 'bg-danger';
-            stuHtml += `<tr><td><b style="color:var(--brand);">${name}</b></td><td>${roll}</td><td>${contact}</td><td><span class='badge ${badgeClass}'>${status}</span></td></tr>`;
-          });
-          stuHtml += `</tbody></table></div></div>`;
-        }
-        studentContainer.innerHTML = stuHtml;
-      }
-    }
+    // Supabase directly controls student-accordion-container via loadStudentsDatabase()
+    loadStudentsDatabase();
   }
 } catch (error) {
       console.error("Filter Engine Crashed:", error);
   }
 }
 
-// 🔥 LIVE DISPATCHER MODAL LOGIC
+// ðŸ”¥ LIVE DISPATCHER MODAL LOGIC
 function openAssignModal(jobId, jobType) {
   if(!globalPayload || !globalPayload.superAdmin) return;
   let container = document.getElementById('operatorListContainer');
@@ -4338,7 +4151,7 @@ function buildFlatTable(dataArray, type, userRole, searchQuery = "") {
   const isSuperAdmin = (userRole === "super admin" || userRole === "system admin" || userRole === "all");
   const showInst = isSuperAdmin || userRole === "operator"; 
   
-  // 🔥 NEW: Text Highlighting Helper
+  // ðŸ”¥ NEW: Text Highlighting Helper
   const hl = (text, q) => {
       if (!q) return text;
       const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Prevent regex crashes
@@ -4526,7 +4339,7 @@ function downloadFile(row, type, btn) {
   triggerBtnAnim(btn);
   let currentRole = globalUser ? globalUser.role : "unknown";
   
-  // 🔥 FIX: Tell the backend NOT to change the status if it's an operator
+  // ðŸ”¥ FIX: Tell the backend NOT to change the status if it's an operator
   let preventChange = (String(currentRole).trim().toLowerCase() === "operator");
 
   serverCall('download', { 
@@ -4549,7 +4362,7 @@ function triggerReset() { askConfirm("Hard reset TK global counter? Command inte
 
 
 // =========================================================================================
-// 🚀 UNIVERSAL SUBMISSION ENGINE & MODAL OPENERS
+// ðŸš€ UNIVERSAL SUBMISSION ENGINE & MODAL OPENERS
 // =========================================================================================
 
 // --- PAPER ACTIONS ---
@@ -4726,7 +4539,7 @@ function actionRequestDoc() {
 
   clearUniversalUploads('doc');
 
-  // 🔥 THE WIRING: Actually load the draft before opening the modal!
+  // ðŸ”¥ THE WIRING: Actually load the draft before opening the modal!
   loadDocDraft();
 
   openModal('docSubmitModal');
@@ -4750,7 +4563,7 @@ function clearDocForm() {
 
   clearUniversalUploads('doc');
 
-  // 🔥 3. THE FIX: Completely wipe the memory and hide the Draft UI!
+  // ðŸ”¥ 3. THE FIX: Completely wipe the memory and hide the Draft UI!
   localStorage.removeItem('tk_doc_draft');
   document.getElementById('docDraftUI').style.display = 'none';
   document.getElementById('docFreshBtn').style.display = 'none';
@@ -4776,14 +4589,14 @@ function handleNativeDocSubmit(e) {
 
 
 // ==========================================
-// 🌐 UNIVERSAL UPLOAD & COMPILATION ENGINE
+// ðŸŒ UNIVERSAL UPLOAD & COMPILATION ENGINE
 // ==========================================
 const tkUploadState = {
     paper: { pdf: null, images: [] },
     doc:   { pdf: null, images: [] }
 };
 
-// 🔥 GLOBALS FOR RETRY SYSTEM
+// ðŸ”¥ GLOBALS FOR RETRY SYSTEM
 let lastUploadPayload = null;
 let lastUploadType = null;
 let lastUploadBtnId = null;
@@ -4867,7 +4680,7 @@ function renderUniversalUploadPreview(type) {
             let url = URL.createObjectURL(imgFile);
             html += `<div style="position: relative; width: 70px; height: 70px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
                         <img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onclick="window.open('${url}', '_blank')" style="cursor:pointer;">
-                        <button type="button" onclick="removeUniversalItem('${type}', ${idx})" style="position:absolute; top:4px; right:4px; background:rgba(239,68,68,0.9); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">✖</button>
+                        <button type="button" onclick="removeUniversalItem('${type}', ${idx})" style="position:absolute; top:4px; right:4px; background:rgba(239,68,68,0.9); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">âœ–</button>
                         ${idx === 0 ? `<div style="position:absolute; bottom:0; left:0; right:0; background:var(--brand); color:#fff; font-size:9px; text-align:center; font-weight:800; padding: 3px 0;">COVER</div>` : ''}
                       </div>`;
         });
@@ -4910,7 +4723,7 @@ function compressImage(file) {
     });
 }
 
-// 🔥 UPGRADED: Added real-time progress callback and elapsed time tracking
+// ðŸ”¥ UPGRADED: Added real-time progress callback and elapsed time tracking
 async function compileImagesToPDF(type, onProgress) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
@@ -4949,7 +4762,7 @@ async function executeUniversalUpload(payload, type, btnId, modalId, successMsg)
 
     if (!ensureQuotaAvailable(payload, type)) return;
 
-    // 🔥 SAVE STATE FOR RETRY CAPABILITY
+    // ðŸ”¥ SAVE STATE FOR RETRY CAPABILITY
     lastUploadPayload = payload;
     lastUploadType = type;
     lastUploadBtnId = btnId;
@@ -5000,7 +4813,7 @@ async function executeUniversalUpload(payload, type, btnId, modalId, successMsg)
             };
             reader.readAsDataURL(state.pdf);
         } else {
-            // 🔥 REAL-TIME PHOTO COMPILATION UI!
+            // ðŸ”¥ REAL-TIME PHOTO COMPILATION UI!
             if (upProgText) upProgText.innerText = "STEP 1: COMPILING PHOTOS TO PDF...";
             
             const pdfBase64 = await compileImagesToPDF(type, (current, total, elapsedStr) => {
@@ -5052,7 +4865,7 @@ function finalizeDispatch(payload, btn, modalId, successMsg, type) {
     let lastLoaded = 0;
     let lastTime = startTime;
 
-    // 🔥 THE FIX: Dynamically route the API call based on the job type!
+    // ðŸ”¥ THE FIX: Dynamically route the API call based on the job type!
     const apiAction = type === 'doc' ? 'submitDocumentJob' : 'submitPaperJob';
 
     serverCallWithProgress(apiAction, payload, (loaded, total) => {
@@ -5156,7 +4969,7 @@ function finalizeDispatch(payload, btn, modalId, successMsg, type) {
 }
 
 // ==========================================================
-// 🏢 INSTITUTE REGISTRATION ENGINE
+// ðŸ¢ INSTITUTE REGISTRATION ENGINE
 // ==========================================================
 let regLogoFile = null;
 
@@ -5244,7 +5057,7 @@ async function handleInstRegSubmit(e) {
 }
 
 // ==========================================================
-// 👨‍🏫 TEACHER REGISTRATION ENGINE
+// ðŸ‘¨â€ðŸ« TEACHER REGISTRATION ENGINE
 // ==========================================================
 let trRegPicFile = null;
 
@@ -5326,7 +5139,7 @@ async function handleTeacherRegSubmit(e) {
 }
 
 // ==========================================================
-// 👨‍💻 OPERATOR REGISTRATION & EDIT ENGINE
+// ðŸ‘¨â€ðŸ’» OPERATOR REGISTRATION & EDIT ENGINE
 // ==========================================================
 let opRegPicFile = null;
 
@@ -5536,7 +5349,7 @@ function handleOpEditSubmit(e) {
 }
 
 // ==========================================
-// 💾 SMART AUTO-SAVE SYSTEM (PAPERS & DOCS)
+// ðŸ’¾ SMART AUTO-SAVE SYSTEM (PAPERS & DOCS)
 // ==========================================
 
 // --- PAPER DRAFTS ---
@@ -5586,7 +5399,7 @@ function loadPaperDraft() {
 function saveDocDraft() {
     const draft = {
         type: document.getElementById('docType').value,
-        className: document.getElementById('docClass').value, // 🔥 Now captures the Class Name
+        className: document.getElementById('docClass').value, // ðŸ”¥ Now captures the Class Name
         examName: document.getElementById('docExamName').value,
         numStudents: document.getElementById('docNumStudents').value,
         docDate: document.getElementById('docDate').value,
@@ -5606,7 +5419,7 @@ function loadDocDraft() {
         try {
             const draft = JSON.parse(draftStr);
             if (draft.type) { document.getElementById('docType').value = draft.type; toggleDocDateReq(); }
-            if (draft.className) document.getElementById('docClass').value = draft.className; // 🔥 Restores the Class Name
+            if (draft.className) document.getElementById('docClass').value = draft.className; // ðŸ”¥ Restores the Class Name
             if (draft.examName) document.getElementById('docExamName').value = draft.examName;
             if (draft.numStudents) document.getElementById('docNumStudents').value = draft.numStudents;
             if (draft.docDate) document.getElementById('docDate').value = draft.docDate;
@@ -5621,7 +5434,7 @@ function loadDocDraft() {
     }
 }
 
-// 🔥 CANCEL BUTTON LOGIC
+// ðŸ”¥ CANCEL BUTTON LOGIC
 function cancelUpload() {
     closeModal('uploadProgressModal');
     
@@ -5637,7 +5450,7 @@ function cancelUpload() {
     showToast("Upload cancelled by user", "warning");
 }
 
-// 🔥 RETRY BUTTON LOGIC
+// ðŸ”¥ RETRY BUTTON LOGIC
 function retryLastUpload() {
     const retryZone = document.getElementById('upRetryZone');
     if (retryZone) retryZone.style.display = 'none';
@@ -5675,7 +5488,7 @@ function showToast(msg, type = 'success') {
         toast.style.borderLeftColor = 'var(--danger)';
         icon = `<svg width="22" height="22" stroke="var(--danger)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><path d="M17 17 L35 35 M35 17 L17 35"/></svg>`;
     } else if (type === 'info') {
-        // 🔥 NEW: Sleek Blue Info style for incoming Broadcasts/Alerts
+        // ðŸ”¥ NEW: Sleek Blue Info style for incoming Broadcasts/Alerts
         toast.style.borderLeftColor = 'var(--brand)';
         icon = `<svg width="22" height="22" stroke="var(--brand)" viewBox="0 0 52 52" style="stroke-width:4; fill:none; stroke-linecap:round; stroke-linejoin:round;"><circle class="anim-circle" cx="26" cy="26" r="25"/><circle cx="26" cy="18" r="2" fill="var(--brand)" stroke="none"/><line x1="26" y1="24" x2="26" y2="36"/></svg>`;
     }
@@ -5691,7 +5504,7 @@ function showToast(msg, type = 'success') {
 }
 
 // =========================================================================================
-// 🔥 OPERATOR COMMAND CENTER ENGINE (SPLIT-VIEW)
+// ðŸ”¥ OPERATOR COMMAND CENTER ENGINE (SPLIT-VIEW)
 // =========================================================================================
 
 function renderOperatorWorkspace() {
@@ -5767,7 +5580,7 @@ function renderOperatorWorkspace() {
 }
 
 // ==========================================
-// 💬 RESPONSIVE & OPTIMISTIC CHAT ENGINE
+// ðŸ’¬ RESPONSIVE & OPTIMISTIC CHAT ENGINE
 // ==========================================
 
 function handleChatTextarea(el) {
@@ -5784,7 +5597,7 @@ function handleChatKeypress(event, btnId) {
     }
 }
 
-// 🔥 INSTANT OPTIMISTIC UI (Fake loading bubble for zero-latency feel)
+// ðŸ”¥ INSTANT OPTIMISTIC UI (Fake loading bubble for zero-latency feel)
 function injectOptimisticMessage(containerId, text) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -5808,7 +5621,7 @@ function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
             if (res.success && res.history && res.history.length > 0) {
                 const newHtml = res.history.map(ev => {
                     if (ev.actorRole === 'automation' || ev.type === 'system') {
-                        return `<div class="chat-bubble-sys">${ev.message} • ${ev.timestamp}</div>`;
+                        return `<div class="chat-bubble-sys">${ev.message} â€¢ ${ev.timestamp}</div>`;
                     }
                     const isMe = (ev.actorName === globalUser.name.split(" ")[0]) && (ev.actorRole === globalUser.role);
                     const bubbleClass = isMe ? "chat-bubble-user" : "chat-bubble-other";
@@ -5824,7 +5637,7 @@ function loadChatSilently(jobId, containerId, isBackgroundPoll = false) {
                 
                 const prevCount = parseInt(container.getAttribute('data-msg-count') || "0");
                         
-                        // 🔥 THE FIX: Always force a render if a "Sending..." bubble is stuck on screen
+                        // ðŸ”¥ THE FIX: Always force a render if a "Sending..." bubble is stuck on screen
                         const hasOptimistic = container.innerHTML.includes('Sending...');
 
                         if (prevCount !== res.history.length || hasOptimistic) {
@@ -5869,7 +5682,7 @@ function selectWorkspaceJob(encodedJob) {
     document.getElementById('wsActiveJobId').value = job.id;
     document.getElementById('wsJobId').innerText = job.id;
     document.getElementById('wsInstName').innerText = `${job.inst}`;
-    document.getElementById('wsJobDetails').innerText = job.subject ? `📄 ${job.subject} (${job.class})` : `📋 ${job.type} (${job.class})`;
+    document.getElementById('wsJobDetails').innerText = job.subject ? ` | ${job.subject} (${job.class})` : ` | ${job.type} (${job.class})`;
     document.getElementById('wsDeadlineTimer').innerHTML = getDeadlineUI(job.deadline);
     
     const btnLaunch = document.getElementById('btnLaunchFormat');
@@ -5890,7 +5703,7 @@ function selectWorkspaceJob(encodedJob) {
     const chatContainer = document.getElementById('wsChatContainer');
     chatContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
     
-    // 🔥 Connect to Private Chat Channel!
+    // ðŸ”¥ Connect to Private Chat Channel!
     RealtimeManager.subscribeChat(job.id);
     loadChatSilently(job.id, 'wsChatContainer');
 }
@@ -5901,7 +5714,7 @@ function submitWorkspaceChat(btn) {
     const noteText = inputEl.value.trim();
     if (!jobId || !noteText) return;
 
-    // 🔥 FIX 1: Instant Optimistic UI (Zero delay)
+    // ðŸ”¥ FIX 1: Instant Optimistic UI (Zero delay)
     injectOptimisticMessage('wsChatContainer', noteText);
     inputEl.value = '';
     inputEl.style.height = 'auto'; // Shrink box
@@ -5910,7 +5723,7 @@ function submitWorkspaceChat(btn) {
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
             if (res.success) {
-                // 🔥 THE FIX: Wait exactly 500ms for the DB to sync before pulling the real message
+                // ðŸ”¥ THE FIX: Wait exactly 500ms for the DB to sync before pulling the real message
                 setTimeout(() => { loadChatSilently(jobId, 'wsChatContainer'); }, 500);
             } else showPopup("Failed: " + res.message, "error");
         })
@@ -5949,12 +5762,12 @@ function openCorrectionModal(jobId, mode) {
     timelineContainer.innerHTML = '<div style="text-align:center; padding:40px;"><div class="spinner-sm" style="border-top-color:var(--brand);"></div><p style="margin-top:10px; font-size:11px; color:var(--text-muted); font-weight:600;">Fetching secure chat...</p></div>';
     openModal('correctionModal');
     
-    // 🔥 Connect to Private Chat Channel!
+    // ðŸ”¥ Connect to Private Chat Channel!
     RealtimeManager.subscribeChat(jobId);
     loadChatSilently(jobId, 'jobTimelineContainer');
 }
 
-// 🔥 FIX 2: Group Modal Chat now has Optimistic UI as well
+// ðŸ”¥ FIX 2: Group Modal Chat now has Optimistic UI as well
 function submitCorrectionAction(btn) {
     const jobId = document.getElementById('correctionJobId').value;
     const mode = document.getElementById('correctionMode').value;
@@ -5972,14 +5785,14 @@ function submitCorrectionAction(btn) {
     serverCall('addJobTimelineEvent', payload)
         .then(res => {
             if (res.success) {
-                // 🔥 THE FIX: Wait exactly 500ms for the DB to sync
+                // ðŸ”¥ THE FIX: Wait exactly 500ms for the DB to sync
                 setTimeout(() => { loadChatSilently(jobId, 'jobTimelineContainer'); }, 500);
             } else showPopup("Failed: " + res.message, "error");
         })
         .catch(err => { showPopup("Network Error: " + err.message, "error"); });
 }
 
-// 🔥 SMART CONTEXT CHECKER: Are they looking at this specific chat?
+// ðŸ”¥ SMART CONTEXT CHECKER: Are they looking at this specific chat?
 function isViewingChat(jobId) {
     if (!jobId) return false;
     const safeJobId = String(jobId).toUpperCase();
@@ -5999,7 +5812,7 @@ function isViewingChat(jobId) {
 }
 
 // ==========================================
-// 🚀 ENTERPRISE REALTIME MANAGER (V2 STABLE)
+// ðŸš€ ENTERPRISE REALTIME MANAGER (V2 STABLE)
 // ==========================================
 
 const RealtimeManager = {
@@ -6017,7 +5830,7 @@ const RealtimeManager = {
             window.supabaseInstance.realtime.setAuth(sessionToken);
         }
 
-        // 🔥 FIX: Prevent interrupting a handshake. 
+        // ðŸ”¥ FIX: Prevent interrupting a handshake. 
         if (this.systemChannel) {
             if (this.systemChannel.state === 'SUBSCRIBED') {
                 window.supabaseInstance.removeChannel(this.systemChannel);
@@ -6037,7 +5850,7 @@ const RealtimeManager = {
     },
 
     subscribeSystemChannels() {
-        // 🔥 NEW: Only remove channels if there are actually active channels to remove
+        // ðŸ”¥ NEW: Only remove channels if there are actually active channels to remove
         const activeChannels = window.supabaseInstance.getChannels();
         if (activeChannels.length > 0) {
             window.supabaseInstance.removeAllChannels(); 
@@ -6047,9 +5860,9 @@ const RealtimeManager = {
         const channelName = `system-events-${globalUser.id}`;
         
         this.systemChannel = window.supabaseInstance.channel(channelName)
-            // 📡 LISTENER 1: In-App Notifications
+            // ðŸ“¡ LISTENER 1: In-App Notifications
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
-                console.log("🔔 INCOMING RAW NOTIFICATION:", payload.new); // LIVE DIAGNOSTIC
+                console.log("ðŸ”” INCOMING RAW NOTIFICATION:", payload.new); // LIVE DIAGNOSTIC
                 
                 const notif = payload.new;
                 
@@ -6070,15 +5883,15 @@ const RealtimeManager = {
                 const isGlobalWorker = ['operator', 'system admin', 'super admin'].includes(myRole);
                 const isMyInstitute  = !notif.institute_id || isGlobalWorker || notif.institute_id === globalUser.instId;
 
-                console.log(`🔍 Match Logic -> TargetRole: ${isTargetedRole}, TargetUser: ${isTargetedUser}, MyInst: ${isMyInstitute}`);
+                console.log(`ðŸ” Match Logic -> TargetRole: ${isTargetedRole}, TargetUser: ${isTargetedUser}, MyInst: ${isMyInstitute}`);
 
                 // 4. The Final Gate
                 if ((isTargetedUser || isTargetedRole) && isMyInstitute) {
                     const refId = notif.reference_id;
 
-                    // 🔥 NEW STRICT RULE: Context-Aware Notification Suppression
+                    // ðŸ”¥ NEW STRICT RULE: Context-Aware Notification Suppression
                     if (isViewingChat(refId)) {
-                        console.log("🤫 User is viewing this chat. Suppressing Toast.");
+                        console.log("ðŸ¤« User is viewing this chat. Suppressing Toast.");
                         
                         // Silently mark as read in memory so the bell badge doesn't increase
                         let hash = (String(notif.title || "") + String(notif.message || "")).substring(0, 50);
@@ -6108,24 +5921,24 @@ const RealtimeManager = {
                     renderNotifications(localNotifications);
                     
                 } else {
-                    console.log("🚫 NOTIFICATION IGNORED (Not intended for this user/role).");
+                    console.log("ðŸš« NOTIFICATION IGNORED (Not intended for this user/role).");
                 }
             })
             
-            // 📡 LISTENER 2: Live Job Queue
+            // ðŸ“¡ LISTENER 2: Live Job Queue
             .on('postgres_changes', { event: '*', schema: 'public', table: 'jobs_queue' }, (payload) => {
                 // Focus traps removed! The queue will now update even if you are typing!
                 this.triggerRecoveryFetch();
             })
             
-            // 📡 LISTENER 3: Live Cross-Device Toggle Sync
+            // ðŸ“¡ LISTENER 3: Live Cross-Device Toggle Sync
             .on('postgres_changes', { 
                 event: 'UPDATE', 
                 schema: 'public', 
                 table: 'user_sessions', 
-                filter: `user_id=eq.${globalUser.id}` // 🔥 SECURITY: Only listen to THIS user's devices
+                filter: `user_id=eq.${globalUser.id}` // ðŸ”¥ SECURITY: Only listen to THIS user's devices
             }, (payload) => {
-                console.log("📱 Cross-Device Session Update:", payload.new);
+                console.log("ðŸ“± Cross-Device Session Update:", payload.new);
                 
                 if (payload.new && payload.new.preferences) {
                     const newPrefs = payload.new.preferences;
@@ -6150,18 +5963,18 @@ const RealtimeManager = {
                 }
             })
             .subscribe((status, err) => {
-                console.log("📡 Master Socket Status:", status);
-                if (err) console.error("❌ Socket Error:", err);
+                console.log("ðŸ“¡ Master Socket Status:", status);
+                if (err) console.error("âŒ Socket Error:", err);
                 
                 if (status === 'SUBSCRIBED') {
                     this.triggerRecoveryFetch();
                 }
             });
 
-        // 🔥 NEW LISTENER 4: Listen for Operator Payouts in the Ledger
+        // ðŸ”¥ NEW LISTENER 4: Listen for Operator Payouts in the Ledger
         this.ledgerChannel = window.supabaseInstance.channel('ledger-updates')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'billing_ledger' }, payload => {
-                console.log("💳 New Ledger Transaction Detected!", payload);
+                console.log("ðŸ’³ New Ledger Transaction Detected!", payload);
                 if (globalUser && globalUser.role === 'operator') {
                     if(typeof syncOperatorFinances === 'function') syncOperatorFinances();
                 }
@@ -6169,7 +5982,7 @@ const RealtimeManager = {
             .subscribe();
     },
 
-    // 🎯 DYNAMIC CHAT CHANNEL (Only connects when viewing a specific job)
+    // ðŸŽ¯ DYNAMIC CHAT CHANNEL (Only connects when viewing a specific job)
     subscribeChat(jobId) {
         if (!jobId) return;
         
@@ -6184,7 +5997,7 @@ const RealtimeManager = {
                 if (opWorkspaceVisible) loadChatSilently(jobId, 'wsChatContainer', true);
                 else if (modalVisible) loadChatSilently(jobId, 'jobTimelineContainer', true);
             })
-            .subscribe((status) => console.log(`💬 Chat Socket [${jobId}]:`, status));
+            .subscribe((status) => console.log(`ðŸ’¬ Chat Socket [${jobId}]:`, status));
     },
 
     triggerRecoveryFetch() {
@@ -6215,11 +6028,11 @@ function updateOperatorUPI() {
            if(res.success) {
                 globalUser.upi = upiId; // Update local memory
                 
-                // 🔥 Instantly update the UI so they know it worked
+                // ðŸ”¥ Instantly update the UI so they know it worked
                 let upiDisplay = document.getElementById('currentUpiDisplay');
                 if (upiDisplay) upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Linked: <span style="color:white; font-family:monospace; font-size:14px;">${upiId}</span></span>`;
                 
-                // 🔥 2. FIRE THE PREMIUM TOAST NOTIFICATION
+                // ðŸ”¥ 2. FIRE THE PREMIUM TOAST NOTIFICATION
                 showToast(
                     `<span style="font-weight:800; font-size:13px;">Wallet Linked</span>
                      <span style="font-size:11px; font-weight:600; color:var(--text-muted); margin-top:2px;">UPI ID securely saved for Auto-Payouts.</span>`, 
@@ -6237,7 +6050,7 @@ function updateOperatorUPI() {
 }
 
 // ==========================================
-// ⚙️ OPERATOR SETTINGS LOGIC & AUDIO MUTE
+// âš™ï¸ OPERATOR SETTINGS LOGIC & AUDIO MUTE
 // ==========================================
 window.isAudioMuted = false;
 
@@ -6264,7 +6077,7 @@ function updateOperatorStatusUI(sel) {
     const newStatus = sel.value;
     globalUser.status = newStatus;
     
-    let icon = newStatus === 'Active' ? '🟢' : (newStatus === 'Busy' ? '🟡' : '🔴');
+    let icon = newStatus === 'Active' ? 'ðŸŸ¢' : (newStatus === 'Busy' ? 'ðŸŸ¡' : 'ðŸ”´');
     showToast(`${icon} Status updated to ${newStatus}`, "success");
 }
 
@@ -6283,10 +6096,10 @@ function requestWorkTypeChangeUI(btn) {
 }
 
 // ==========================================
-// 🌐 GLOBAL DEVICE TELEMETRY ENGINE
+// ðŸŒ GLOBAL DEVICE TELEMETRY ENGINE
 // ==========================================
 async function captureDeviceTelemetry() {
-    // 🔥 NEW: Instantly abort if the user is not logged in yet!
+    // ðŸ”¥ NEW: Instantly abort if the user is not logged in yet!
     if (!globalUser || !globalUser.email) return; 
 
     try {
@@ -6309,7 +6122,7 @@ async function captureDeviceTelemetry() {
             console.warn("IP fetch blocked, proceeding with Unknown."); 
         }
 
-        // 🔥 FIX: Bind the session memory specifically to this user's email
+        // ðŸ”¥ FIX: Bind the session memory specifically to this user's email
         let storageKey = 'tk_session_' + globalUser.email;
         let localSessionId = localStorage.getItem(storageKey);
 
@@ -6336,7 +6149,7 @@ async function captureDeviceTelemetry() {
                     syncSwitch('prefSms', res.preferences.sms);
                     syncSwitch('prefEmail', res.preferences.email);
 
-                    // 🔥 FIRE THE PUSH ENGINE STRICTLY AFTER THE ROW IS SECURED
+                    // ðŸ”¥ FIRE THE PUSH ENGINE STRICTLY AFTER THE ROW IS SECURED
                     // It silently fetches and saves the FCM token to the guaranteed row
                     if (res.preferences.push) {
                         requestNotificationPermission(true);
@@ -6350,7 +6163,7 @@ async function captureDeviceTelemetry() {
 }
 
 // ============================================================================
-// 💰 OPERATOR FINANCIAL ENGINE & DYNAMIC FILTERING
+// ðŸ’° OPERATOR FINANCIAL ENGINE & DYNAMIC FILTERING
 // ============================================================================
 async function syncOperatorFinances() {
     if (!globalUser || globalUser.role !== 'operator') return;
@@ -6402,7 +6215,7 @@ async function syncOperatorFinances() {
                     formattedJobsText = jobIds.map(id => {
                         let jobName = jobDictionary[id] || "SYSTEM TASK";
                         rawSearchText += ` ${id} ${jobName}`;
-                        return `<span style="color:var(--text-muted);">${id}</span> <span style="color:var(--brand);">• ${jobName.toUpperCase()}</span>`;
+                        return `<span style="color:var(--text-muted);">${id}</span> <span style="color:var(--brand);">â€¢ ${jobName.toUpperCase()}</span>`;
                     }).join('<br>');
                 } else {
                     formattedJobsText = `<span style="color:var(--text-muted); text-transform:uppercase;">${row.transaction_type}</span>`;
@@ -6435,7 +6248,7 @@ async function syncOperatorFinances() {
             if (globalUser.upi && globalUser.upi.trim() !== "") {
                 upiDisplay.innerHTML = `<span style="color:var(--success); font-weight:800;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Linked: <span style="color:white; font-family:monospace; font-size:14px;">${globalUser.upi}</span></span>`;
             } else {
-                upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">⚠️ No UPI Linked (Payouts Paused)</span>`;
+                upiDisplay.innerHTML = `<span style="color:var(--danger); font-weight:800;">âš ï¸ No UPI Linked (Payouts Paused)</span>`;
             }
         }
 
@@ -6490,7 +6303,7 @@ function filterOperatorLedger() {
 }
 
 // ==========================================
-// 📄 EXPORT: PREMIUM INVOICE PDF & CSV
+// ðŸ“„ EXPORT: PREMIUM INVOICE PDF & CSV
 // ==========================================
 function exportLedgerCSV(btn) {
     triggerBtnAnim(btn);
@@ -6631,7 +6444,7 @@ function exportLedgerPDF(btn) {
 }
 
 // ============================================================================
-// 🍏 iOS LIQUID GLASS MOBILE ENGINE (V3 DYNAMIC + SAFE ROUTER)
+// ðŸ iOS LIQUID GLASS MOBILE ENGINE (V3 DYNAMIC + SAFE ROUTER)
 // ============================================================================
 
 // 1. Toggles menu when clicking the center + button
@@ -6698,7 +6511,7 @@ function buildMobileNav(role) {
         inst: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/></svg>`,
         ops: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16.051 12.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.866l-1.156-1.153a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/><path d="M8 15H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>`,
         ledger: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>`,
-        attd: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        attd: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>`,
         addAdmin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>`,
         broadcast: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>`,
         apps: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`,
@@ -6707,7 +6520,7 @@ function buildMobileNav(role) {
 
     const buildTab = (id, icon, label) => `<a href="javascript:void(0)" class="nav-tab ${id==='overview'?'active':''}" onclick="closeFabMenu(); switchTab('${id}'); updateMobileActiveTab(this);">${icon}<span>${label}</span></a>`;
     
-    // 🔥 NEW: Horizontal List Layout for Menu Items
+    // ðŸ”¥ NEW: Horizontal List Layout for Menu Items
     const buildFabItem = (type, param, iconStr, color, label, url='') => {
         let safeUrl = url ? url.replace(/'/g, "\\'") : '';
         return `<div class="fab-item" onclick="executeMobileAction('${type}', '${param}', '${safeUrl}')">
@@ -6747,7 +6560,7 @@ function buildMobileNav(role) {
         menuHtml = buildFabItem("func", "actionAddOperator", icons.ops, "var(--success)", "Add Operator") + buildFabItem("func", "actionRegisterInstitute", icons.inst, "var(--brand)", "Add Client") + buildFabItem("tab", "documents", icons.docs, "var(--accent)", "Doc Queue") + buildFabItem("tab", "papers", icons.paper, "var(--danger)", "Paper Queue") + buildFabItem("tab", "operators", icons.ops, "var(--purple)", "Workforce") + buildFabItem("tab", "notifications", icons.broadcast, "var(--text)", "Broadcast");
     }
 
-    // 🔥 Wires the tabs into the pill box, and keeps the FAB outside
+    // ðŸ”¥ Wires the tabs into the pill box, and keeps the FAB outside
     navBar.innerHTML = `<div class="nav-pill-box">${tabsHtml}</div>` + fabButton;
     fabGrid.innerHTML = menuHtml;
 }
@@ -6756,6 +6569,341 @@ function updateMobileActiveTab(clickedEl) {
     document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
     clickedEl.classList.add('active');
 }
+
+let globalPricingMaster = [];
+
+async function syncInstituteBilling() {
+    if (!globalUser || globalUser.role !== 'admin') return;
+
+    try {
+        // 1. Fetch Pricing Master Data
+        const { data: pricing } = await window.supabaseInstance
+            .from('pricing_master')
+            .select('*')
+            .eq('active', true);
+        if (pricing) globalPricingMaster = pricing;
+
+        // 2. Fetch Institute Quotas
+        const { data: institute } = await window.supabaseInstance
+            .from('institutes')
+            .select('*')
+            .eq('id', globalUser.institute_id)
+            .single();
+
+        // 3. Fetch App Features
+        const { data: features } = await window.supabaseInstance
+            .from('institute_features')
+            .select('*')
+            .eq('institute_id', globalUser.institute_id)
+            .single();
+
+        // 4. Fetch Active Subscription
+        const { data: sub } = await window.supabaseInstance
+            .from('subscriptions')
+            .select('*')
+            .eq('institute_id', globalUser.institute_id)
+            .eq('status', 'Active')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+        // Populate Top Summary (Fallback to institute plan if sub table is empty)
+        if (institute) {
+            document.getElementById('billPlanType').innerText = sub?.plan_name || institute.plan_type || 'FREE';
+            document.getElementById('billStartDate').innerText = sub?.start_date ? new Date(sub.start_date).toLocaleDateString('en-GB') : '-';
+            document.getElementById('billRenewDate').innerText = sub?.renewal_date ? new Date(sub.renewal_date).toLocaleDateString('en-GB') : '-';
+            document.getElementById('billPurchaseValue').innerText = `₹${Number(sub?.purchase_value || 0).toLocaleString('en-IN')}`;
+
+            // Populate Quota Grid
+            document.getElementById('billPaperTotal').innerText = institute.papers_total || 0;
+            document.getElementById('billPaperRemain').innerText = institute.papers_left || 0;
+            
+            document.getElementById('billRcTotal').innerText = institute.rc_total || 0;
+            document.getElementById('billRcRemain').innerText = institute.rc_left || 0;
+            
+            document.getElementById('billAcTotal').innerText = institute.ac_total || 0;
+            document.getElementById('billAcRemain').innerText = institute.ac_left || 0;
+            
+            document.getElementById('billSmsTotal').innerText = institute.sms_total || 0;
+            document.getElementById('billSmsRemain').innerText = institute.sms_remaining || 0;
+        }
+
+        // Populate App Toggles
+        if (features) {
+            document.getElementById('billAppAtt').checked = (features.attendance_enabled === 'YES');
+            document.getElementById('billAppAdm').checked = features.admission_enabled;
+            document.getElementById('billAppFee').checked = features.fee_enabled;
+            
+            document.getElementById('reqAppAtt').style.display = (features.attendance_enabled === 'YES') ? 'none' : 'inline-block';
+            document.getElementById('reqAppAdm').style.display = features.admission_enabled ? 'none' : 'inline-block';
+            document.getElementById('reqAppFee').style.display = features.fee_enabled ? 'none' : 'inline-block';
+        }
+
+        // Initialize Checkout Cart calculations
+        handleServiceChange();
+
+    } catch (error) {
+        console.error("Error syncing billing data:", error);
+    }
+}
+
+// Global cache for teachers
+let globalTeachersList = [];
+
+async function loadTeachersDirectory() {
+    // 1. Resolve Institute ID safely
+    const instId = globalUser?.institute_id || globalUser?.instId;
+    if (!instId) {
+        console.warn("Cannot load teachers: No institute_id found on globalUser", globalUser);
+        return;
+    }
+
+    const tbody = document.getElementById('table-inst-teachers');
+    if (!tbody) return;
+
+    try {
+        console.log("Fetching teachers for institute_id:", instId);
+
+        // Query users with role 'teacher' for this institute, joined with teacher_profiles
+        const { data, error } = await window.supabaseInstance
+            .from('users')
+            .select(`
+                id,
+                email,
+                full_name,
+                phone_number,
+                status,
+                teacher_profiles (
+                    assigned_class,
+                    subject_handles
+                )
+            `)
+            .eq('institute_id', instId)
+            .ilike('role', 'teacher')
+            .order('full_name', { ascending: true });
+
+        if (error) {
+            console.error("Supabase Error fetching teachers:", error);
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--danger); font-weight:600;">Error: ${error.message}</td></tr>`;
+            return;
+        }
+
+        console.log("Teachers retrieved from Supabase:", data);
+        globalTeachersList = data || [];
+        renderTeachersTable(globalTeachersList);
+
+    } catch (err) {
+        console.error("Crash in loadTeachersDirectory:", err);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--danger); font-weight:600;">Failed to connect to database.</td></tr>`;
+    }
+}
+
+function renderTeachersTable(teachers) {
+    const tbody = document.getElementById('table-inst-teachers');
+    if (!tbody) return;
+
+    if (!teachers || teachers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--text-muted); font-weight:600;">No teachers found in database for this institute.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = teachers.map(t => {
+        const profile = Array.isArray(t.teacher_profiles) ? t.teacher_profiles[0] : t.teacher_profiles;
+        const assignedClass = profile?.assigned_class || '-';
+        
+        let subjects = '-';
+        if (Array.isArray(profile?.subject_handles) && profile.subject_handles.length > 0) {
+            subjects = profile.subject_handles.map(s => `<span class="badge bg-info" style="margin-right:4px;">${s}</span>`).join('');
+        } else if (typeof profile?.subject_handles === 'string') {
+            subjects = profile.subject_handles;
+        }
+
+        const isActive = (String(t.status).trim().toLowerCase() === 'active');
+        const badgeClass = isActive ? 'bg-success' : 'bg-danger';
+
+        const actions = isActive 
+            ? `<button class='btn-warning btn-outline btn-sm' onclick="teacherAction('remove', '${t.email}', this)">Remove</button>`
+            : `<button class='btn-success btn-sm' onclick="teacherAction('restore', '${t.email}', this)">Add</button><button class='btn-danger btn-sm' onclick="teacherAction('delete', '${t.email}', this)">Delete</button>`;
+
+        return `
+            <tr>
+                <td>
+                    <b style="color:white; font-size:13px;">${t.full_name || 'Unnamed Teacher'}</b>
+                    <div style="font-size:10px; color:var(--text-muted);">${t.email}</div>
+                </td>
+                <td>${subjects}</td>
+                <td><span style="font-size:12px; color:var(--text); font-weight:600;">${t.phone_number || '-'}</span></td>
+                <td><span style="font-weight:700; font-size:12px;">${assignedClass}</span></td>
+                <td><span class="badge ${badgeClass}">${t.status || 'Active'}</span></td>
+                <td>${actions}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+
+let globalStudentsList = [];
+let filteredStudentsList = [];
+let studentDisplayLimit = 30;
+
+async function loadStudentsDatabase() {
+    const instId = globalUser?.institute_id || globalUser?.instId;
+    if (!instId) {
+        console.warn("Cannot load students: No institute_id found on globalUser", globalUser);
+        return;
+    }
+
+    const tbody = document.getElementById('table-inst-students-body');
+    if (!tbody) return;
+
+    try {
+        console.log("Fetching students from Supabase for institute_id:", instId);
+
+        const { data, error } = await window.supabaseInstance
+            .from('students')
+            .select('*')
+            .eq('institute_id', instId)
+            .order('class_name', { ascending: true })
+            .order('roll_no', { ascending: true });
+
+        if (error) {
+            console.error("Supabase Error fetching students:", error);
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--danger); font-weight:600;">Error: ${error.message}</td></tr>`;
+            return;
+        }
+
+        console.log("Students retrieved from Supabase:", data);
+        globalStudentsList = data || [];
+        populateStudentClassDropdown(globalStudentsList);
+        
+        // Reset display limit and filter
+        studentDisplayLimit = 30;
+        applyStudentFilters();
+
+    } catch (err) {
+        console.error("Crash in loadStudentsDatabase:", err);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:var(--danger); font-weight:600;">Failed to connect to database.</td></tr>`;
+    }
+}
+
+function populateStudentClassDropdown(students) {
+    const filterSelect = document.getElementById('student-class-filter');
+    if (!filterSelect) return;
+
+    const currentVal = filterSelect.value || 'all';
+    const classes = [...new Set(students.map(s => s.class_name).filter(Boolean))].sort();
+
+    let optionsHtml = `<option value="all">All Classes</option>`;
+    classes.forEach(c => {
+        const isSelected = (c === currentVal) ? 'selected' : '';
+        optionsHtml += `<option value="${c}" ${isSelected}>Class ${c}</option>`;
+    });
+
+    filterSelect.innerHTML = optionsHtml;
+}
+
+function handleStudentSearch() {
+    studentDisplayLimit = 30;
+    applyStudentFilters();
+}
+
+function handleStudentClassFilter() {
+    studentDisplayLimit = 30;
+    applyStudentFilters();
+}
+
+function applyStudentFilters() {
+    const searchQ = (document.getElementById('studentSearchInput')?.value || '').trim().toUpperCase();
+    const selectedClass = document.getElementById('student-class-filter')?.value || 'all';
+
+    filteredStudentsList = globalStudentsList.filter(s => {
+        const matchClass = (selectedClass === 'all') || (s.class_name === selectedClass);
+        const matchSearch = !searchQ ||
+            (s.student_name && s.student_name.toUpperCase().includes(searchQ)) ||
+            (s.admission_no && s.admission_no.toUpperCase().includes(searchQ)) ||
+            (s.father_name && s.father_name.toUpperCase().includes(searchQ)) ||
+            (s.village && s.village.toUpperCase().includes(searchQ));
+        return matchClass && matchSearch;
+    });
+
+    renderStudentsTableRows();
+}
+
+function renderStudentsTableRows() {
+    const tbody = document.getElementById('table-inst-students-body');
+    const loadMoreBox = document.getElementById('studentLoadMoreBox');
+    const countBadge = document.getElementById('studentCountBadge');
+    if (!tbody) return;
+
+    const searchQ = (document.getElementById('studentSearchInput')?.value || '').trim();
+
+    if (!filteredStudentsList || filteredStudentsList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:35px; color:var(--text-muted); font-weight:600;">No students match the selected filters.</td></tr>`;
+        if (loadMoreBox) loadMoreBox.style.display = 'none';
+        if (countBadge) countBadge.innerText = '0 records';
+        return;
+    }
+
+    const visibleBatch = filteredStudentsList.slice(0, studentDisplayLimit);
+
+    const hl = (text, q) => {
+        if (!q) return text || '-';
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return String(text).replace(new RegExp(`(${escapedQ})`, 'gi'), `<mark class="highlight-match">$1</mark>`);
+    };
+
+    tbody.innerHTML = visibleBatch.map(s => {
+        const isActive = (String(s.status).trim().toLowerCase() === 'active');
+        const badgeClass = isActive ? 'bg-success' : 'bg-danger';
+
+        const sName = (s.student_name || '').toUpperCase();
+        const fName = (s.father_name || '').toUpperCase();
+        const village = (s.village || '-').toUpperCase();
+        const admNo = s.admission_no || '-';
+
+        return `
+            <tr>
+                <td data-label="Adm No">
+                    <span class="flat-pill" style="background:rgba(255,255,255,0.05); color:var(--brand); border:1px solid var(--border); font-family:monospace; font-weight:800;">
+                        ${hl(admNo, searchQ.toUpperCase())}
+                    </span>
+                </td>
+                <td data-label="Student & Father">
+                    <b style="color:white; font-size:13px;">${hl(sName, searchQ.toUpperCase())}</b>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">F: ${hl(fName, searchQ.toUpperCase())}</div>
+                </td>
+                <td data-label="Class & Roll">
+                    <b style="color:white; font-size:12px;">Class ${s.class_name || '-'}</b>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Roll: ${s.roll_no ?? '-'}</div>
+                </td>
+                <td data-label="Contact No"><span style="font-size:12px; color:var(--text); font-weight:600;">${s.contact_no || '-'}</span></td>
+                <td data-label="Village"><span style="font-size:11px; color:var(--text-muted); font-weight:600;">${hl(village, searchQ.toUpperCase())}</span></td>
+                <td data-label="Status"><span class="badge ${badgeClass}">${s.status || 'Active'}</span></td>
+            </tr>
+        `;
+    }).join('');
+
+    // Update Counter
+    if (countBadge) {
+        countBadge.innerText = `Showing ${visibleBatch.length} of ${filteredStudentsList.length} students`;
+    }
+
+    // Toggle Load More button
+    if (loadMoreBox) {
+        loadMoreBox.style.display = (visibleBatch.length < filteredStudentsList.length) ? 'block' : 'none';
+    }
+}
+
+function loadMoreStudents(btn) {
+    if (btn) triggerBtnAnim(btn);
+    studentDisplayLimit += 30;
+    setTimeout(() => {
+        renderStudentsTableRows();
+        if (btn) resetBtnAnim(btn);
+    }, 200);
+}
+
+
 
 </script>
 </body>
