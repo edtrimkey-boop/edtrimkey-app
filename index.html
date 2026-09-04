@@ -1542,8 +1542,9 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
         <div class="desktop-only" style="display: flex; flex-direction: column; text-align: left;">
           <span style="font-size: 13px; font-weight: 800; color: var(--text);" id="userNameDisplay">Loading...</span>
         </div>
-        <span style="color: var(--text-muted); margin-left: 10px; font-size: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg></span>
-        
+        <span class="profile-chevron" id="profileChevron" style="color: var(--text-muted); margin-left: 10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </span>
         <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
           <div class="dropdown-header">
             <div style="font-size: 16px; font-weight: 800; color: white;" id="dropName">User</div>
