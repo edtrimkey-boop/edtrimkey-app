@@ -1375,9 +1375,9 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 
 <div id="instRegModal" class="glass-overlay">
   <div class="glass-box" style="max-width: 800px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
+    <div class="premium-sticky-header"></div>
     <button type="button" class="close-minimal" onclick="closeModal('instRegModal')">✖</button>
-    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--success); margin-top:0; margin-bottom:25px; display:flex; align-items:center; gap:10px;"><svg  width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" />
-            <path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg> Register New Institute</h2>
+    <h2 style="font-family:'Overpass',sans-serif; font-weight:800; color:var(--success); margin-top:0; margin-bottom:25px; display:flex; align-items:center; gap:10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg> Register New Institute</h2>
     <form id="nativeInstRegForm" onsubmit="handleInstRegSubmit(event)">
       <div class="grid-2" style="margin-bottom: 15px;">
         <div class="form-group"><label class="label-text">Client Name <span class="req">*</span></label><input type="text" id="regClientName" class="form-input" required placeholder="e.g. John Doe" /></div>
@@ -1756,7 +1756,7 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
   <div id="nav-inst-teachers" class="nav-item inst-admin" style="display:none;" onclick="switchTab('inst-teachers')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M15 13a3 3 0 1 0-6 0"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/></svg>Teachers Directory</div>
   <div id="nav-inst-students" class="nav-item inst-admin" style="display:none;" onclick="switchTab('inst-students')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Students Database</div>
 
-  <div id="nav-institutes" class="nav-item sys-admin" style="display:none;" onclick="switchTab('institutes')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;" ><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 12h.01"/><path d="M18 16h.01"/><path d="M22 7a1 1 0 0 0-1-1h-2a2 2 0 0 1-1.143-.359L13.143 2.36a2 2 0 0 0-2.286-.001L6.143 5.64A2 2 0 0 1 5 6H3a1 1 0 0 0-1 1v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2z"/><path d="M6 12h.01"/><path d="M6 16h.01"/><circle cx="12" cy="10" r="2"/></svg>Global Institutes</div>
+  <div id="nav-institutes" class="nav-item sys-admin" style="display:none;" onclick="switchTab('institutes')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg>Global Institutes</div>
   <div id="nav-billing" class="nav-item sys-admin" style="display:none;" onclick="switchTab('billing')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0px;"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>Global Ledger</div>
  <div id="nav-operators" class="nav-item sys-admin" style="display:none;" onclick="switchTab('operators')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0px;"><path d="M16.051 12.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.866l-1.156-1.153a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/><path d="M8 15H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg>Operations Team</div>
   <div id="nav-reports" class="nav-item sys-admin" style="display:none;" onclick="switchTab('reports')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0px;"><path d="M12 16v5"/><path d="M16 14.639V21"/><path d="M20 10.656V21"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18.463V21"/><path d="M8 14.656V21"/></svg>Analytics Console</div>
@@ -1863,10 +1863,10 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
           
           <div class="panel" id="profileCard" style="flex:1; min-width:320px; margin-bottom:0;">
             <div class="panel-header" style="border:none; padding:0; margin-bottom:15px;"><h3 id="profileCardTitle">Your Profile</h3></div>
-            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><path d="M17.925 20.056a6 6 0 0 0-11.851.001"/><circle cx="12" cy="11" r="4"/><circle cx="12" cy="12" r="10"/></svg>  <span id="v1-teacher" style="color:white; font-weight:800;"></span></p>
-            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> <span id="v1-subject" style="color:white; font-weight:800;"></span></p>
-            <p id="profileInstRow" style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:bottom; margin-right:8px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg><span id="v1-institute" style="color:white; font-weight:800;"></span></p>
-            <p class="statusGreen" style="margin-top: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="8" style="vertical-align:bottom; margin-right:8px;"><circle cx="12" cy="12" r="1"/></svg> User Active</p>
+            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><path d="M17.925 20.056a6 6 0 0 0-11.851.001"/><circle cx="12" cy="11" r="4"/><circle cx="12" cy="12" r="10"/></svg>  <span id="v1-teacher" style="color:white; font-weight:800;"></span></p>
+            <p style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> <span id="v1-subject" style="color:white; font-weight:800;"></span></p>
+            <p id="profileInstRow" style="margin-bottom:8px; font-weight:600; color:var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom; margin-right:8px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg><span id="v1-institute" style="color:white; font-weight:800;"></span></p>
+            <p class="statusGreen" style="margin-top: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="8" style="vertical-align:bottom; margin-right:px;"><circle cx="12" cy="12" r="1"/></svg> User Active</p>
           </div>
           
           <div class="panel" id="instDetailsCard" style="display:none; flex:1; min-width:320px; border-left: 4px solid var(--brand); margin-bottom:0;">
@@ -1874,7 +1874,7 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
             <h2 id="inst-name" style="margin-bottom:8px; font-size:20px; color:var(--text); font-weight:800;"></h2>
             <p id="inst-address" style="margin-bottom:8px; font-size:13px; color:var(--text-muted); font-weight:600;"></p>
             <p id="inst-email" style="margin-bottom:15px; font-size:13px; color:var(--brand); font-weight:700;"></p>
-            <p class="statusGreen" style="margin-top:0;">● Subscription <span id="inst-status"></span></p>
+            <p class="statusGreen" style="margin-top:0;"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="8" style="vertical-align:bottom; margin-right:2px;"><circle cx="12" cy="12" r="1"/></svg> Subscription <span id="inst-status"></span></p>
           </div>
 
           <div class="panel" id="companyInfoCard" style="flex:1; min-width:320px; border-left: 4px solid var(--brand); margin-bottom:0; display:none;">
@@ -1922,8 +1922,8 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 
       <!-- FOOTER -->
       <footer style="text-align: center; padding: 25px 20px; margin-top: 20px; border-top: 1px dashed var(--border);">
-        <div style="font-size: 14px; color: var(--brand); font-weight: 600; margin-bottom: 5px;">Crafted with ❤️ by Trim Key</div>
-        <div style="font-size: 12px; color: var(--text-muted);">© <span id="year"></span> Trim Key. All rights reserved.</div>
+        <div style="font-size: 14px; color: var(--brand); font-weight: 600; margin-bottom: 5px;">Crafted with <svg width="20" height="20" viewBox="0 0 24 24" fill="red" style="vertical-align:bottom;"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg> by Trim Key</div>
+        <div style="font-size: 12px; color: var(--text-muted);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:bottom;"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg> <span id="year"></span> Trim Key. All rights reserved.</div>
       </footer>
 
     </div> <!-- CLOSES view-overview -->
@@ -1946,40 +1946,22 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 
     <!-- DOCUMENTS -->
     <div id="view-documents" class="page-view">
-      <div class="panel" style="border-left: 4px solid var(--accent);">
-        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-          <h3>Document Processing Pipeline</h3>
-          <button class="btn-success" onclick="openDocRequestModal()" style="padding: 8px 16px; font-size:12px; background:var(--accent);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Request Document
-          </button>
+      <div class="panel">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; border-bottom: none; margin-bottom: 10px; padding-bottom: 0;">
+          <h3 style="margin:0;">Document Jobs Queue</h3>
+          <div class="search-wrapper">
+             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+             <input type="text" id="docSearchInput" class="search-input" placeholder="Search ID, Inst, Class..." oninput="applyFilters()">
+          </div>
         </div>
-        
-        <div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:12px;">
-            <input type="text" id="adminDocSearch" class="form-input" placeholder="Search Class or Job ID..." style="max-width:250px; margin:0;" oninput="filterAdminDocs()">
-            <select id="adminDocStatus" class="form-input" style="width:auto; margin:0;" onchange="filterAdminDocs()">
-                <option value="all">All Statuses</option>
-                <option value="Delivered">Delivered</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-            </select>
+        <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
+          <select id="doc-inst-filter" class="filter-select" style="display:none;" onchange="applyFilters()"><option value="all">All Institutes</option></select>
+          <select id="doc-class-filter" class="filter-select" onchange="applyFilters()"><option value="all">All Classes</option></select>
+          <select id="doc-session-filter" class="filter-select" onchange="applyFilters()"></select>
+          <select id="doc-type-filter" class="filter-select" onchange="applyFilters()"></select>
+          <select id="doc-status-filter" class="filter-select" onchange="applyFilters()"></select>
         </div>
-
-        <div class="tk-table-wrapper">
-          <table class="tk-sleek-table">
-            <thead>
-              <tr>
-                <th>Job ID & Date</th>
-                <th>Document Type & Class</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="table-admin-docs">
-               <tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">Loading pipeline...</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div id="docs-accordion-container"></div>
       </div>
     </div>
 
@@ -2178,7 +2160,7 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
       <div class="panel">
         <div class="panel-header">
           <h3>Client Control Center</h3>
-          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionRegisterInstitute()"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M11.667 17.5V15a1 1 0 00-3.334 0v2.5" /><path d="m13.889 3.889-2.937-1.922a1.67 1.67 0 00-1.904 0L5.118 4.7a1.67 1.67 0 01-.951.3H2.5a.833.833 0 00-.833.833v10A1.667 1.667 0 003.333 17.5h13.334a1.667 1.667 0 001.666-1.667v-5.277" /><path d="M15 13.333h.01" /><path d="M16.667 8.889V4.444" /><path d="M18.889 6.667h-4.445" /><path d="M5 10h.01" /><path d="M5 13.333h.01" /><circle cx="10" cy="8.333" r="1.667" /></svg>Register New</button>
+          <button class="btn-outline" style="display:flex; align-items:center;" onclick="actionRegisterInstitute()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M18 4.933V21"/><path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6"/><path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11"/><path d="M6 4.933V21"/><circle cx="12" cy="9" r="2"/></svg>Register Institute</button>
         </div>
         <div style="display:flex; gap:15px; margin-bottom:25px; flex-wrap:wrap; background: rgba(0,0,0,0.25); padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
           <select id="inst-status-filter" class="filter-select" onchange="applyFilters()"></select>
