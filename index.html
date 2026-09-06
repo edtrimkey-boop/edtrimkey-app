@@ -2435,6 +2435,109 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
         </div>
 
         <div id="settings-content" style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border);"></div>
+
+        <!-- ==========================================
+             INSTITUTE ADMIN CONFIGURATION PANEL
+             ========================================== -->
+        <div id="adminSettingsPanel" class="inst-admin" style="display:none; margin-top:30px; padding-top:30px; border-top:1px solid var(--border);">
+           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+               <h3 style="color:var(--text); font-weight:900; text-transform:uppercase; letter-spacing:1px; margin:0;">Institute Administration</h3>
+               <button class="btn-success" onclick="saveAdminSettings(this)" style="padding:10px 20px;">
+                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px; vertical-align:text-bottom;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 
+                   Save All Settings
+               </button>
+           </div>
+
+           <div class="grid-2">
+               <!-- 1. BRANDING CUSTOMIZATIONS -->
+               <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px;">
+                  <h4 style="color:var(--brand); margin-top:0; margin-bottom:15px; font-weight:800;">1. Document Branding</h4>
+                  <div class="form-group" style="margin-bottom:15px;">
+                      <label class="label-text">Paper Header Tagline</label>
+                      <input type="text" id="setBrandHeader" class="form-input" placeholder="e.g. Excellence in Education" style="margin-bottom:0;">
+                  </div>
+                  <div class="form-group" style="margin-bottom:15px;">
+                      <label class="label-text">Paper Footer Address / Contact</label>
+                      <input type="text" id="setBrandFooter" class="form-input" placeholder="e.g. 123 Main St | Ph: 9876543210" style="margin-bottom:0;">
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                      <label class="label-text">Update Institute Logo</label>
+                      <div class="upload-box" onclick="document.getElementById('setLogoInput').click()" style="padding:15px;">
+                          <p id="setLogoStatusText" style="margin:0; font-size:11px; color:var(--text-muted); font-weight:600;">Click to upload new PNG/JPG</p>
+                          <input type="file" id="setLogoInput" accept="image/png, image/jpeg, image/jpg" style="display:none;" onchange="handleSettingsLogo(this)">
+                      </div>
+                  </div>
+               </div>
+
+               <!-- 2. TEACHER SECURITY & QUOTAS -->
+               <div style="display:flex; flex-direction:column; gap:20px;">
+                   <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px dashed var(--accent); padding:20px;">
+                      <h4 style="color:var(--accent); margin-top:0; margin-bottom:15px; font-weight:800;">2. Staff Access Control</h4>
+                      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                          <div>
+                              <div style="color:white; font-size:12px; font-weight:800;">View Contact Numbers</div>
+                              <div style="color:var(--text-muted); font-size:10px;">Allow teachers to see student phone numbers.</div>
+                          </div>
+                          <label class="switch" style="transform:scale(0.8); margin:0;"><input type="checkbox" id="setSecContacts"><span class="slider"></span></label>
+                      </div>
+                      <div style="display:flex; justify-content:space-between; align-items:center;">
+                          <div>
+                              <div style="color:white; font-size:12px; font-weight:800;">Edit Student Profiles</div>
+                              <div style="color:var(--text-muted); font-size:10px;">Allow teachers to modify student demographic data.</div>
+                          </div>
+                          <label class="switch" style="transform:scale(0.8); margin:0;"><input type="checkbox" id="setSecEdit"><span class="slider"></span></label>
+                      </div>
+                   </div>
+
+                   <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px;">
+                      <h4 style="color:var(--danger); margin-top:0; margin-bottom:15px; font-weight:800;">3. Quota Alerts</h4>
+                      <div class="grid-2">
+                          <div class="form-group" style="margin-bottom:0;">
+                              <label class="label-text">Low Paper Warning</label>
+                              <input type="number" id="setAlertPaper" class="form-input" placeholder="e.g. 10" style="margin-bottom:0;">
+                          </div>
+                          <div class="form-group" style="margin-bottom:0;">
+                              <label class="label-text">Low Doc Warning</label>
+                              <input type="number" id="setAlertDoc" class="form-input" placeholder="e.g. 50" style="margin-bottom:0;">
+                          </div>
+                      </div>
+                   </div>
+               </div>
+           </div>
+
+          <!-- 4. MULTI-CHANNEL ROUTING ENGINE -->
+           <div style="background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid var(--border); padding:20px; margin-top:20px;">
+              <h4 style="color:var(--purple); margin-top:0; margin-bottom:15px; font-weight:800;">4. Multi-Channel Routing Engine</h4>
+              <p style="font-size:11px; color:var(--text-muted); font-weight:600; margin-bottom:20px;">Use <b style="color:white;">[NAME]</b>, <b style="color:white;">[DATE]</b>, or <b style="color:white;">[INST]</b> as dynamic variables. The system will auto-route to active channels.</p>
+              
+              <!-- Attendance Event -->
+              <div style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed rgba(255,255,255,0.1);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                      <label class="label-text" style="margin:0; font-size:13px; color:white;">Attendance (Absent Event)</label>
+                      <div style="display:flex; gap:8px;">
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="att_chan_sms"> SMS</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="att_chan_wa"> WhatsApp</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="att_chan_push"> Push</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="att_chan_email"> Email</label>
+                      </div>
+                  </div>
+                  <textarea id="att_template" class="form-input" rows="2" style="resize:vertical; margin-bottom:0;" placeholder="Dear Parent, your ward [NAME] is absent today on [DATE]. - [INST]"></textarea>
+              </div>
+
+              <!-- Fee Event -->
+              <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                      <label class="label-text" style="margin:0; font-size:13px; color:white;">Fee Reminder Event</label>
+                      <div style="display:flex; gap:8px;">
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="fee_chan_sms"> SMS</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="fee_chan_wa"> WhatsApp</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="fee_chan_push"> Push</label>
+                          <label class="cb-pill" style="margin:0; padding:6px 10px;"><input type="checkbox" id="fee_chan_email"> Email</label>
+                      </div>
+                  </div>
+                  <textarea id="fee_template" class="form-input" rows="2" style="resize:vertical; margin-bottom:0;" placeholder="Dear Parent, a fee balance is pending for [NAME]. Please clear it soon. - [INST]"></textarea>
+              </div>
+           </div>
         
         <div class="sys-admin" style="display:none; margin-top:30px; padding-top:20px; border-top:1px solid var(--border);">
            <h4 style="color:var(--danger); margin-bottom:15px; font-weight:800;">Danger Zone (System Admins Only)</h4>
@@ -2615,20 +2718,41 @@ function actionChangePassword(btn) {
    if(newPw !== confirmPw) return showPopup("New passwords do not match.", "warning");
    if(newPw.length < 6) return showPopup("New password must be at least 6 characters.", "warning");
    
-   // ... keep existing code ...
    triggerBtnAnim(btn);
    openModal('syncLoader');
 
-   serverCall('changeUserPassword', { email: globalUser.email, oldPw: oldPw, newPw: newPw })
+   // Pass the current status so the backend knows if it needs to activate the account
+   serverCall('changeUserPassword', { 
+       email: globalUser.email, 
+       oldPw: oldPw, 
+       newPw: newPw,
+       currentStatus: globalUser.status 
+   })
      .then(res => {
          closeModal('syncLoader');
          if(res.success) {
             closeModal('passwordModal');
-            showPopup(res.message);
-            document.getElementById('oldPwInput').value = ""; document.getElementById('newPwInput').value = ""; document.getElementById('confirmPwInput').value = "";
-         } else { showPopup("Error: " + res.message); }
+            document.getElementById('oldPwInput').value = ""; 
+            document.getElementById('newPwInput').value = ""; 
+            document.getElementById('confirmPwInput').value = "";
+            
+            // If they were Pending, their account is now Active. Refresh the dashboard.
+            if (globalUser.status === 'Pending') {
+                showPopup("Account activated securely! Loading your dashboard...", "success");
+                setTimeout(() => initDashboard(globalUser.email, Memory.getToken(), null, true), 1500);
+            } else {
+                showPopup(res.message, "success");
+            }
+         } else { 
+            resetBtnAnim(btn);
+            showPopup("Error: " + res.message, "error"); 
+         }
      })
-     .catch(err => { closeModal('syncLoader'); showPopup(err.message); });
+     .catch(err => { 
+         resetBtnAnim(btn);
+         closeModal('syncLoader'); 
+         showPopup("Network Error: " + err.message, "error"); 
+     });
 }
 
 function actionLogoutAll() {
@@ -2642,6 +2766,19 @@ function actionLogoutAll() {
         
         .catch(err => { closeModal('syncLoader'); showPopup(err.message); });
    });
+}
+
+// =========================================================================================
+// 🛡️ UNIVERSAL SAFE DOM ENGINE (Prevents Null Crashes)
+// =========================================================================================
+function setValSafe(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value;
+}
+
+function setTextSafe(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text;
 }
 
 // =========================================================================================
@@ -3840,8 +3977,6 @@ function applyRoleUI(p) {
   `;
   if (userRole === "super admin" || userRole === "system admin" || userRole === "all") {
       settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Super Admin Configurations</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Global Master Data Export</li><li>System Default Storage Drives</li><li>Webhook & API Endpoint Integrations</li><li>Global Maintenance Mode Toggle</li></ul>`;
-  } else if (userRole === "admin") {
-      settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Institute Administration</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Default SMS Notification Templates</li><li>Paper Header/Footer Branding Customizations</li><li>Teacher Access Security Levels</li><li>Subscription Alerts & Renewal Routing</li></ul>`;
   } else if (userRole === "teacher") {
       settingsHtml += `<h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Teacher Preferences</h4><ul style="color:var(--text-muted); font-size:13px; line-height:1.8; margin-left:20px; font-weight:600;"><li>Set Default Class & Subject for Submissions</li><li>Alert Preferences (Email vs Push Notifications)</li><li>Dashboard Layout Theme</li></ul>`;
   } else if (userRole === "operator") {
@@ -3911,9 +4046,31 @@ function applyRoleUI(p) {
       if (btnOpWs) btnOpWs.style.display = 'none';
       if (navOpFin) navOpFin.style.display = 'none'; 
   }
+  
+  // ==========================================
+  // 🛡️ FIRST LOGIN SECURITY TRAP
+  // ==========================================
+  if (String(p.status).trim() === 'Pending') {
+      // 1. Force the password modal open
+      openModal('passwordModal');
+      
+      // 2. Hide the close button so they cannot bypass it
+      const passModal = document.getElementById('passwordModal');
+      const closeBtn = passModal.querySelector('.close-minimal');
+      if (closeBtn) closeBtn.style.display = 'none';
+      
+      // 3. Update the modal text to explain the context
+      const titleText = passModal.querySelector('h2');
+      if (titleText) titleText.innerHTML = `<svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="var(--accent)" stroke-width="2" style="vertical-align:text-bottom; margin-right:6px;"><rect x="3" y="11" width="14" height="8" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Account Setup Required`;
+      
+      showPopup("Welcome to Ed-Trim Key! Please set your private password to activate your account.", "info");
+  }
 
   // Render the iOS Bottom Navigation based on role
     buildMobileNav(userRole);
+
+    // 🔥 ADD THIS HERE to populate the settings tab on load
+  populateAdminSettings();
 
 }
 
@@ -5330,9 +5487,9 @@ async function handleInstRegSubmit(e) {
     
     const instCodeRaw = document.getElementById('regInstCode').value.toUpperCase().trim();
     const fileName = `logo_${instCodeRaw}_${Date.now()}.jpg`;
-    const { data, error } = await window.supabaseInstance.storage.from('Institute_Logos').upload(fileName, blobData, { contentType: 'image/jpeg', upsert: true });
+    const { data, error } = await window.supabaseInstance.storage.from('logo').upload(fileName, blobData, { contentType: 'image/jpeg', upsert: true });
     if (error) throw error;
-    const { data: pubData } = window.supabaseInstance.storage.from('Institute_Logos').getPublicUrl(fileName);
+    const { data: pubData } = window.supabaseInstance.storage.from('logo').getPublicUrl(fileName);
     const uploadedLogoUrl = pubData.publicUrl;
 
     var syncElem = document.getElementById('syncText');
@@ -5434,6 +5591,7 @@ async function handleTeacherRegSubmit(e) {
   if (syncElem) syncElem.innerText = "SAVING TO DATABASE...";
   else showLoader('SAVING TO DATABASE...');
   var payload = {
+    instId: globalUser.instId || globalUser.institute_id || '', // ADD THIS LINE
     email: document.getElementById('trRegEmail').value,
     name: document.getElementById('trRegName').value,
     contactNo: document.getElementById('trRegPhone').value,
@@ -7222,6 +7380,170 @@ function loadMoreStudents(btn) {
         if (btn) resetBtnAnim(btn);
     }, 200);
 }
+
+let settingsLogoFile = null;
+
+// 1. Handle Logo Selection UI
+function handleSettingsLogo(input) {
+    if(!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+    if(file.size > 5 * 1024 * 1024) { 
+        showPopup('Logo exceeds 5MB limit.', 'warning'); 
+        input.value = ''; 
+        return; 
+    }
+    settingsLogoFile = file;
+    document.getElementById('setLogoStatusText').innerText = `Selected: ${file.name} (${(file.size/1048576).toFixed(2)} MB)`;
+    document.getElementById('setLogoStatusText').style.color = "var(--brand)";
+}
+
+// 1. Populate data directly from the new tables
+async function populateAdminSettings() {
+    if (!globalUser || globalUser.role !== 'admin') return;
+
+    const panel = document.getElementById('adminSettingsPanel');
+    if (panel) panel.style.display = 'block';
+
+    const instId = globalUser?.institute_id || globalUser?.instId;
+    if (!instId) return;
+
+    try {
+        // Fetch Core Settings
+        const { data: settings } = await window.supabaseInstance
+            .from('institute_settings').select('*').eq('institute_id', instId).single();
+
+        if (settings) {
+            setValSafe('setBrandHeader', settings.paper_header || '');
+            setValSafe('setBrandFooter', settings.paper_footer || '');
+            setValSafe('setAlertPaper', settings.alert_paper_threshold || 10);
+            setValSafe('setAlertDoc', settings.alert_doc_threshold || 50);
+
+            const secContacts = document.getElementById('setSecContacts');
+            if (secContacts) secContacts.checked = (settings.allow_teacher_contacts !== false);
+            
+            const secEdit = document.getElementById('setSecEdit');
+            if (secEdit) secEdit.checked = (settings.allow_teacher_edit === true);
+        }
+
+        // Fetch Multi-Channel Routing Templates
+        const { data: templates } = await window.supabaseInstance
+            .from('communication_templates').select('*').eq('institute_id', instId);
+
+        if (templates && templates.length > 0) {
+            templates.forEach(t => {
+                if (t.event_type === 'ATTENDANCE_ABSENT') {
+                    if (t.channel === 'SMS') document.getElementById('att_chan_sms').checked = t.is_active;
+                    if (t.channel === 'WHATSAPP') document.getElementById('att_chan_wa').checked = t.is_active;
+                    if (t.channel === 'PUSH') document.getElementById('att_chan_push').checked = t.is_active;
+                    if (t.channel === 'EMAIL') document.getElementById('att_chan_email').checked = t.is_active;
+                    setValSafe('att_template', t.template_body);
+                } else if (t.event_type === 'FEE_REMINDER') {
+                    if (t.channel === 'SMS') document.getElementById('fee_chan_sms').checked = t.is_active;
+                    if (t.channel === 'WHATSAPP') document.getElementById('fee_chan_wa').checked = t.is_active;
+                    if (t.channel === 'PUSH') document.getElementById('fee_chan_push').checked = t.is_active;
+                    if (t.channel === 'EMAIL') document.getElementById('fee_chan_email').checked = t.is_active;
+                    setValSafe('fee_template', t.template_body);
+                }
+            });
+        }
+    } catch (error) {
+        console.warn("No configuration rows found yet. Defaulting to empty UI.", error);
+    }
+}
+
+// 2. Save Dual-Table Architecture
+async function saveAdminSettings(btn) {
+    triggerBtnAnim(btn);
+
+    const instId = globalUser?.institute_id || globalUser?.instId;
+    if (!instId) {
+        resetBtnAnim(btn);
+        return showPopup("Error: Institute ID missing from session.", "error");
+    }
+
+    try {
+        let uploadedLogoUrl = null;
+
+        if (settingsLogoFile) {
+            showLoader('UPLOADING BRAND LOGO...');
+            let base64Logo = await compressImage(settingsLogoFile);
+            let blobData = await (await fetch(base64Logo)).blob();
+            const fileName = `logo_${globalUser.code}_${Date.now()}.jpg`;
+            
+            const { error: uploadErr } = await window.supabaseInstance.storage
+                .from('logo').upload(fileName, blobData, { contentType: 'image/jpeg', upsert: true });
+            
+            if (uploadErr) throw uploadErr;
+            const { data: pubData } = window.supabaseInstance.storage.from('logo').getPublicUrl(fileName);
+            uploadedLogoUrl = pubData.publicUrl;
+            
+            await window.supabaseInstance.from('institutes').update({ logo_url: uploadedLogoUrl }).eq('id', instId);
+            settingsLogoFile = null; 
+            document.getElementById('setLogoStatusText').innerText = "Logo updated successfully!";
+            document.getElementById('setLogoStatusText').style.color = "var(--success)";
+        }
+
+        showLoader('SAVING CORE SETTINGS...');
+
+        // 1. Upsert Core Settings
+        const settingsPayload = {
+            institute_id: instId,
+            paper_header: document.getElementById('setBrandHeader').value,
+            paper_footer: document.getElementById('setBrandFooter').value,
+            alert_paper_threshold: Number(document.getElementById('setAlertPaper').value) || 10,
+            alert_doc_threshold: Number(document.getElementById('setAlertDoc').value) || 50,
+            allow_teacher_contacts: document.getElementById('setSecContacts').checked,
+            allow_teacher_edit: document.getElementById('setSecEdit').checked,
+            updated_at: new Date().toISOString()
+        };
+
+        const { error: settingsErr } = await window.supabaseInstance
+            .from('institute_settings').upsert(settingsPayload, { onConflict: 'institute_id' });
+        if (settingsErr) throw settingsErr;
+
+        showLoader('APPLYING ROUTING RULES...');
+
+        // 2. Upsert Multi-Channel Templates Array
+        const getCb = (id) => document.getElementById(id).checked;
+        const attText = document.getElementById('att_template').value;
+        const feeText = document.getElementById('fee_template').value;
+
+        const commsPayload = [
+            { institute_id: instId, event_type: 'ATTENDANCE_ABSENT', channel: 'SMS', is_active: getCb('att_chan_sms'), template_body: attText },
+            { institute_id: instId, event_type: 'ATTENDANCE_ABSENT', channel: 'WHATSAPP', is_active: getCb('att_chan_wa'), template_body: attText },
+            { institute_id: instId, event_type: 'ATTENDANCE_ABSENT', channel: 'PUSH', is_active: getCb('att_chan_push'), template_body: attText },
+            { institute_id: instId, event_type: 'ATTENDANCE_ABSENT', channel: 'EMAIL', is_active: getCb('att_chan_email'), template_body: attText },
+            
+            { institute_id: instId, event_type: 'FEE_REMINDER', channel: 'SMS', is_active: getCb('fee_chan_sms'), template_body: feeText },
+            { institute_id: instId, event_type: 'FEE_REMINDER', channel: 'WHATSAPP', is_active: getCb('fee_chan_wa'), template_body: feeText },
+            { institute_id: instId, event_type: 'FEE_REMINDER', channel: 'PUSH', is_active: getCb('fee_chan_push'), template_body: feeText },
+            { institute_id: instId, event_type: 'FEE_REMINDER', channel: 'EMAIL', is_active: getCb('fee_chan_email'), template_body: feeText }
+        ];
+
+        const { error: commsErr } = await window.supabaseInstance
+            .from('communication_templates').upsert(commsPayload, { onConflict: 'institute_id, event_type, channel' });
+        if (commsErr) throw commsErr;
+
+        resetBtnAnim(btn);
+        hideLoader();
+        showToast("System routing rules successfully secured.", "success");
+
+        if (uploadedLogoUrl) {
+            const topLogo = document.getElementById('headerInstLogo');
+            if (topLogo) {
+                topLogo.src = uploadedLogoUrl;
+                topLogo.style.background = "white";
+                topLogo.style.padding = "2px";
+            }
+        }
+
+    } catch (err) {
+        resetBtnAnim(btn);
+        hideLoader();
+        showPopup("Database Error: " + err.message, "error");
+    }
+}
+
 
 </script>
 </body>
