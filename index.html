@@ -2930,7 +2930,7 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 // =========================================================================================
 // 🔥 NEW DIRECT VERCEL BACKEND ENGINE
 // =========================================================================================
-const VERCEL_API_URL = "https://edtrimkey-backend.vercel.app/api/gateway";
+const VERCEL_API_URL = "";
 
 async function serverCall(action, payloadData = {}) {
   const requestBody = { 
@@ -2983,7 +2983,7 @@ function serverCallWithProgress(action, payloadData, onProgress) {
         const xhr = new XMLHttpRequest();
         
         // 🔥 THE FIX: Use your global API variable instead of typing the URL manually!
-        const apiUrl = typeof VERCEL_API_URL !== 'undefined' ? VERCEL_API_URL : "https://edtrimkey-backend.vercel.app/api/gateway";
+        const apiUrl = typeof VERCEL_API_URL !== 'undefined' ? VERCEL_API_URL : "https://backend.ed.trimkey.in/api/gateway";
         
         xhr.open("POST", apiUrl, true);
         xhr.setRequestHeader("Content-Type", "application/json");
