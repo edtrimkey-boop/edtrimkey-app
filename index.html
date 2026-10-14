@@ -1098,11 +1098,503 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
     }
 }
 
+/* =======================================================
+   SARA AI FLOATING CHATBOT WIDGET (LIQUID GLASS PHYSICS)
+   ======================================================= */
+  #sara-chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 99990;
+    font-family: 'Montserrat', sans-serif;
+  }
 
+  /* Floating Trigger Button: Brand Cyan Circle with Liquid Glass & Floating Animation */
+  #sara-chat-btn {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #26C3EA 0%, #0EA5E9 50%, #0284C7 100%);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 25px rgba(38, 195, 234, 0.6), inset 0 2px 2px rgba(255, 255, 255, 0.6);
+    transition: transform 0.3s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: saraFloat 3.2s ease-in-out infinite;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    outline: none;
+  }
+
+  @keyframes saraFloat {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 25px rgba(38, 195, 234, 0.6), inset 0 2px 2px rgba(255, 255, 255, 0.6);
+    }
+    50% {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.55), 0 0 35px rgba(38, 195, 234, 0.85), inset 0 2px 3px rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  #sara-chat-btn:hover {
+    animation-play-state: paused;
+    transform: translateY(-5px) scale(1.08);
+    box-shadow: 0 22px 45px rgba(0, 0, 0, 0.6), 0 0 45px rgba(38, 195, 234, 0.95), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    border-color: #ffffff;
+  }
+
+  #sara-chat-btn:active {
+    transform: scale(0.92);
+    transition: transform 0.1s ease;
+  }
+
+  /* Chat Icon inside Button */
+  .sara-chat-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1));
+  }
+
+  .sara-chat-icon svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+    stroke: #ffffff;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+  }
+
+  #sara-chat-btn:hover .sara-chat-icon {
+    transform: scale(1.1) rotate(-4deg);
+  }
+
+  /* Glowing Online Status Dot */
+  .sara-pulse-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 13px;
+    height: 13px;
+    background-color: #10B981;
+    border: 2.5px solid #0B111E;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #10B981;
+    display: block;
+    z-index: 3;
+    animation: saraPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes saraPulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  /* Liquid Glass Hover Tooltip */
+  .sara-tooltip {
+    position: absolute;
+    right: calc(100% + 14px);
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    background: rgba(20, 30, 48, 0.94);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    border: 1px solid rgba(38, 195, 234, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(38, 195, 234, 0.25);
+    transition: all 0.25s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1));
+  }
+
+  .sara-tooltip strong {
+    color: var(--brand, #26C3EA);
+  }
+
+  #sara-chat-btn:hover .sara-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* Chat Modal Window */
+  #sara-chat-modal {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 420px;
+    height: 650px;
+    max-height: calc(100vh - 48px);
+    background: rgba(11, 17, 30, 0.95);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85), 0 0 35px rgba(38, 195, 234, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100000;
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.28s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1)), transform 0.28s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1));
+  }
+
+  #sara-chat-modal.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* Modal Top Bar */
+  #sara-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: linear-gradient(145deg, #182338 0%, #10192A 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .sara-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .sara-header-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(38, 195, 234, 0.25), rgba(139, 92, 246, 0.25));
+    border: 1px solid rgba(38, 195, 234, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(38, 195, 234, 0.35);
+    flex-shrink: 0;
+  }
+
+  .sara-header-icon svg {
+    width: 20px;
+    height: 20px;
+    color: var(--brand, #26C3EA);
+  }
+
+  .sara-header-title {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .sara-header-title span {
+    color: var(--brand, #26C3EA);
+    text-shadow: 0 0 10px rgba(38, 195, 234, 0.4);
+  }
+
+  .sara-header-sub {
+    font-size: 11px;
+    color: var(--text-muted, #94A3B8);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Header Action Buttons (Reload & Close - Liquid Glass with Vivid Colors) */
+  .sara-header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sara-action-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.25s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1)) !important;
+    outline: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .sara-action-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    display: block !important;
+    stroke: #ffffff !important;
+    stroke-width: 2.2 !important;
+    transition: transform 0.3s ease, stroke 0.2s ease !important;
+  }
+
+  /* Reload Button: Neon Brand Cyan */
+  .sara-reload-btn {
+    background: rgba(38, 195, 234, 0.12) !important;
+    border-color: rgba(38, 195, 234, 0.4) !important;
+  }
+
+  .sara-reload-btn svg {
+    stroke: var(--brand, #26C3EA) !important;
+  }
+
+  .sara-reload-btn:hover {
+    background: rgba(38, 195, 234, 0.25) !important;
+    border-color: var(--brand, #26C3EA) !important;
+    box-shadow: 0 0 18px rgba(38, 195, 234, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px) scale(1.08) !important;
+  }
+
+  .sara-reload-btn:hover svg {
+    transform: rotate(180deg) !important;
+  }
+
+  /* Close Button: Neon Danger Red */
+  .sara-close-btn {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+  }
+
+  .sara-close-btn svg {
+    stroke: #EF4444 !important;
+    stroke-width: 2.5 !important;
+  }
+
+  .sara-close-btn:hover {
+    background: rgba(239, 68, 68, 0.3) !important;
+    border-color: var(--danger, #EF4444) !important;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px) scale(1.08) !important;
+  }
+
+  .sara-close-btn:hover svg {
+    transform: rotate(90deg) !important;
+  }
+
+  .sara-action-btn:active {
+    transform: scale(0.92) !important;
+  }
+
+  /* Modal Body / Iframe Area */
+  .sara-body-wrapper {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: #0B111E;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sara-chat-iframe {
+    width: 100%;
+    flex: 1;
+    border: none;
+    background: transparent;
+    display: block;
+  }
+
+  /* Loading Spinner for Sara AI */
+  #sara-iframe-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: #0B111E;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+  }
+
+  #sara-iframe-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sara-spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(38, 195, 234, 0.15);
+    border-top-color: var(--brand, #26C3EA);
+    border-radius: 50%;
+    animation: saraSpin 0.8s linear infinite;
+  }
+
+  .sara-loader-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted, #94A3B8);
+    letter-spacing: 0.5px;
+  }
+
+  @keyframes saraSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Mobile & Tablet Optimizations */
+  @media (max-width: 950px) {
+    #sara-chat-widget {
+      bottom: calc(98px + env(safe-area-inset-bottom));
+      right: 18px;
+    }
+    
+    #sara-chat-btn {
+      width: 54px;
+      height: 54px;
+      min-width: 54px;
+      min-height: 54px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(38, 195, 234, 0.5);
+    }
+
+    .sara-chat-icon svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .sara-tooltip {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 600px) {
+    #sara-chat-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-height: none;
+      border-radius: 0;
+      border: none;
+      z-index: 100000;
+    }
+    
+    #sara-chat-header {
+      padding-top: max(14px, env(safe-area-inset-top));
+      padding-left: 16px;
+      padding-right: 16px;
+      border-radius: 0;
+    }
+  }
 
 </style>
 </head>
 <body>
+
+<!-- ======================================================== -->
+<!-- SARA AI FLOATING CHATBOT WIDGET (ED-TRIM KEY)             -->
+<!-- ======================================================== -->
+<div id="sara-chat-widget">
+  <!-- Floating Brand Icon Button with Liquid Glass & Hover Tooltip -->
+  <button id="sara-chat-btn" onclick="toggleSaraChat(true)" aria-label="Open Chat with Sara AI">
+    <div class="sara-chat-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        <path d="M12 7.5L12.7 9.3L14.5 10L12.7 10.7L12 12.5L11.3 10.7L9.5 10L11.3 9.3Z" fill="#ffffff" stroke="none"/>
+      </svg>
+    </div>
+    <span class="sara-pulse-dot" title="Sara AI is Online"></span>
+    <div class="sara-tooltip">
+      <span>Chat with <strong>Sara AI</strong> ✨</span>
+    </div>
+  </button>
+
+  <!-- Chat Window Modal -->
+  <div id="sara-chat-modal" role="dialog" aria-modal="true" aria-label="Sara AI Chat Window">
+    <div id="sara-chat-header">
+      <div class="sara-header-left">
+        <div class="sara-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="sara-header-title">Ed-Trim Key / <span>Sara AI</span></div>
+          <div class="sara-header-sub">
+            <span class="sara-pulse-dot" style="position:static; width: 7px; height: 7px; border: none; box-shadow: 0 0 6px #10B981;"></span> Active Academic Assistant
+          </div>
+        </div>
+      </div>
+      <div class="sara-header-actions">
+        <!-- High-Contrast Visible Reload Button -->
+        <button type="button" class="sara-action-btn sara-reload-btn" onclick="reloadSaraChat()" title="Reload Sara AI" aria-label="Reload Sara AI">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+          </svg>
+        </button>
+        <!-- High-Contrast Visible Close Button -->
+        <button type="button" class="sara-action-btn sara-close-btn" onclick="toggleSaraChat(false)" title="Close Sara AI" aria-label="Close Sara AI">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="sara-body-wrapper">
+      <div id="sara-iframe-loader">
+        <div class="sara-spinner"></div>
+        <div class="sara-loader-text">Connecting to Sara AI...</div>
+      </div>
+      <iframe
+        id="sara-chat-iframe"
+        src="https://sara.trimkey.in"
+        title="Sara AI Chat"
+        allow="clipboard-write; clipboard-read; microphone; camera"
+        onload="onSaraIframeLoaded()"
+      ></iframe>
+    </div>
+  </div>
+</div>
 
 <!-- 🍏 iOS MOBILE NAVIGATION ENGINE (Injected via JS) -->
 <div id="mobile-nav-bar" style="display:none;"></div>
@@ -8237,6 +8729,55 @@ function handleTeacherEditSubmit(e) {
             showPopup('Update Failed: ' + err.message, 'error');
         });
 }
+
+
+function toggleSaraChat(open) {
+    const modal = document.getElementById("sara-chat-modal");
+    const btn = document.getElementById("sara-chat-btn");
+    if (!modal || !btn) return;
+
+    if (open) {
+      modal.classList.add("active");
+      btn.style.display = "none";
+    } else {
+      modal.classList.remove("active");
+      setTimeout(function() {
+        if (!modal.classList.contains("active")) {
+          btn.style.display = "flex";
+        }
+      }, 150);
+    }
+}
+
+function reloadSaraChat() {
+    const iframe = document.getElementById("sara-chat-iframe");
+    const loader = document.getElementById("sara-iframe-loader");
+    if (iframe) {
+      if (loader) loader.classList.remove("hidden");
+      try {
+        iframe.contentWindow.location.reload();
+      } catch (e) {
+        iframe.src = iframe.src;
+      }
+    }
+}
+
+function onSaraIframeLoaded() {
+    const loader = document.getElementById("sara-iframe-loader");
+    if (loader) {
+      loader.classList.add("hidden");
+    }
+}
+
+// Global listener: Press Escape to close Sara Chat modal
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      const modal = document.getElementById("sara-chat-modal");
+      if (modal && modal.classList.contains("active")) {
+        toggleSaraChat(false);
+      }
+    }
+});
 
 </script>
 </body>
