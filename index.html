@@ -1774,32 +1774,71 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
   </div>
 </div>
 
-<div id="paymentModal" class="glass-overlay">
-  <div class="glass-box" style="max-width: 450px; padding: 40px; text-align: left; max-height: 90vh; overflow-y: auto; position: relative;">
-     <div class="premium-sticky-header">
-        <h2 style="color:var(--brand);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          Complete Payment
-        </h2>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <button type="button" class="close-minimal" onclick="closeModal('paymentModal')" style="position:relative; top:0; right:0;">✖</button>
+<!-- =======================================================
+     TRIM KEY FLOW — POPUP CHECKOUT MODAL (OPTION A)
+     ======================================================= -->
+<div id="paymentModal" class="glass-overlay" style="z-index: 99999;">
+  <div class="glass-box" style="max-width: 490px; width: 94%; height: 720px; max-height: calc(100vh - 40px); padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 22px; border: 1px solid rgba(0, 251, 166, 0.35); box-shadow: 0 25px 65px rgba(0,0,0,0.85), 0 0 35px rgba(0, 251, 166, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2); background: rgba(11, 17, 30, 0.96);">
+     
+     <!-- Trim Key Flow Top Header -->
+     <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: linear-gradient(145deg, #182338 0%, #10192A 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+           <div style="width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, rgba(0, 251, 166, 0.25), rgba(38, 195, 234, 0.25)); border: 1px solid rgba(0, 251, 166, 0.5); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0, 251, 166, 0.35); flex-shrink: 0;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00fba6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+           </div>
+           <div>
+              <div style="color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                 Trim Key <span style="color: #00fba6; text-shadow: 0 0 10px rgba(0, 251, 166, 0.4);">Flow</span>
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px; font-weight: 600;">
+                 <span style="width: 7px; height: 7px; border-radius: 50%; background: #00fba6; box-shadow: 0 0 6px #00fba6; display: inline-block;"></span> 256-Bit SSL Encrypted Checkout
+              </div>
+           </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+           <!-- Open Popout Tab -->
+           <button type="button" class="sara-action-btn" onclick="openFlowInNewTab()" title="Open in Dedicated Tab" aria-label="Open in Dedicated Tab">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+           </button>
+           <!-- Reload Iframe -->
+           <button type="button" class="sara-action-btn sara-reload-btn" onclick="reloadFlowCheckout()" title="Reload Checkout Session" aria-label="Reload Checkout Session">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+              </svg>
+           </button>
+           <!-- Close Modal -->
+           <button type="button" class="sara-action-btn sara-close-btn" onclick="closeFlowPaymentModal()" title="Close Checkout" aria-label="Close Checkout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+           </button>
         </div>
      </div>
-     
-     <div style="text-align: center;">
-         <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Ref: <span id="payRefId" style="color:white; font-weight:700;">Loading...</span></p>
-         <h2 id="payAmountDisplay" style="color:var(--success); font-size:36px; font-weight:900; margin-bottom:25px;">₹0</h2>
-         
-         <div style="background:white; padding:15px; border-radius:16px; display:inline-block; margin-bottom:20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-            <img id="payQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_PAYMENT" style="width:200px; height:200px; display:block;" />
-         </div>
-         
-         <p style="font-size:11px; color:var(--text-muted); margin-bottom:25px; font-weight:600; line-height:1.5;">Scan this QR with any UPI app to pay, or use the checkout link sent securely to your email.</p>
-     </div>
-     
-     <div style="display:flex; flex-direction:column; gap:12px;">
-       <button class="btn-success" onclick="verifyPayment()" style="width:100%; padding:14px; font-size:14px;">I Have Paid</button>
-       <button class="btn-outline" onclick="closeModal('paymentModal')" style="width:100%; border-color:var(--danger); color:var(--danger);">Cancel Process</button>
+
+     <!-- Body with Flow Iframe & Connection Loader -->
+     <div style="position: relative; flex: 1; width: 100%; height: 100%; background: #060B12; display: flex; flex-direction: column;">
+        <div id="flowIframeLoader" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: #060B12; z-index: 2; transition: opacity 0.3s ease;">
+           <div class="sara-spinner" style="border-top-color: #00fba6;"></div>
+           <div class="sara-loader-text" style="color: #94A3B8;">Connecting to Trim Key Flow...</div>
+           <div id="flowLoaderAmount" style="font-size: 20px; font-weight: 800; color: #00fba6; font-family: monospace;">₹0.00</div>
+        </div>
+        <iframe
+          id="flowCheckoutIframe"
+          src="about:blank"
+          title="Trim Key Flow Checkout"
+          allow="payment; clipboard-write; clipboard-read; microphone; camera"
+          onload="onFlowIframeLoaded()"
+          style="width: 100%; flex: 1; border: none; background: transparent; display: block;"
+        ></iframe>
      </div>
   </div>
 </div>
@@ -5196,32 +5235,43 @@ function calculateValue() {
 
 function payNow(){
   const type = document.getElementById("serviceSelect").value;
-  const amount = document.getElementById("calculatedValue").innerText.replace("₹","");
+  const amount = document.getElementById("calculatedValue").innerText.replace("₹","").trim();
   
-  if (amount == 0) return showPopup("Enter a valid quantity.", "warning");
-  
-  // ... keep existing code ...
+  if (!amount || amount === "0") return showPopup("Enter a valid quantity.", "warning");
   
   var btn = event.target;
   triggerBtnAnim(btn);
   
   openModal('syncLoader');
-  serverCall('createPaymentLink', { instCode: globalUser.code, type: type, amount: amount, email: globalUser.email })
+  serverCall('createPaymentLink', { 
+      instCode: globalUser.code, 
+      type: type, 
+      amount: amount, 
+      email: globalUser.email,
+      name: globalUser.name || 'Institute Admin',
+      phone: globalUser.phone || '',
+      quantity: Number(document.getElementById('rechargeQuantity')?.value) || 1
+  })
     .then(res => {
       closeModal('syncLoader');
       if(res.success) {
-         document.getElementById('payRefId').innerText = res.refId;
-         document.getElementById('payAmountDisplay').innerText = "₹" + res.amount;
-         openModal('paymentModal');
-      } else { showPopup("Error: " + res.message); }
+         const paymentNumber = res.refId || res.payment_number || res.paymentNumber;
+         const checkoutUrl = res.checkout_url || res.checkoutUrl || (`${TRIMKEY_FLOW_BASE_URL}/checkout/${paymentNumber}`);
+         openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount);
+      } else { 
+         showPopup("Payment Link Error: " + res.message, "error"); 
+      }
     })
-    .catch(err => { closeModal('syncLoader'); showPopup("Error: " + err.message); });
+    .catch(err => { 
+      closeModal('syncLoader'); 
+      showPopup("Payment Error: " + err.message, "error"); 
+    });
 }
 
 function verifyPayment() {
-   closeModal('paymentModal');
-   showPopup("Payment submitted for verification. Invoice will be generated automatically.");
-   setTimeout(() => { initDashboard(globalUser.email); }, 3000);
+   closeFlowPaymentModal();
+   showPopup("Payment submitted for verification. Checking status with Trim Key Flow...");
+   setTimeout(() => { initDashboard(globalUser.email); }, 2000);
 }
 
 function openAdmissionApp(btn) {
@@ -8557,19 +8607,25 @@ function triggerInitialPayment(amount) {
         instCode: globalUser.code, 
         type: 'Initial Registration Setup', 
         amount: amount, 
-        email: globalUser.email 
+        email: globalUser.email,
+        name: globalUser.name || 'Institute Admin',
+        phone: globalUser.phone || '',
+        quantity: 1
     })
     .then(res => {
         closeModal('syncLoader');
         if(res.success) {
-            document.getElementById('payRefId').innerText = res.refId;
-            document.getElementById('payAmountDisplay').innerText = "₹" + res.amount;
-            openModal('paymentModal');
+            const paymentNumber = res.refId || res.payment_number || res.paymentNumber;
+            const checkoutUrl = res.checkout_url || res.checkoutUrl || (`${TRIMKEY_FLOW_BASE_URL}/checkout/${paymentNumber}`);
+            openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount);
         } else { 
-            showPopup("Error: " + res.message); 
+            showPopup("Payment Link Error: " + res.message, "error"); 
         }
     })
-    .catch(err => { closeModal('syncLoader'); showPopup(err.message); });
+    .catch(err => { 
+        closeModal('syncLoader'); 
+        showPopup(err.message, "error"); 
+    });
 }
 
 function openUserProfileEditor() {
@@ -8792,6 +8848,103 @@ document.addEventListener("keydown", function(e) {
       if (modal && modal.classList.contains("active")) {
         toggleSaraChat(false);
       }
+    }
+});
+
+
+// =========================================================================================
+// 🚀 TRIM KEY FLOW — POPUP CHECKOUT CONTROLLER (OPTION A)
+// =========================================================================================
+const TRIMKEY_FLOW_BASE_URL = window.TRIMKEY_FLOW_URL || "https://flow.trimkey.in";
+let currentFlowPayment = null;
+
+function openFlowCheckout(url, refId, amount) {
+    currentFlowPayment = {
+        url: url,
+        refId: refId,
+        amount: amount
+    };
+    const iframe = document.getElementById('flowCheckoutIframe');
+    const loader = document.getElementById('flowIframeLoader');
+    const amtEl = document.getElementById('flowLoaderAmount');
+    
+    if (amtEl) amtEl.innerText = amount ? ("₹" + amount) : "";
+    if (loader) loader.classList.remove('hidden');
+    if (iframe) iframe.src = url;
+    
+    openModal('paymentModal');
+}
+
+function closeFlowPaymentModal() {
+    closeModal('paymentModal');
+    const iframe = document.getElementById('flowCheckoutIframe');
+    if (iframe) {
+        setTimeout(function() { iframe.src = 'about:blank'; }, 300);
+    }
+}
+
+function reloadFlowCheckout() {
+    const iframe = document.getElementById('flowCheckoutIframe');
+    const loader = document.getElementById('flowIframeLoader');
+    if (iframe && currentFlowPayment && currentFlowPayment.url) {
+        if (loader) loader.classList.remove('hidden');
+        iframe.src = currentFlowPayment.url;
+    }
+}
+
+function openFlowInNewTab() {
+    if (currentFlowPayment && currentFlowPayment.url && currentFlowPayment.url !== 'about:blank') {
+        window.open(currentFlowPayment.url, '_blank');
+    }
+}
+
+function onFlowIframeLoaded() {
+    const iframe = document.getElementById('flowCheckoutIframe');
+    const loader = document.getElementById('flowIframeLoader');
+    if (iframe && iframe.src && iframe.src !== 'about:blank') {
+        if (loader) loader.classList.add('hidden');
+    }
+}
+
+function handleFlowPaymentSuccess(data) {
+    console.log('[Trim Key Flow]: Payment Success Event Received', data);
+    const paymentNumber = data.paymentNumber || currentFlowPayment?.refId;
+    closeFlowPaymentModal();
+    
+    if (typeof tkPlaySound === 'function') {
+        tkPlaySound('notification');
+    }
+    
+    showPopup("Payment Confirmed! Your subscription and quotas are updated via Trim Key Flow.", "success");
+    
+    // Reconcile and reload dashboard state
+    if (paymentNumber && typeof serverCall === 'function') {
+        serverCall('confirmFlowPayment', {
+            paymentNumber: paymentNumber,
+            instCode: globalUser?.code
+        }).catch(function(e) {
+            console.log('[Flow Sync]: Asynchronous webhook delivery in progress', e);
+        });
+    }
+
+    setTimeout(function() {
+        if (typeof initDashboard === 'function' && typeof globalUser !== 'undefined') {
+            initDashboard(globalUser.email, Memory.getToken(), "Account updated successfully!");
+        }
+    }, 1200);
+}
+
+// Global PostMessage listener for Trim Key Flow checkout events
+window.addEventListener('message', function(event) {
+    if (!event.data) return;
+    
+    // Listen for Trim Key Flow payment confirmation event
+    if (event.data.type === 'TK_FLOW_PAYMENT_SUCCESS' || event.data.status === 'SUCCESS') {
+        handleFlowPaymentSuccess(event.data);
+    }
+    // Listen for modal close request from Trim Key Flow
+    if (event.data.type === 'TK_FLOW_CLOSE_MODAL') {
+        closeFlowPaymentModal();
     }
 });
 
