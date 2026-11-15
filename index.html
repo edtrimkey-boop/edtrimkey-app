@@ -17,6 +17,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/apple-ETK-icon.png">
 <link rel="apple-touch-icon" href="https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/apple-ETK-icon.png">
 <meta name="theme-color" content="#0B111E">
+<link rel="preconnect" href="https://flow.trimkey.in" crossorigin>
+<link rel="dns-prefetch" href="https://flow.trimkey.in">
 
 <style>
 /* =======================================================
@@ -5261,7 +5263,7 @@ function payNow(){
       if(res.success) {
          const paymentNumber = res.refId || res.payment_number || res.paymentNumber;
          const checkoutUrl = res.checkout_url || res.checkoutUrl || (`${TRIMKEY_FLOW_BASE_URL}/checkout/${paymentNumber}`);
-         openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount);
+         openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount, type, Number(document.getElementById('rechargeQuantity')?.value) || 1);
       } else { 
          showPopup("Payment Link Error: " + res.message, "error"); 
       }
@@ -8625,7 +8627,7 @@ function triggerInitialPayment(amount) {
         if(res.success) {
             const paymentNumber = res.refId || res.payment_number || res.paymentNumber;
             const checkoutUrl = res.checkout_url || res.checkoutUrl || (`${TRIMKEY_FLOW_BASE_URL}/checkout/${paymentNumber}`);
-            openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount);
+            openFlowCheckout(checkoutUrl, paymentNumber, res.amount || amount, 'Initial Registration Setup', 1);
         } else { 
             showPopup("Payment Link Error: " + res.message, "error"); 
         }
@@ -8866,11 +8868,13 @@ document.addEventListener("keydown", function(e) {
 const TRIMKEY_FLOW_BASE_URL = window.TRIMKEY_FLOW_URL || "https://flow.trimkey.in";
 let currentFlowPayment = null;
 
-function openFlowCheckout(url, refId, amount) {
+function openFlowCheckout(url, refId, amount, serviceType, quantity) {
     currentFlowPayment = {
         url: url,
         refId: refId,
-        amount: amount
+        amount: amount,
+        serviceType: serviceType || 'Report Card',
+        quantity: quantity || 1
     };
     const iframe = document.getElementById('flowCheckoutIframe');
     const loader = document.getElementById('flowIframeLoader');
@@ -8929,7 +8933,12 @@ function handleFlowPaymentSuccess(data) {
     if (paymentNumber && typeof serverCall === 'function') {
         serverCall('confirmFlowPayment', {
             paymentNumber: paymentNumber,
-            instCode: globalUser?.code
+            instCode: globalUser?.code,
+            serviceType: currentFlowPayment?.serviceType || 'Report Card',
+            amount: currentFlowPayment?.amount || data.amount,
+            quantity: currentFlowPayment?.quantity || 1
+        }).then(function(res) {
+            console.log('[Flow Reconciliation Success]:', res);
         }).catch(function(e) {
             console.log('[Flow Sync]: Asynchronous webhook delivery in progress', e);
         });
