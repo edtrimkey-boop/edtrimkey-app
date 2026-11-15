@@ -8936,7 +8936,9 @@ function handleFlowPaymentSuccess(data) {
             instCode: globalUser?.code,
             serviceType: currentFlowPayment?.serviceType || 'Report Card',
             amount: currentFlowPayment?.amount || data.amount,
-            quantity: currentFlowPayment?.quantity || 1
+            quantity: currentFlowPayment?.quantity || 1,
+            providerPaymentId: data.provider_payment_id || data.razorpay_payment_id,
+            providerOrderId: data.provider_order_id || data.razorpay_order_id
         }).then(function(res) {
             console.log('[Flow Reconciliation Success]:', res);
         }).catch(function(e) {
