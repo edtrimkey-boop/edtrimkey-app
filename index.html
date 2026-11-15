@@ -5243,13 +5243,17 @@ function payNow(){
   triggerBtnAnim(btn);
   
   openModal('syncLoader');
+  var userPhone = String(globalUser.phone || '').replace(/\D/g, '');
+  if (userPhone.length > 10 && userPhone.startsWith('91')) userPhone = userPhone.slice(-10);
+  var validPhone = /^[6-9]\d{9}$/.test(userPhone) ? userPhone : undefined;
+
   serverCall('createPaymentLink', { 
       instCode: globalUser.code, 
       type: type, 
       amount: amount, 
       email: globalUser.email,
       name: globalUser.name || 'Institute Admin',
-      phone: globalUser.phone || '',
+      phone: validPhone,
       quantity: Number(document.getElementById('rechargeQuantity')?.value) || 1
   })
     .then(res => {
@@ -8603,13 +8607,17 @@ function triggerInitialPayment(amount) {
     if (amount <= 0) return showPopup("No pending amount found.", "info");
 
     openModal('syncLoader');
+    var userPhone = String(globalUser.phone || '').replace(/\D/g, '');
+    if (userPhone.length > 10 && userPhone.startsWith('91')) userPhone = userPhone.slice(-10);
+    var validPhone = /^[6-9]\d{9}$/.test(userPhone) ? userPhone : undefined;
+
     serverCall('createPaymentLink', { 
         instCode: globalUser.code, 
         type: 'Initial Registration Setup', 
         amount: amount, 
         email: globalUser.email,
         name: globalUser.name || 'Institute Admin',
-        phone: globalUser.phone || '',
+        phone: validPhone,
         quantity: 1
     })
     .then(res => {
