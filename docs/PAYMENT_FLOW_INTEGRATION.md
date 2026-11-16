@@ -76,6 +76,13 @@ When `handleFlowPaymentSuccess()` executes:
    ```
 5. Reloads dashboard state with fresh quotas.
 
+### 2.5. Customer Details Auto-Forwarding (Name, Email & Mobile)
+During checkout initiation (`handleRecharge` and `triggerInitialPayment`):
+* **Name:** Auto-retrieved from `globalUser.name` or `globalUser.full_name`.
+* **Email:** Auto-retrieved from `globalUser.email`.
+* **Mobile Phone:** Retrieved from `globalUser.phone` or `globalUser.phone_number`, normalized to 10 digits (removing country prefix `+91` or `0`).
+* **Zero-friction UX:** Forwarded to backend and Trim Key Flow so that Razorpay and payment gateway forms are prefilled instantly, removing redundant manual typing for the customer.
+
 ---
 
 ## 3. Sara AI Chatbot Integration
@@ -84,4 +91,4 @@ Sara AI is embedded as a floating conversational widget:
 * **Floating Launcher:** `#sara-chat-btn` (bottom right corner with pulse dot).
 * **Modal Window:** `#sara-chat-modal` containing an iframe pointing to `https://sara.trimkey.in`.
 * **Controls:** High-contrast reload (`reloadSaraChat()`) and close (`toggleSaraChat(false)`) buttons.
-* **Logo & Visual Identity:** Configured in `#sara-chat-btn .sara-chat-icon` and `.sara-header-icon`.
+* **Logo & Visual Identity:** Animated SVG/GIF (`1115.gif`) dynamically scaled with `object-fit: cover` to fit 100% of the circular launcher button and modal header.

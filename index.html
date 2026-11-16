@@ -2601,7 +2601,7 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 <div class="sidebar" id="sidebar">
   <div class="brandRow" style="margin-bottom: 40px; padding: 0 25px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
     <div style="display: flex; align-items: center; gap: 10px;">
-      <img class="logo" style="width:35px; height:35px;" src="https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/new-ETK.png">
+      <img class="logo" style="width:35px; height:35px;" src="https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/EKT_GIF.gif">
       <div class="brand" style="font-size: 18px;">Ed-Trim Key</div>
     </div>
     <button class="mobile-close-btn liquid-glass glass-circle-btn" onclick="toggleSidebar()">
@@ -5271,16 +5271,19 @@ function payNow(){
   triggerBtnAnim(btn);
   
   openModal('syncLoader');
-  var userPhone = String(globalUser.phone || '').replace(/\D/g, '');
+  var userPhone = String(globalUser.phone || globalUser.phone_number || '').replace(/\D/g, '');
   if (userPhone.length > 10 && userPhone.startsWith('91')) userPhone = userPhone.slice(-10);
+  else if (userPhone.length > 10 && userPhone.startsWith('0')) userPhone = userPhone.slice(-10);
   var validPhone = /^[6-9]\d{9}$/.test(userPhone) ? userPhone : undefined;
+  var userName = globalUser.name || globalUser.full_name || 'Institute Admin';
+  var userEmail = globalUser.email || '';
 
   serverCall('createPaymentLink', { 
       instCode: globalUser.code, 
       type: type, 
       amount: amount, 
-      email: globalUser.email,
-      name: globalUser.name || 'Institute Admin',
+      email: userEmail,
+      name: userName,
       phone: validPhone,
       quantity: Number(document.getElementById('rechargeQuantity')?.value) || 1
   })
@@ -8635,16 +8638,19 @@ function triggerInitialPayment(amount) {
     if (amount <= 0) return showPopup("No pending amount found.", "info");
 
     openModal('syncLoader');
-    var userPhone = String(globalUser.phone || '').replace(/\D/g, '');
+    var userPhone = String(globalUser.phone || globalUser.phone_number || '').replace(/\D/g, '');
     if (userPhone.length > 10 && userPhone.startsWith('91')) userPhone = userPhone.slice(-10);
+    else if (userPhone.length > 10 && userPhone.startsWith('0')) userPhone = userPhone.slice(-10);
     var validPhone = /^[6-9]\d{9}$/.test(userPhone) ? userPhone : undefined;
+    var userName = globalUser.name || globalUser.full_name || 'Institute Admin';
+    var userEmail = globalUser.email || '';
 
     serverCall('createPaymentLink', { 
         instCode: globalUser.code, 
         type: 'Initial Registration Setup', 
         amount: amount, 
-        email: globalUser.email,
-        name: globalUser.name || 'Institute Admin',
+        email: userEmail,
+        name: userName,
         phone: validPhone,
         quantity: 1
     })
