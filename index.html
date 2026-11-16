@@ -9210,7 +9210,7 @@ function generateReceiptHtml(rec, isPrint = false) {
             </div>
             <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'};">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${isPrint ? '#0284c7' : '#26C3EA'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span><strong>Website:</strong> <a href="https://trimkey.in" target="_blank" style="color: ${isPrint ? '#0284c7' : '#26C3EA'}; text-decoration: none; font-weight: 700;">https://trimkey.in/ed</a> &bull; <a href="https://flow.trimkey.in" target="_blank" style="color: #00F5A0; text-decoration: none; font-weight: 700;">https://flow.trimkey.in</a></span>
+              <span><strong>Website:</strong> <a href="https://trimkey.in" target="_blank" style="color: ${isPrint ? '#0284c7' : '#26C3EA'}; text-decoration: none; font-weight: 700;">https://trimkey.in/ed</a> &bull; <a href="https://trimkey.in" target="_blank" style="color: #00F5A0; text-decoration: none; font-weight: 700;">https://trimkey.in</a></span>
             </div>
           </div>
         </div>
@@ -9390,9 +9390,9 @@ function generateReceiptDoc(rec) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(51, 65, 85);
-    doc.text("Address: Tech Innovation Hub, Bailey Road, Patna, Bihar - 800001, India", 52, 144);
-    doc.text("Contact: support@trimkey.in  |  Phone: +91 8294544727", 52, 157);
-    doc.text("Website: https://ed.trimkey.in  |  Payment Flow: https://flow.trimkey.in  |  GST: Registered Cloud Provider", 52, 170);
+    doc.text("Address: Lalpur, Ranchi, Jharkhand - 834001, India", 52, 144);
+    doc.text("Contact: support@ed.trimkey.in |  Phone: +91 8235400967", 52, 157);
+    doc.text("Website: https://trimkey.in/ed  |  Payment Flow: https://flow.trimkey.in  |  UDYAM/MSME: JH-21-0019073", 52, 170);
 
     // 3. Transaction Summary Box
     doc.setDrawColor(226, 232, 240);
@@ -9542,7 +9542,7 @@ function generateReceiptDoc(rec) {
     // Footer contact
     doc.setFontSize(7);
     doc.setTextColor(148, 163, 184);
-    doc.text("EdTrimKey Support: support@trimkey.in  |  Official Portal: https://ed.trimkey.in", 40, 585);
+    doc.text("EdTrimKey Support: support@ed.trimkey.in |  Official Portal: https://ed.trimkey.in", 40, 585);
     doc.text(`Receipt Reference: ${ledId}  |  Generated on ${new Date().toLocaleString('en-IN')}`, 40, 597);
 
     return doc;
