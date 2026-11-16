@@ -180,3 +180,24 @@ Before submitting any front-end change to Ed-Trim Key:
   - Customer contact details auto-queried from user profile (Name, Email, Phone).
   - Itemized quantity, unit pricing, total order value in INR (₹).
   - Print, Download, and View PDF actions.
+
+---
+
+## 9. Floating Liquid Glass Header & Universal SVG Standard
+
+### 9.1 Floating Liquid Glass Header Physics
+- **Detached Island Geometry:** Positioned with `position: sticky; top: 16px; margin: 16px 24px 0 24px;` so content area cards scroll smoothly underneath it.
+- **Capsule Pill Curvature:** `border-radius: var(--radius-pill); /* 9999px */` with height `64px` (`56px` on mobile).
+- **Surface Physics:** `backdrop-filter: blur(25px) saturate(190%); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.25);`
+- **Integrated Controls:**
+  1. **Hamburger Button:** 3-bar sidebar toggle with spring physics.
+  2. **Glass Title Pill:** Features dynamic tab SVG (`#headerTabIcon`), institute logo, separator, and active view name.
+  3. **Quick Database Sync Button (`#headerSyncBtn`):** 40px circular glass button with animated spinning refresh SVG.
+  4. **Quick Theme Toggle (`#headerThemeBtn`):** 40px circular glass button dynamically rendering Sun (in dark mode) or Moon (in light mode) SVGs.
+  5. **Notification Bell (`#bellWrapper`):** Glass orb with unread count badge and styled alerts dropdown.
+  6. **User Profile Capsule (`#userHeaderInfo`):** Avatar orb, user name, and chevron toggle.
+
+### 9.2 Universal SVG Standard (No Text Glyphs or Emojis)
+- **Zero Raw Characters:** Never use `✖`, `+`, `▼`, or Unicode emojis in buttons or interactive controls.
+- **Modal Close Controls (`.close-minimal`):** Strictly equipped with Apple Cupertino cross SVGs (`14px` by `14px`, `stroke-width="2.5"`).
+- **Action Buttons:** Every modal submit, register, save, cancel, acknowledge, and table row action button features an inline semantic SVG icon (`gap: 8px;`).
