@@ -192,9 +192,9 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
    4. TOP BAR, HEADER & NOTIFICATIONS
    ======================================================= */
 .main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0; overflow-x: hidden; overflow-y: auto; transition: all 0.3s ease; scroll-behavior: smooth; position: relative; }
-.header-scrim { position: fixed; top: 0; left: 0; width: 100%; height: 75px; background: rgba(11, 17, 30, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); pointer-events: none; z-index: 90; }
+.header-scrim { display: none !important; }
 
-.top-bar { height: 75px; flex-shrink: 0; background: transparent; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; position: sticky; top: 0; z-index: 100;}
+.top-bar { height: 75px; flex-shrink: 0; background: rgba(11, 17, 30, 0.85); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; position: sticky; top: 0; z-index: 100; }
 
 /* 🔥 FIX 3: Perfectly Spaced Header Icons */
 .brandRow { display: flex; align-items: center; gap: 20px !important; }
@@ -303,7 +303,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; filter:
    5. MAIN LAYOUT & PANELS
    ======================================================= */
 .content-area { flex: 1 0 auto; padding: 30px; width: 100%; }
-.panel { background: var(--card); transition: 0.3s ease; max-width: 100%;}
+.panel { background: var(--card); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 30px; box-shadow: var(--premium-shadow); border: 1px solid var(--border); transition: 0.3s ease; max-width: 100%; }
 .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
 .panel-header h3 { font-size: 16px; text-transform: uppercase; color: var(--brand); letter-spacing: 1.5px; margin:0; font-weight: 800;}
 
@@ -342,8 +342,7 @@ input[readonly], input:disabled { background: var(--card); color: var(--text-mut
    ======================================================= */
 
 /* 1. UNIVERSAL BUTTON SHAPE & OPTICAL GLASS PHYSICS */
-button:not(.close-minimal):not(.chat-send-btn):not(.glass-circle-btn):not(.sara-action-btn),
-.liquid-glass,
+.liquid-glass, .btn,
 input[type="button"],
 input[type="submit"],
 .btn-primary,
@@ -411,16 +410,14 @@ button.btn-xs,
    ======================================================== */
 
 /* Blue Filled Primary Glass Button (Submit Buttons & Dashboard Submit Paper) */
-.btn-primary,
-button:not([class*="btn-"]):not(.liquid-glass):not(.close-minimal):not(.chat-send-btn):not(.glass-circle-btn):not(.sara-action-btn) {
+.btn-primary {
     background: #26C3EA !important;
     color: #061320 !important;
     font-weight: 800 !important;
     border: 1px solid rgba(255, 255, 255, 0.45) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.55) !important;
 }
-.btn-primary:hover:not(:disabled),
-button:not([class*="btn-"]):not(.liquid-glass):not(.close-minimal):not(.chat-send-btn):not(.glass-circle-btn):not(.sara-action-btn):hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) {
     background: #1cb5dc !important;
     color: #061320 !important;
     border-color: rgba(255, 255, 255, 0.75) !important;
@@ -684,7 +681,7 @@ td { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; ve
 .cropper-container { width: 100%; max-height: 400px; background: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
 .cropper-container img { max-width: 100%; display: block; }
 .loading-bar-container { width: 100%; max-width: 250px; height: 6px; background: rgba(255,255,255,0.05); border-radius: var(--radius-pill); overflow: hidden; margin: 25px auto 0; position: relative;}
-.loading-bar { height: 100%; width: 40%; background: var(--brand); border-radius: var(--radius-pill); position: absolute; animation: slideBar 1.2s infinite ease-in-out; } position: absolute; animation: slideBar 1.2s infinite ease-in-out; }
+.loading-bar { height: 100%; width: 40%; background: var(--brand); border-radius: var(--radius-pill); position: absolute; animation: slideBar 1.2s infinite ease-in-out; }
 @keyframes slideBar { 0% { left: -50%; } 100% { left: 100%; } }
 .spinner-sm { width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -1365,26 +1362,26 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
   /* Floating Trigger Button: Brand Cyan Circle with Liquid Glass & Floating Animation */
   #sara-chat-btn {
     position: relative;
-    width: 60px;
-    height: 60px;
-    min-width: 60px;
-    min-height: 60px;
-    border-radius: 50%;
-    background: var(--brand);
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    border-radius: 50% !important;
+    background: var(--brand) !important;
     backdrop-filter: blur(25px) saturate(200%);
     -webkit-backdrop-filter: blur(25px) saturate(200%);
     color: #ffffff;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.5);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
     transition: transform 0.35s var(--ios-spring, cubic-bezier(0.32, 0.72, 0, 1)), opacity 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     animation: saraFloat 3.2s ease-in-out infinite;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    padding: 0;
+    padding: 0 !important;
     outline: none;
   }
 
@@ -3832,6 +3829,20 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 
 <script>
 // =========================================================================================
+// 🔥 GLOBAL ESSENTIAL UTILITIES (Guaranteed defined before any role or sync code runs)
+// =========================================================================================
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+window.escapeHtml = escapeHtml;
+
+// =========================================================================================
 // 🔥 NEW DIRECT VERCEL BACKEND ENGINE
 // =========================================================================================
 const VERCEL_API_URL = "https://backend-ed.trimkey.in/api/gateway";
@@ -5097,9 +5108,9 @@ function applyRoleUI(p) {
 
   // Teacher / Admin Apps Check
   if(userRole === "teacher" || userRole === "admin" || userRole === "all") {
-    let b1 = document.getElementById('btn-submit-paper'); if (b1) b1.style.display = 'flex';
-    let b2 = document.getElementById('btn-request-doc'); if (b2) b2.style.display = 'flex';
-    let b3 = document.getElementById('btn-generated'); if (b3) b3.style.display = 'flex';
+    let b1 = document.getElementById('btn-submit-paper'); if (b1) b1.style.display = 'inline-flex';
+    let b2 = document.getElementById('btn-request-doc'); if (b2) b2.style.display = 'inline-flex';
+    let b3 = document.getElementById('btn-generated'); if (b3) b3.style.display = 'inline-flex';
     
     let dynContainer = document.getElementById('dynamic-apps-container');
     let sideDynContainer = document.getElementById('sidebar-dynamic-apps');
@@ -5226,7 +5237,7 @@ function applyRoleUI(p) {
   let settingsHtml = `
     <h4 style="color:var(--brand); margin-bottom:12px; font-weight:800;">Global Notification Preferences</h4>
     <p style="font-size:11px; color:var(--text-muted); margin-bottom:20px; font-weight:600;">Manage how you receive alerts across the system. Applies to all your devices.</p>
- <button onclick="requestNotificationPermission()" style="margin-bottom:20px;"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="m15 8 2 2 4-4"/><path d="M16.8607 4.4824A6 6 0 0 0 6 8C6 12.499 4.589 13.956 3.262 15.326"/><path d="M3.262 15.326A1 1 0 0 0 4 17H20A1 1 0 0 0 20.74 15.327C20.209 14.779 19.665 14.218 19.203 13.454"/></svg> Enable Alerts</button>
+ <button class="liquid-glass btn-primary" onclick="requestNotificationPermission()" style="margin-bottom:20px;"> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom; margin-right:4px;"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="m15 8 2 2 4-4"/><path d="M16.8607 4.4824A6 6 0 0 0 6 8C6 12.499 4.589 13.956 3.262 15.326"/><path d="M3.262 15.326A1 1 0 0 0 4 17H20A1 1 0 0 0 20.74 15.327C20.209 14.779 19.665 14.218 19.203 13.454"/></svg> Enable Alerts</button>
     <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:30px;">
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; border:1px solid var(--border);">
             <div>

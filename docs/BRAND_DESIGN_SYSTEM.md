@@ -157,3 +157,26 @@ Before submitting any front-end change to Ed-Trim Key:
 - [ ] Do all dynamic app buttons in the dashboard have their corresponding SVG icon?
 - [ ] Is the sidebar close button completely hidden on desktop?
 - [ ] Does the page compile with 0 syntax errors (`new Function(...)` check passes)?
+
+---
+
+## 8. SARA AI Floating Widget & Billing Ledger System
+
+### 8.1 SARA AI Floating Trigger Widget
+- **Geometry:** Exact 60px × 60px circle (`border-radius: 50% !important;`).
+- **Logo Graphic:** Animated GIF (`https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/1115.gif`) fitted cleanly to 100% of button area (`object-fit: cover`).
+- **Aesthetic:** Solid brand cyan with Apple liquid glass refraction (`backdrop-filter: blur(25px) saturate(200%)`), zero glowing aura.
+- **Micro-interactions:** Natural floating kinetic animation (`saraFloat 3.2s ease-in-out infinite`), active press scale `0.92`, hides smoothly when the chat window opens.
+
+### 8.2 Institute Billing Transaction Ledger & PDF Receipt
+- **Table Columns:** `LED ID | Date with time | Type | Service | Amount | Qty | Status`.
+- **Date & Time Layout:** Stacked on two distinct lines for rapid optical scanning:
+  - Line 1: `16 Nov 2026` (Weight 700, White)
+  - Line 2: `03:31 am` (Weight 600, Muted Text)
+- **Clickable LED ID:** Opens the official Tax Invoice & Payment Receipt modal and offers direct PDF download via jsPDF.
+- **Official PDF Receipt Specs:**
+  - Official Brand Logo header.
+  - Issuer & Business Information with SVGs (Address: Lalpur, Ranchi, Jharkhand - 834001; Phone: +91 8235400967; Email: trimkeyai@gmail.com; Website: https://trimkey.in/ed).
+  - Customer contact details auto-queried from user profile (Name, Email, Phone).
+  - Itemized quantity, unit pricing, total order value in INR (₹).
+  - Print, Download, and View PDF actions.
