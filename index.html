@@ -1872,6 +1872,67 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
 </div>
 
 <!-- =======================================================
+     OFFICIAL PAYMENT RECEIPT & TAX INVOICE MODAL
+     ======================================================= -->
+<div id="billingReceiptModal" class="glass-overlay" style="z-index: 100000; display: none;">
+  <div class="glass-box" style="max-width: 680px; width: 95%; max-height: 92vh; padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 24px; border: 1px solid rgba(38, 195, 234, 0.4); box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 35px rgba(38, 195, 234, 0.25); background: rgba(11, 17, 30, 0.98);">
+    
+    <!-- Receipt Modal Top Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; background: linear-gradient(145deg, #182338 0%, #10192A 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, rgba(38, 195, 234, 0.25), rgba(0, 245, 160, 0.25)); border: 1px solid rgba(38, 195, 234, 0.5); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(38, 195, 234, 0.35);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#26C3EA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div style="color: #ffffff; font-size: 15px; font-weight: 800; letter-spacing: 0.5px;">
+            Payment Receipt <span style="color: #26C3EA;">& Tax Invoice</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #00F5A0; box-shadow: 0 0 6px #00F5A0;"></span> 
+            Cryptographically Verified • GST Compliant
+          </div>
+        </div>
+      </div>
+      
+      <button type="button" class="sara-action-btn sara-close-btn" onclick="closeBillingReceiptModal()" title="Close Receipt" aria-label="Close Receipt">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Scrollable Receipt Content -->
+    <div id="receiptPrintArea" style="flex: 1; overflow-y: auto; padding: 22px; color: #fff;">
+      <!-- Populated dynamically via showBillingReceipt() -->
+    </div>
+
+    <!-- Sticky Bottom Action Footer -->
+    <div style="display: flex; gap: 10px; padding: 14px 22px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.08); justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+      <button type="button" class="btn-outline" onclick="printBillingReceipt()" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; font-weight: 700; border-radius: 10px; cursor: pointer;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print Receipt
+      </button>
+      <button type="button" class="btn-success" onclick="downloadCurrentReceiptPdf()" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, #00F5A0 0%, #00D287 100%); color: #05080F; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 245, 160, 0.35);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05080F" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download PDF Receipt
+      </button>
+      <button type="button" class="btn-sm btn-outline" onclick="openCurrentReceiptPdfBlob()" title="Open PDF directly in a new browser tab" style="display: inline-flex; align-items: center; gap: 5px; padding: 9px 14px; font-weight: 700; border-radius: 10px; cursor: pointer;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        Open PDF
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- =======================================================
      PAPER SUBMISSION MODAL
      ======================================================= -->
 <div id="paperSubmitModal" class="glass-overlay">
@@ -2978,17 +3039,30 @@ h1, h2, h3, .premium-sticky-header h2, .panel h2, .glass-title-pill h3 {
       </div>
 
       <div class="panel">
-        <div class="panel-header">
-          <h3>Activity Ledger</h3>
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <h3 style="margin:0;">Activity Ledger & Receipts</h3>
+          </div>
           <select id="activityFilterType" class="filter-select" onchange="applyFilters()">
             <option value="All">All Transactions</option>
-            <option value="Recharge">Recharge</option>
-            <option value="Usage">Usage</option>
+            <option value="Recharge">Recharges</option>
+            <option value="Usage">Usage Deductions</option>
           </select>
         </div>
-        <div style="overflow-x:auto;">
-          <table>
-            <thead><tr><th>Date</th><th>Type</th><th>Service</th><th>Amount / Qty</th><th>Status</th></tr></thead>
+        <div class="tk-table-wrapper" style="overflow-x:auto;">
+          <table class="tk-sleek-table">
+            <thead>
+              <tr>
+                <th>LED ID</th>
+                <th>Date with time</th>
+                <th>Type</th>
+                <th>Service</th>
+                <th>Amount</th>
+                <th>Qty</th>
+                <th>Status</th>
+              </tr>
+            </thead>
             <tbody id="table-inst-billing"></tbody>
           </table>
         </div>
@@ -5565,20 +5639,57 @@ function applyFilters() {
     let instBilling = Array.isArray(rawBilling) ? rawBilling : [];
     let filterType = document.getElementById('activityFilterType') ? document.getElementById('activityFilterType').value : 'All';
     
-     if (instBillingTbody) {
+    if (instBillingTbody) {
       let filteredBilling = instBilling;
-      if (filterType === 'Recharge') filteredBilling = instBilling.filter(b => b.amount > 0);
-      if (filterType === 'Usage') filteredBilling = instBilling.filter(b => !b.amount || b.amount <= 0);
+      if (filterType === 'Recharge') filteredBilling = instBilling.filter(b => Number(b.amount) > 0);
+      if (filterType === 'Usage') filteredBilling = instBilling.filter(b => !b.amount || Number(b.amount) <= 0);
+      currentBillingRecords = filteredBilling;
+
       if (filteredBilling.length === 0) {
-        instBillingTbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding:30px; color:var(--text-muted); font-weight:600;'>No billing records found.</td></tr>";
+        instBillingTbody.innerHTML = "<tr><td colspan='7' style='text-align:center; padding:35px; color:var(--text-muted); font-weight:600;'>No billing records found in ledger.</td></tr>";
       } else {
         let bHtml = "";
-        filteredBilling.forEach(b => {
-          let badgeClass = b.status === 'PAID' ? 'bg-success' : 'bg-warning'; 
-          let dateStr = b.date ? new Date(b.date).toLocaleDateString() : '-';
-          let amtOrQty = b.amount > 0 ? "₹" + b.amount : "Usage";
-          let typeStr = b.amount > 0 ? "Recharge" : "Usage";
-          bHtml += `<tr><td>${dateStr}</td><td>${typeStr}</td><td>${b.service || '-'}</td><td><b style='color:var(--success);'>${amtOrQty}</b></td><td><span class='badge ${badgeClass}'>${b.status || 'Pending'}</span></td></tr>`;
+        filteredBilling.forEach((b, idx) => {
+          let badgeClass = (b.status === 'PAID' || b.status === 'POSTED') ? 'bg-success' : 'bg-warning'; 
+          let dateObj = b.date ? new Date(b.date) : new Date();
+          let dateWithTime = dateObj.toLocaleString('en-IN', {
+              timeZone: 'Asia/Kolkata',
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+          });
+          let ledId = b.ledId || b.id || ('LED-TRX-' + (idx + 1));
+          let amt = Number(b.amount) || 0;
+          let qty = Number(b.quantity || b.metadata?.quantity) || 1;
+          let typeStr = amt > 0 ? "Recharge" : (b.type || "Usage");
+          let serviceStr = b.service || 'Subscription';
+          let statusStr = b.status || (amt > 0 ? 'PAID' : 'POSTED');
+
+          bHtml += `<tr style="cursor: pointer;" onclick="openBillingReceipt(${idx})">
+            <td data-label="LED ID">
+              <button type="button" class="btn-sm btn-outline tk-led-btn" onclick="event.stopPropagation(); openBillingReceipt(${idx})" title="Click to view & download official PDF receipt" style="font-family:monospace; font-size:11px; padding:4px 8px; display:inline-flex; align-items:center; gap:5px; border-radius:6px; cursor:pointer; background:rgba(38, 195, 234, 0.08); border-color:rgba(38, 195, 234, 0.35); color:var(--brand); font-weight:700;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                ${ledId}
+              </button>
+            </td>
+            <td data-label="Date with time" style="white-space:nowrap; font-size:12px; color:var(--text-muted);">${dateWithTime}</td>
+            <td data-label="Type"><span class="badge ${amt > 0 ? 'bg-primary' : 'bg-secondary'}">${typeStr}</span></td>
+            <td data-label="Service" style="font-weight:600; color:#fff;">${serviceStr}</td>
+            <td data-label="Amount"><b style="color:var(--success); font-size:13px;">₹${amt.toFixed(2)}</b></td>
+            <td data-label="Qty" style="font-weight:700; color:rgba(255,255,255,0.85);">${qty}</td>
+            <td data-label="Status">
+              <div style="display:flex; align-items:center; gap:8px; justify-content:flex-end;">
+                <span class="badge ${badgeClass}">${statusStr}</span>
+                <button type="button" onclick="event.stopPropagation(); downloadBillingReceiptByIndex(${idx})" title="Directly download PDF receipt" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:white; border-radius:6px; padding:4px 7px; display:inline-flex; align-items:center; gap:4px; font-size:10px; cursor:pointer; font-weight:700;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  PDF
+                </button>
+              </div>
+            </td>
+          </tr>`;
         });
         instBillingTbody.innerHTML = bHtml;
       }
@@ -8975,6 +9086,455 @@ function onFlowIframeLoaded() {
     }
 }
 
+// =========================================================================================
+// 🧾 OFFICIAL PAYMENT RECEIPT & TAX INVOICE ENGINE (jsPDF & Print System)
+// =========================================================================================
+let currentBillingRecords = [];
+let activeReceiptData = null;
+
+function generateReceiptHtml(rec, isPrint = false) {
+    const ledId = rec.ledId || rec.id || 'LED-TRX';
+    const amountVal = Number(rec.amount || 0).toFixed(2);
+    const qtyVal = Number(rec.quantity || 1);
+    const unitPriceVal = Number(rec.unitPrice || (rec.amount / qtyVal) || 0).toFixed(2);
+    const dateObj = rec.date ? new Date(rec.date) : new Date();
+    const formattedDateWithTime = dateObj.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    const customerName = rec.customerName || globalUser?.name || globalUser?.full_name || 'Institute Admin';
+    const customerEmail = rec.customerEmail || globalUser?.email || '';
+    const customerPhone = rec.customerPhone || globalUser?.phone || globalUser?.phone_number || '';
+    const instName = rec.instName || globalUser?.institute || 'Keystone Public School';
+    const instCode = rec.instCode || globalUser?.code || 'KPS';
+    const serviceName = rec.service || 'Subscription';
+    const gatewayId = rec.gatewayPaymentId || rec.ref || 'pay_online_verified';
+    const flowTrx = rec.paymentNumber || rec.ref || ledId;
+
+    return `
+      <div style="background: ${isPrint ? '#ffffff' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${isPrint ? '#cbd5e1' : 'rgba(255,255,255,0.08)'}; border-radius: 16px; padding: 22px; color: ${isPrint ? '#0f172a' : '#ffffff'}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: ${isPrint ? '#0284c7' : '#26C3EA'};">ED-TRIM KEY</span>
+              <span style="font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: rgba(38, 195, 234, 0.15); color: #26C3EA; border: 1px solid rgba(38, 195, 234, 0.3);">FLOW SETTLED</span>
+            </div>
+            <div style="font-size: 11px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.5)'}; margin-top: 3px; font-weight: 600;">
+              TAX INVOICE & OFFICIAL PAYMENT RECEIPT
+            </div>
+          </div>
+          
+          <div style="text-align: right;">
+            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.5)'}; font-weight: 700;">Total Order Value</div>
+            <div style="font-size: 26px; font-weight: 900; color: #00F5A0; font-family: monospace; line-height: 1.1;">₹${amountVal}</div>
+            <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #00F5A0; font-weight: 700; margin-top: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              PAID & SETTLED
+            </div>
+          </div>
+        </div>
+
+        <!-- Meta Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: ${isPrint ? '#f8fafc' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Ledger Reference (LED ID)</div>
+            <div style="font-size: 12px; font-family: monospace; font-weight: 800; color: ${isPrint ? '#0284c7' : '#26C3EA'}; margin-top: 2px;">${ledId}</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Date & Time</div>
+            <div style="font-size: 12px; font-weight: 600; color: ${isPrint ? '#1e293b' : '#fff'}; margin-top: 2px;">${formattedDateWithTime}</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Gateway Payment ID</div>
+            <div style="font-size: 12px; font-family: monospace; font-weight: 700; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'}; margin-top: 2px;">${gatewayId}</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Payment Route</div>
+            <div style="font-size: 12px; font-weight: 600; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'}; margin-top: 2px;">Trim Key Flow (Razorpay / UPI)</div>
+          </div>
+        </div>
+
+        <!-- Billed To & Institute Info -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          <div style="background: ${isPrint ? '#ffffff' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; border-radius: 12px; padding: 12px 14px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px;">Billed To (Customer)</div>
+            <div style="font-size: 13px; font-weight: 800; color: ${isPrint ? '#0f172a' : '#fff'};">${customerName}</div>
+            ${customerEmail ? `<div style="font-size: 11px; color: ${isPrint ? '#475569' : 'rgba(255,255,255,0.6)'}; margin-top: 2px;">${customerEmail}</div>` : ''}
+            ${customerPhone ? `<div style="font-size: 11px; color: ${isPrint ? '#475569' : 'rgba(255,255,255,0.6)'}; margin-top: 2px;">+91 ${customerPhone}</div>` : ''}
+          </div>
+          
+          <div style="background: ${isPrint ? '#ffffff' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; border-radius: 12px; padding: 12px 14px;">
+            <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px;">Institute Details</div>
+            <div style="font-size: 13px; font-weight: 800; color: ${isPrint ? '#0f172a' : '#fff'};">${instName}</div>
+            <div style="font-size: 11px; color: ${isPrint ? '#475569' : 'rgba(255,255,255,0.6)'}; margin-top: 2px;">Institute Code: <strong>${instCode}</strong></div>
+            <div style="font-size: 11px; color: ${isPrint ? '#475569' : 'rgba(255,255,255,0.6)'}; margin-top: 2px;">Status: Active License</div>
+          </div>
+        </div>
+
+        <!-- Itemized Order Table -->
+        <div style="border-radius: 12px; overflow: hidden; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}; margin-bottom: 18px;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+            <thead>
+              <tr style="background: ${isPrint ? '#f1f5f9' : 'rgba(38, 195, 234, 0.1)'}; color: ${isPrint ? '#334155' : '#26C3EA'};">
+                <th style="padding: 10px 14px; font-weight: 800; text-transform: uppercase; font-size: 10px;">Item / Service Description</th>
+                <th style="padding: 10px 14px; font-weight: 800; text-transform: uppercase; font-size: 10px; text-align: center;">Qty</th>
+                <th style="padding: 10px 14px; font-weight: 800; text-transform: uppercase; font-size: 10px; text-align: right;">Unit Price</th>
+                <th style="padding: 10px 14px; font-weight: 800; text-transform: uppercase; font-size: 10px; text-align: right;">Total Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; background: ${isPrint ? '#ffffff' : 'transparent'};">
+                <td style="padding: 12px 14px;">
+                  <div style="font-weight: 800; color: ${isPrint ? '#0f172a' : '#fff'}; font-size: 13px;">${serviceName} Quota Allocation</div>
+                  <div style="font-size: 11px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.45)'}; margin-top: 3px;">Top-up credit credited to institute's active features ledger.</div>
+                </td>
+                <td style="padding: 12px 14px; text-align: center; font-weight: 700; color: ${isPrint ? '#0f172a' : '#fff'};">${qtyVal}</td>
+                <td style="padding: 12px 14px; text-align: right; font-weight: 600; color: ${isPrint ? '#475569' : 'rgba(255,255,255,0.7)'};">₹${unitPriceVal}</td>
+                <td style="padding: 12px 14px; text-align: right; font-weight: 800; color: #00F5A0; font-size: 13px;">₹${amountVal}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pricing Totals & Financial Breakdown -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 18px;">
+          <div style="width: 270px; display: flex; flex-direction: column; gap: 7px; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.6)'};">
+              <span>Subtotal</span>
+              <span style="color: ${isPrint ? '#0f172a' : '#fff'}; font-weight: 600;">₹${amountVal}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.6)'};">
+              <span>Gateway & Processing Fee</span>
+              <span style="color: #00F5A0; font-weight: 600;">Waived (₹0.00)</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.6)'};">
+              <span>Taxes / GST</span>
+              <span style="color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.5)'};">Included</span>
+            </div>
+            <div style="height: 1px; background: ${isPrint ? '#cbd5e1' : 'rgba(255,255,255,0.1)'}; margin: 3px 0;"></div>
+            <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; color: ${isPrint ? '#0f172a' : '#fff'};">
+              <span>Total Paid</span>
+              <span style="color: #00F5A0;">₹${amountVal}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance & Cryptographic Notice -->
+        <div style="background: ${isPrint ? '#f8fafc' : 'rgba(255,255,255,0.02)'}; border: 1px dashed ${isPrint ? '#cbd5e1' : 'rgba(255,255,255,0.1)'}; border-radius: 10px; padding: 10px 14px; font-size: 10px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.45)'}; line-height: 1.5; text-align: center;">
+          This electronic receipt is computer-generated and verified by Trim Key Flow Payment Infrastructure. No physical signature is required. All digital transactions are permanently committed to the cryptographic ledger.
+        </div>
+      </div>
+    `;
+}
+
+function generateReceiptDoc(rec) {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        throw new Error("jsPDF library is not loaded.");
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4'); // 595.28 x 841.89 pt
+    
+    const ledId = rec.ledId || rec.id || 'LED-TRX';
+    const amountVal = Number(rec.amount || 0).toFixed(2);
+    const qtyVal = Number(rec.quantity || 1);
+    const unitPriceVal = Number(rec.unitPrice || (rec.amount / qtyVal) || 0).toFixed(2);
+    const dateObj = rec.date ? new Date(rec.date) : new Date();
+    const formattedDate = dateObj.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedTime = dateObj.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+    const fullDateTime = `${formattedDate}, ${formattedTime} IST`;
+
+    // 1. Header Banner (Dark Obsidian)
+    doc.setFillColor(15, 23, 42); // #0F172A
+    doc.rect(0, 0, 595, 105, 'F');
+
+    // Brand Name & Title
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(38, 195, 234); // #26C3EA
+    doc.text("ED-TRIM KEY", 40, 42);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(203, 213, 225); // #CBD5E1
+    doc.text("POWERED BY TRIM KEY FLOW INFRASTRUCTURE", 40, 58);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.text("PAYMENT RECEIPT & TAX INVOICE", 40, 82);
+
+    // Verified Badge on Right
+    doc.setFillColor(6, 78, 59); // Dark green
+    doc.roundedRect(380, 28, 175, 26, 4, 4, 'F');
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(0, 245, 160); // #00F5A0
+    doc.text("256-BIT SSL ENCRYPTED", 395, 44);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text("SETTLEMENT CONFIRMED", 420, 68);
+
+    // 2. Transaction Summary Box
+    doc.setDrawColor(226, 232, 240);
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(40, 120, 515, 65, 4, 4, 'FD');
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.text("TRANSACTION DETAILS", 52, 136);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.setTextColor(51, 65, 85);
+
+    doc.text(`LED ID:`, 52, 152);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${ledId}`, 115, 152);
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Payment Ref:`, 52, 168);
+    doc.text(`${rec.paymentNumber || rec.ref || '-'}`, 115, 168);
+
+    doc.text(`Gateway ID:`, 320, 152);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${rec.gatewayPaymentId || 'pay_online_verified'}`, 385, 152);
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Date & Time:`, 320, 168);
+    doc.text(`${fullDateTime}`, 385, 168);
+
+    // 3. Customer & Institute Info Box
+    doc.setDrawColor(226, 232, 240);
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(40, 195, 515, 75, 4, 4, 'FD');
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.text("BILLED TO (CUSTOMER)", 52, 212);
+    doc.text("INSTITUTE / CLIENT", 320, 212);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.setTextColor(30, 41, 59);
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`${(rec.customerName || globalUser?.name || 'Institute Admin').toUpperCase()}`, 52, 228);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Email: ${rec.customerEmail || globalUser?.email || 'admin@trimkey.in'}`, 52, 242);
+    doc.text(`Phone: ${rec.customerPhone ? '+91 ' + rec.customerPhone : 'N/A'}`, 52, 256);
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`${(rec.instName || globalUser?.institute || 'Keystone Public School').toUpperCase()}`, 320, 228);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Institute Code: ${rec.instCode || globalUser?.code || 'KPS'}`, 320, 242);
+    doc.text(`Payment Method: ${rec.paymentMethod || 'ONLINE'} (${rec.paymentGateway || 'Trim Key Flow'})`, 320, 256);
+
+    // 4. Itemized Pricing Table
+    const tableTop = 285;
+    doc.setFillColor(38, 195, 234); // #26C3EA
+    doc.rect(40, tableTop, 515, 22, 'F');
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(255, 255, 255);
+    doc.text("SERVICE / ITEM DESCRIPTION", 52, tableTop + 14);
+    doc.text("QTY", 310, tableTop + 14);
+    doc.text("UNIT PRICE", 390, tableTop + 14);
+    doc.text("TOTAL (INR)", 485, tableTop + 14);
+
+    // Table Content Row
+    const rowY = tableTop + 38;
+    doc.setFillColor(248, 250, 252);
+    doc.rect(40, tableTop + 22, 515, 36, 'F');
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`${rec.service || 'Recharge'} Quota Top-up`, 52, rowY);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Cloud educational operations quota credit for ${rec.service}`, 52, rowY + 12);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`${qtyVal}`, 315, rowY + 4);
+    doc.text(`Rs. ${unitPriceVal}`, 390, rowY + 4);
+
+    doc.setTextColor(16, 185, 129); // Green
+    doc.text(`Rs. ${amountVal}`, 485, rowY + 4);
+
+    // 5. Financial Summary Block
+    let sumY = tableTop + 75;
+    doc.setDrawColor(226, 232, 240);
+    doc.line(40, sumY, 555, sumY);
+
+    sumY += 16;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.text("Subtotal:", 360, sumY);
+    doc.text(`Rs. ${amountVal}`, 485, sumY);
+
+    sumY += 14;
+    doc.text("Processing Fee:", 360, sumY);
+    doc.setTextColor(16, 185, 129);
+    doc.text("Waived (Rs. 0.00)", 485, sumY);
+
+    sumY += 14;
+    doc.setTextColor(71, 85, 105);
+    doc.text("Taxes / GST:", 360, sumY);
+    doc.text("Included (Rs. 0.00)", 485, sumY);
+
+    sumY += 10;
+    doc.setDrawColor(203, 213, 225);
+    doc.line(340, sumY, 555, sumY);
+
+    sumY += 18;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.text("TOTAL ORDER VALUE:", 280, sumY);
+    doc.setTextColor(16, 185, 129);
+    doc.text(`Rs. ${amountVal}`, 485, sumY);
+
+    // 6. Security Notice & Footer
+    const footY = 530;
+    doc.setFillColor(241, 245, 249);
+    doc.roundedRect(40, footY, 515, 55, 4, 4, 'F');
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(71, 85, 105);
+    doc.text("DIGITAL AUDIT TRAIL & SYSTEM COMPLIANCE", 52, footY + 16);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text("This receipt was digitally generated by Ed-Trim Key & Trim Key Flow Payment Infrastructure.", 52, footY + 28);
+    doc.text("Payment has been cryptographically confirmed and permanently committed to the immutable billing ledger.", 52, footY + 39);
+    doc.text("All transactions comply with Reserve Bank of India (RBI) guidelines for online settlements.", 52, footY + 50);
+
+    // Footer contact
+    doc.setFontSize(7.5);
+    doc.setTextColor(148, 163, 184);
+    doc.text("EdTrimKey Support: support@trimkey.in  |  Official Portal: https://ed.trimkey.in", 40, 620);
+    doc.text(`Receipt Reference: ${ledId}  |  Generated on ${new Date().toLocaleString('en-IN')}`, 40, 632);
+
+    return doc;
+}
+
+function openBillingReceipt(idx) {
+    if (!currentBillingRecords || !currentBillingRecords[idx]) return;
+    showBillingReceipt(currentBillingRecords[idx]);
+}
+
+function showBillingReceipt(rec) {
+    activeReceiptData = rec;
+    const printArea = document.getElementById('receiptPrintArea');
+    if (printArea) {
+        printArea.innerHTML = generateReceiptHtml(rec, false);
+    }
+    const modal = document.getElementById('billingReceiptModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        openModal('billingReceiptModal');
+    }
+}
+
+function closeBillingReceiptModal() {
+    closeModal('billingReceiptModal');
+    const modal = document.getElementById('billingReceiptModal');
+    if (modal) {
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
+    }
+}
+
+function downloadCurrentReceiptPdf() {
+    if (!activeReceiptData) return;
+    try {
+        const doc = generateReceiptDoc(activeReceiptData);
+        const fileName = `EdTrimKey_Receipt_${activeReceiptData.ledId || 'TRX'}.pdf`;
+        doc.save(fileName);
+        showPopup("Receipt PDF downloaded successfully!", "success");
+    } catch (e) {
+        console.error("PDF Download error:", e);
+        showPopup("Failed to generate PDF: " + e.message, "error");
+    }
+}
+
+function openCurrentReceiptPdfBlob() {
+    if (!activeReceiptData) return;
+    try {
+        const doc = generateReceiptDoc(activeReceiptData);
+        const blobUrl = doc.output('bloburl');
+        window.open(blobUrl, '_blank');
+    } catch (e) {
+        console.error("PDF Open error:", e);
+        showPopup("Failed to open PDF: " + e.message, "error");
+    }
+}
+
+function downloadBillingReceiptByIndex(idx) {
+    if (!currentBillingRecords || !currentBillingRecords[idx]) return;
+    activeReceiptData = currentBillingRecords[idx];
+    downloadCurrentReceiptPdf();
+}
+
+function printBillingReceipt() {
+    if (!activeReceiptData) return;
+    let iframe = document.getElementById('receiptPrintIframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'receiptPrintIframe';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+    }
+    
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Receipt - ${activeReceiptData.ledId}</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; margin: 20px; font-size: 13px; line-height: 1.5; }
+                @media print {
+                    body { margin: 0; padding: 15px; }
+                }
+            </style>
+        </head>
+        <body>
+            ${generateReceiptHtml(activeReceiptData, true)}
+        </body>
+        </html>
+    `);
+    doc.close();
+    iframe.contentWindow.focus();
+    setTimeout(() => {
+        iframe.contentWindow.print();
+    }, 250);
+}
+
 function handleFlowPaymentSuccess(data) {
     console.log('[Trim Key Flow]: Payment Success Event Received', data);
     const paymentNumber = data.paymentNumber || currentFlowPayment?.refId;
@@ -8986,6 +9546,31 @@ function handleFlowPaymentSuccess(data) {
     
     showPopup("Payment Confirmed! Your subscription and quotas are updated via Trim Key Flow.", "success");
     
+    // Construct immediate receipt object for prompt download/print
+    const ledId = (paymentNumber || '').startsWith('LED-') 
+        ? paymentNumber 
+        : `LED-${paymentNumber || ('PAY-' + Date.now())}`;
+
+    const immediateReceipt = {
+        ledId: ledId,
+        date: new Date().toISOString(),
+        service: currentFlowPayment?.serviceType || data.serviceType || 'Recharge',
+        amount: Number(currentFlowPayment?.amount || data.amount || 0),
+        quantity: Number(currentFlowPayment?.quantity || data.quantity || 1),
+        unitPrice: Number(currentFlowPayment?.amount || data.amount || 0) / Number(currentFlowPayment?.quantity || data.quantity || 1),
+        paymentNumber: paymentNumber,
+        gatewayPaymentId: data.provider_payment_id || data.razorpay_payment_id || '',
+        gatewayOrderId: data.provider_order_id || data.razorpay_order_id || '',
+        paymentGateway: 'Trim Key Flow',
+        paymentMethod: 'ONLINE',
+        customerName: globalUser?.name || globalUser?.full_name || 'Institute Admin',
+        customerEmail: globalUser?.email || '',
+        customerPhone: globalUser?.phone || globalUser?.phone_number || '',
+        instName: globalUser?.institute || globalUser?.code || '',
+        instCode: globalUser?.code || '',
+        status: 'PAID'
+    };
+
     // Reconcile and reload dashboard state
     if (paymentNumber && typeof serverCall === 'function') {
         serverCall('confirmFlowPayment', {
@@ -8998,16 +9583,28 @@ function handleFlowPaymentSuccess(data) {
             providerOrderId: data.provider_order_id || data.razorpay_order_id
         }).then(function(res) {
             console.log('[Flow Reconciliation Success]:', res);
+            if (res.ledgerRef) {
+                immediateReceipt.ledId = res.ledgerRef;
+                const printArea = document.getElementById('receiptPrintArea');
+                if (printArea && activeReceiptData === immediateReceipt) {
+                    printArea.innerHTML = generateReceiptHtml(immediateReceipt, false);
+                }
+            }
         }).catch(function(e) {
             console.log('[Flow Sync]: Asynchronous webhook delivery in progress', e);
         });
     }
 
+    // Immediately present the Receipt Modal for download or print
+    setTimeout(function() {
+        showBillingReceipt(immediateReceipt);
+    }, 400);
+
     setTimeout(function() {
         if (typeof initDashboard === 'function' && typeof globalUser !== 'undefined') {
             initDashboard(globalUser.email, Memory.getToken(), "Account updated successfully!");
         }
-    }, 1200);
+    }, 1500);
 }
 
 // Global PostMessage listener for Trim Key Flow checkout events

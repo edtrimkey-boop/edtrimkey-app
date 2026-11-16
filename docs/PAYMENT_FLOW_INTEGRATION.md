@@ -83,6 +83,22 @@ During checkout initiation (`handleRecharge` and `triggerInitialPayment`):
 * **Mobile Phone:** Retrieved from `globalUser.phone` or `globalUser.phone_number`, normalized to 10 digits (removing country prefix `+91` or `0`).
 * **Zero-friction UX:** Forwarded to backend and Trim Key Flow so that Razorpay and payment gateway forms are prefilled instantly, removing redundant manual typing for the customer.
 
+### 2.6. Redesigned Activity Ledger & Receipts Table
+The table in `Institute Billing` tab was redesigned from:
+`Date | Type | Service | Amount / Qty | Status`
+to:
+`LED ID | Date with time | Type | Service | Amount | Qty | Status`
+* **LED ID:** Interactive button displaying the immutable reference (e.g. `LED-TKF-PAY-20261115-000010`). Clicking it opens the official Receipt Modal.
+* **Date with time:** Formatted in IST (e.g. `16 Nov 2026, 03:31 AM`).
+* **Itemized Columns:** Disaggregates `Amount` and `Qty` into separate high-contrast columns.
+* **Instant Actions:** Each row includes a direct `PDF` button to download the receipt immediately.
+
+### 2.7. PDF Receipt Generation & Print Engine (`jsPDF`)
+* **Prompt Post-Payment Flow:** When a payment is captured (`handleFlowPaymentSuccess`), the system immediately displays `#billingReceiptModal` with the full itemized breakdown (Order Value, Quantity, Pricing, Tax status, Customer & Institute info).
+* **Download PDF:** Client-side vector PDF generation via `window.jspdf.jsPDF`, rendering a corporate GST-compliant tax receipt.
+* **Direct Print:** Isolated printing via hidden iframe (`receiptPrintIframe`), supporting standard printer dialogs and system "Save as PDF".
+* **Browser Tab Preview:** `openCurrentReceiptPdfBlob()` opens the generated PDF directly in a new tab via `doc.output('bloburl')`.
+
 ---
 
 ## 3. Sara AI Chatbot Integration
