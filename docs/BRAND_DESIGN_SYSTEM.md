@@ -3,23 +3,26 @@
 ## 1. Executive Philosophy & The "Anti-AI" Standard
 
 Most AI-generated interfaces feel sterile, robotic, or overly loud because language models default to two common failure modes:
-1. Flat, unshaded rectangles (`border-radius: 4px` to `8px`) with raw solid hex colors and zero depth.
-2. Cheap neon glow effects and noisy multi-color gradients (`linear-gradient`, `box-shadow: 0 0 25px rgba(...)`) that look like generic 2010s templates.
+1. Flat, unshaded rectangles (`border-radius: 4px` to `8px`) with raw solid hex colors and zero optical depth.
+2. Cheap neon glow effects and noisy multi-color gradients (`linear-gradient`, `box-shadow: 0 0 25px rgba(...)`, `text-shadow: 0 0 10px ...`) that look like generic 2010s templates.
 
 **Ed-Trim Key is engineered strictly on Apple Cupertino Human Interface Guidelines (HIG)**:
-- **Zero glowing halos or neon text-shadows**: Clean, diffuse ambient shadows (`box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25)`).
-- **Zero gradient colors**: No noisy color shifts. Solid, refined tones and single-tint translucent frosted layers.
+- **Zero glowing halos or neon text-shadows**: Clean, diffuse ambient shadows (`box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25)` or `0 2px 8px rgba(0, 0, 0, 0.2)`).
+- **Zero gradient colors**: No noisy multi-color gradients (`linear-gradient`). Solid, refined tones and single-tint translucent frosted layers.
 - **Two Distinct Button Personalities**:
-  1. **Solid Color-Filled Glass Effect**: High-contrast, rich solid buttons (e.g., `#26C3EA` Electric Cyan Blue for primary submits and dashboard actions, `#10B981` Emerald Green for positive confirmations) with physical top specular reflection rims and crisp typography.
-  2. **Translucent Tinted Frosted Glass Effect**: Subtle, frosted optical glass (`rgba(255, 255, 255, 0.07)` to `rgba(38, 195, 234, 0.12)`) with `backdrop-filter: blur(20px) saturate(190%)` for secondary, outline, cancel, and table ledger badges.
+  1. **Solid Color-Filled Glass Effect**: High-contrast, rich solid buttons (e.g., `#26C3EA` Electric Cyan Blue for primary submits and dashboard actions, `#10B981` Emerald Green for positive confirmations, `#EF4444` Ruby Crimson for critical actions) with physical top specular reflection rims (`inset 0 1px 1px rgba(255, 255, 255, 0.6)`) and crisp dark typography.
+  2. **Translucent Tinted Frosted Glass Effect**: Subtle, frosted optical glass (`rgba(255, 255, 255, 0.06)` to `rgba(38, 195, 234, 0.12)`) with `backdrop-filter: blur(20px) saturate(190%)` for secondary, outline, cancel, and table ledger badges.
 - **Continuous Surface Tension Geometry**: Capsule pill curvature (`border-radius: var(--radius-pill); /* 9999px */`).
 - **Tactile Apple Spring Kinetics**: `cubic-bezier(0.32, 0.72, 0, 1)` with haptic compression `scale(0.94)` on active press.
+
+> **Golden Rule of Brand Consistency:**  
+> Never render flat rectangles, neon glows, or multi-color gradients in Ed-Trim Key. Every action element must strictly follow the Liquid Glass Optical Engine.
 
 ---
 
 ## 2. The Optical Physics of Apple Liquid Glass
 
-Every interactive component combines five physical layers without artificial glowing artifacts:
+To achieve authentic, handcrafted Apple glass rather than artificial glowing artifacts, each component combines five physical layers:
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -31,7 +34,7 @@ Every interactive component combines five physical layers without artificial glo
 └────────────────────────────────────────────────────────┘
 ```
 
-### The Core Engineering Rules
+### The Core Engineering Pillars
 
 1. **Backdrop Light Filtration:**
    ```css
@@ -42,7 +45,7 @@ Every interactive component combines five physical layers without artificial glo
 
 2. **Specular Refraction Lip (Internal Light Gathering):**
    ```css
-   box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 4px 14px rgba(0, 0, 0, 0.25);
    ```
    *Why:* Real polished glass gathers overhead lighting along its top curved edge. Zero neon halos (`0 0 20px ...` is strictly forbidden).
 
@@ -50,154 +53,136 @@ Every interactive component combines five physical layers without artificial glo
    ```css
    border-radius: var(--radius-pill); /* 9999px */
    ```
-   *Why:* Eliminates clinical rectangular corners (`4px` or `6px`) in favor of fluid physical hardware geometry.
+   *Why:* Rectangular boxes feel clinical. Continuous capsule/pill curvature emulates fluid surface tension and high-end industrial hardware.
 
-4. **Tactile Spring Physics & Haptic Press:**
+4. **Tactile Spring Physics:**
    ```css
    transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);
    ```
+   *Why:* Linear or standard `ease` feels sluggish. The Apple spring curve `cubic-bezier(0.32, 0.72, 0, 1)` provides swift acceleration and smooth inertia damping.
+
+5. **Haptic Compression (Press Feedback):**
    ```css
    button:active {
-     transform: scale(0.94) !important;
-     transition: transform 0.1s cubic-bezier(0.32, 0.72, 0, 1) !important;
+     transform: scale(0.94);
+     transition: transform 0.1s cubic-bezier(0.32, 0.72, 0, 1);
    }
    ```
+   *Why:* Emulates the physical click of an Apple Taptic Engine.
 
 ---
 
-## 3. Universal Button Architecture & Catalog
+## 3. Button Categories & Palette
 
 All button classes are globally defined in [index.html](file:///c:/Users/Dell/Downloads/edtrimkey-app/index.html).
 
-### 3.1 Solid Color Filled Glass Buttons (High-Impact CTAs)
+### 3.1 Solid Color-Filled Glass Buttons
 
-| Class | Appearance / Fill | Typography | Usage Scenario |
+| Class | Solid Glass Color | Text Color | Usage Scenario | Inset Highlight & Shadow |
+| :--- | :--- | :--- | :--- | :--- |
+| `.btn-primary` | **Electric Cyan** (`var(--brand)` / `#26C3EA`) | `#05080F` (Dark) | Primary Submits, Submit Paper, Main Action | `inset 0 1px 1px rgba(255,255,255,0.6)`, `0 4px 14px rgba(0,0,0,0.25)` |
+| `.btn-success` | **Emerald Green** (`var(--success)` / `#10B981`) | `#05080F` (Dark) | Pay Now, Approve, Download Receipt, Complete | `inset 0 1px 1px rgba(255,255,255,0.6)`, `0 4px 14px rgba(0,0,0,0.25)` |
+| `.btn-danger` | **Ruby Crimson** (`var(--danger)` / `#EF4444`) | `#ffffff` (White) | Delete, Reject, Production Workspace, Dispute | `inset 0 1px 1px rgba(255,255,255,0.4)`, `0 4px 14px rgba(0,0,0,0.25)` |
+| `.btn-warning` | **Amber Gold** (`var(--accent)` / `#F59E0B`) | `#05080F` (Dark) | Request Document, Review Changes, Notice | `inset 0 1px 1px rgba(255,255,255,0.6)`, `0 4px 14px rgba(0,0,0,0.25)` |
+| `.btn-purple` | **Amethyst Violet** (`var(--purple)` / `#8B5CF6`) | `#ffffff` (White) | Dashboard Dynamic Apps, Generated Papers | `inset 0 1px 1px rgba(255,255,255,0.4)`, `0 4px 14px rgba(0,0,0,0.25)` |
+
+### 3.2 Translucent Tinted Glass Buttons
+
+| Class | Appearance / Tint | Text Color | Usage Scenario |
 | :--- | :--- | :--- | :--- |
-| `.btn-primary` | **Solid Electric Cyan Glass** (`#26C3EA`) | Dark `#061320`, Weight 800 | Primary CTAs, Dashboard Submit Paper, Modal Submit & Login |
-| `.btn-success` | **Solid Emerald Green Glass** (`#10B981`) | White `#ffffff`, Weight 800 | Confirm, Save, Pay Now, Register, Approve |
-| `.btn-danger` | **Solid Ruby Crimson Glass** (`#EF4444`) | White `#ffffff`, Weight 800 | Delete, Clear All, Reject, Revision Request |
-| `.btn-warning` | **Solid Amber Gold Glass** (`#F59E0B`) | Black `#000000`, Weight 800 | Request Document, Review Alerts |
-| `.btn-purple` | **Solid Amethyst Purple Glass** (`#8B5CF6`) | White `#ffffff`, Weight 800 | Generated Papers, Workspace, Dynamic Dashboard Apps |
-
-### 3.2 Translucent Tinted Frosted Glass Buttons (Secondary & Tables)
-
-| Class | Appearance / Tint | Typography | Usage Scenario |
-| :--- | :--- | :--- | :--- |
-| `.btn-outline` | **Clear Frosted Glass** (`rgba(255, 255, 255, 0.07)`) | White `#ffffff`, Weight 700 | Secondary CTAs, Print, Cancel, Modal Dismiss |
-| `.btn-secondary` | **Smoked Obsidian Glass** (`rgba(30, 41, 59, 0.72)`) | Muted `#cbd5e1`, Weight 700 | Refresh Data, Reset, Secondary Controls |
-| `.tk-led-btn` | **Tinted Cyan Frosted Pill** (`rgba(38, 195, 234, 0.08)`) | Brand Cyan `#26C3EA` | Ledger ID Clickable Invoice Pills |
-| `.btn-action-download` | **Tinted Emerald Frosted Badge** (`rgba(16, 185, 129, 0.12)`) | Mint `#10B981` | Pipeline Table Completed Downloads |
-| `.btn-action-pending` | **Tinted Amber Frosted Badge** (`rgba(245, 158, 11, 0.12)`) | Amber `#F59E0B` | Pipeline Table Pending Status |
-| `.close-minimal` | **Frosted Glass Orb** (32px circular) | Cross Icon | Modal Exit Controls |
+| `.btn-outline` | **Translucent Frosted Ice** (`rgba(255, 255, 255, 0.04)`) | `var(--brand)` | Secondary CTAs, Filter toggles, Back |
+| `.btn-secondary` | **Smoked Obsidian Glass** (`rgba(255, 255, 255, 0.06)`) | `rgba(255, 255, 255, 0.95)` | Refresh Data, Muted Actions, Dismiss |
+| `.glass-circle-btn` | **Circular Glass Orb** (`rgba(255, 255, 255, 0.06)`) | `var(--text)` | Hamburger Menu, Notification Bell |
+| `.close-minimal` | **Modal Exit Glass Orb** (`rgba(255, 255, 255, 0.05)`) | `var(--text-muted)` | Close modal windows (replaces plain text `×`) |
 
 ---
 
-## 4. Dashboard App Buttons & Inline SVGs
+## 4. Architectural Rules
 
-Every action and dynamic external app button rendered in the dashboard overview must feature an inline SVG icon corresponding to its domain:
+### 4.1 Desktop Sidebar Close Button
+- In desktop mode (screens wider than 950px), the sidebar close button (`.mobile-close-btn`) must be strictly hidden:
+  ```css
+  .mobile-close-btn { display: none !important; }
+  ```
+- The desktop view relies exclusively on the top-bar 3-bar hamburger button to toggle the sidebar smoothly. On mobile (`max-width: 950px`), the close button appears inside the drawer.
+
+### 4.2 Dashboard Dynamic App Buttons with Domain SVGs
+When dynamic applications are loaded into the dashboard (`#dyn-apps-container`), every app button must render with a dedicated SVG icon matching its capability:
+- **Attendance**: Calendar check icon
+- **Report Card / Results**: File text icon
+- **Admit Card**: Badge ID card icon
+- **Fee / Payment**: Credit card / billing icon
+- **Exam / Tests**: Document edit / pen icon
+- **Student / Admission**: Academic cap / user badge icon
+- **General / Other**: External app portal icon
 
 ```javascript
-// Function: getAppSvgIcon(name, size = 16)
-// Automatically maps dynamic apps to clean Cupertino SVGs:
-- Attendance     -> Calendar with checklist
-- Admission      -> User application with pen
-- Fee / Billing  -> Currency wallet card
-- Exam / Result  -> Achievement grade star
-- Library        -> Open book
-- Timetable      -> Clock schedule
-- Analytics      -> Bar chart
-- General App    -> Clean 4-square grid icon
+const appSvg = getAppSvgIcon(app.name);
+btn.innerHTML = `${appSvg} <span>${escapeHtml(app.name)}</span>`;
 ```
 
-### Dashboard Button Example
+### 4.3 Top Bar Header Integrity
+- The top bar header (`<header class="top-bar">` and its associated `.top-bar` CSS) is maintained strictly as established in commit `9cc7ec3`.
+- Any updates to the app shell must never disrupt or override the layout, spacing, or functionality of this header.
+
+---
+
+## 5. Anti-Patterns & "AI Code Smells" To Strictly Avoid
+
+When adding new screens or modifying existing code, **never** introduce the following flaws:
+
+| ❌ AI Code Smell (Never Do This) | ✅ Apple Liquid Glass Standard |
+| :--- | :--- |
+| `border-radius: 4px;` or `border-radius: 6px;` | `border-radius: 9999px;` or `var(--radius-pill)` |
+| Neon glow `box-shadow: 0 0 25px rgba(...)` | Diffuse ambient shadow: `box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25)` |
+| Multi-color `linear-gradient(...)` backgrounds | Clean solid tones (`var(--brand)`) or single-tint frosted layers |
+| Glowing text `text-shadow: 0 0 10px rgba(...)` | Crisp, legible text without blur: `text-shadow: none;` |
+| Plain text modal close button `×` with no background | `.close-minimal` circular glass orb with red hover state |
+| Default `transition: 0.3s ease;` | `transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);` with `active: scale(0.94)` |
+| Uppercase blocky fonts (`text-transform: uppercase; font-family: sans-serif;`) | `font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 0.3px;` |
+
+---
+
+## 6. Implementation Code Patterns
+
+### 6.1 Standard Modal Action Bar
 ```html
-<button class="liquid-glass btn-purple" onclick="openApp()">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-    <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-    <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-    <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-    <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-  </svg>
-  <span>Fee Portal</span>
+<div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+  <button type="button" class="liquid-glass btn-outline" onclick="closeModal()">
+    Cancel
+  </button>
+  <button type="button" class="liquid-glass btn-danger" onclick="clearForm()">
+    Clear All
+  </button>
+  <button type="submit" class="liquid-glass btn-success">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    Confirm & Proceed
+  </button>
+</div>
+```
+
+### 6.2 Data Table Ledger Action
+```html
+<!-- LED ID & Action in Data Tables -->
+<button class="liquid-glass btn-sm btn-outline tk-led-btn" onclick="openReceipt('LED-001')">
+  LED-001
+</button>
+<button class="liquid-glass btn-sm btn-success" onclick="downloadReceiptPdf('LED-001')">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Receipt
 </button>
 ```
 
 ---
 
-## 5. Sidebar Navigation & Responsive Rules
+## 7. Developer & Agent Verification Checklist
 
-1. **Desktop View (>950px):**
-   - The close button (`.mobile-close-btn`) is strictly **hidden** (`display: none !important;`).
-   - The primary sidebar expand/collapse control is the **3-bar hamburger button** in the sticky top header.
-2. **Mobile View (≤950px):**
-   - The sidebar functions as a slide-out drawer (`transform: translateX(-100%)`).
-   - The `.mobile-close-btn` is displayed (`display: inline-flex !important;`) inside the drawer header so mobile users can dismiss the drawer.
-
----
-
-## 6. Anti-Patterns & "AI Code Smells" To Strictly Avoid
-
-| ❌ AI Code Smell (Never Do This) | ✅ Apple Liquid Glass Standard |
-| :--- | :--- |
-| Multi-color gradients (`linear-gradient(135deg, ... 0%, ... 100%)`) | Solid color filled (`#26C3EA`) or clean single-tint frosted glass |
-| Neon glowing drop shadows (`box-shadow: 0 0 25px rgba(...)`) | Diffuse ambient drop shadow (`0 2px 8px rgba(0, 0, 0, 0.25)`) |
-| Glowing text (`text-shadow: 0 0 10px rgba(...)`) | Clean high-contrast solid typography with Montserrat 800 weight |
-| Hard rectangular corners (`border-radius: 4px` to `8px`) | Capsule pill geometry (`var(--radius-pill); /* 9999px */`) |
-| Unstyled buttons or buttons missing SVG icons | All buttons have semantic SVG icons with `gap: 8px;` |
-| Sidebar close button visible in desktop view | `.mobile-close-btn { display: none !important; }` on desktop |
-
----
-
-## 7. Developer & Agent Quality Checklist
-
-Before submitting any front-end change to Ed-Trim Key:
-- [ ] Are all glowing effects (`0 0 Xpx ...`) and gradients removed?
-- [ ] Are primary submit buttons and dashboard action buttons solid color filled with glass rims?
-- [ ] Are secondary and cancel buttons styled as translucent frosted glass?
-- [ ] Do all dynamic app buttons in the dashboard have their corresponding SVG icon?
-- [ ] Is the sidebar close button completely hidden on desktop?
-- [ ] Does the page compile with 0 syntax errors (`new Function(...)` check passes)?
-
----
-
-## 8. SARA AI Floating Widget & Billing Ledger System
-
-### 8.1 SARA AI Floating Trigger Widget
-- **Geometry:** Exact 60px × 60px circle (`border-radius: 50% !important;`).
-- **Logo Graphic:** Animated GIF (`https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/1115.gif`) fitted cleanly to 100% of button area (`object-fit: cover`).
-- **Aesthetic:** Solid brand cyan with Apple liquid glass refraction (`backdrop-filter: blur(25px) saturate(200%)`), zero glowing aura.
-- **Micro-interactions:** Natural floating kinetic animation (`saraFloat 3.2s ease-in-out infinite`), active press scale `0.92`, hides smoothly when the chat window opens.
-
-### 8.2 Institute Billing Transaction Ledger & PDF Receipt
-- **Table Columns:** `LED ID | Date with time | Type | Service | Amount | Qty | Status`.
-- **Date & Time Layout:** Stacked on two distinct lines for rapid optical scanning:
-  - Line 1: `16 Nov 2026` (Weight 700, White)
-  - Line 2: `03:31 am` (Weight 600, Muted Text)
-- **Clickable LED ID:** Opens the official Tax Invoice & Payment Receipt modal and offers direct PDF download via jsPDF.
-- **Official PDF Receipt Specs:**
-  - Official Brand Logo header.
-  - Issuer & Business Information with SVGs (Address: Lalpur, Ranchi, Jharkhand - 834001; Phone: +91 8235400967; Email: trimkeyai@gmail.com; Website: https://trimkey.in/ed).
-  - Customer contact details auto-queried from user profile (Name, Email, Phone).
-  - Itemized quantity, unit pricing, total order value in INR (₹).
-  - Print, Download, and View PDF actions.
-
----
-
-## 9. Floating Liquid Glass Header & Universal SVG Standard
-
-### 9.1 Floating Liquid Glass Header Physics
-- **Detached Island Geometry:** Positioned with `position: sticky; top: 16px; margin: 16px 24px 0 24px;` so content area cards scroll smoothly underneath it.
-- **Capsule Pill Curvature:** `border-radius: var(--radius-pill); /* 9999px */` with height `64px` (`56px` on mobile).
-- **Surface Physics:** `backdrop-filter: blur(25px) saturate(190%); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.25);`
-- **Integrated Controls:**
-  1. **Hamburger Button:** 3-bar sidebar toggle with spring physics.
-  2. **Glass Title Pill:** Features dynamic tab SVG (`#headerTabIcon`), institute logo, separator, and active view name.
-  3. **Quick Database Sync Button (`#headerSyncBtn`):** 40px circular glass button with animated spinning refresh SVG.
-  4. **Quick Theme Toggle (`#headerThemeBtn`):** 40px circular glass button dynamically rendering Sun (in dark mode) or Moon (in light mode) SVGs.
-  5. **Notification Bell (`#bellWrapper`):** Glass orb with unread count badge and styled alerts dropdown.
-  6. **User Profile Capsule (`#userHeaderInfo`):** Avatar orb, user name, and chevron toggle.
-
-### 9.2 Universal SVG Standard (No Text Glyphs or Emojis)
-- **Zero Raw Characters:** Never use `✖`, `+`, `▼`, or Unicode emojis in buttons or interactive controls.
-- **Modal Close Controls (`.close-minimal`):** Strictly equipped with Apple Cupertino cross SVGs (`14px` by `14px`, `stroke-width="2.5"`).
-- **Action Buttons:** Every modal submit, register, save, cancel, acknowledge, and table row action button features an inline semantic SVG icon (`gap: 8px;`).
+Before opening a pull request or submitting code touching UI in Ed-Trim Key:
+- [ ] Are all action buttons styled with `.liquid-glass` and a semantic variant (`.btn-primary`, `.btn-success`, etc.)?
+- [ ] Are all primary and confirmation actions rendered as solid color-filled glass buttons with dark text and specular top inset reflections?
+- [ ] Are all secondary, cancel, and outline actions rendered as translucent frosted glass buttons?
+- [ ] Are all neon glow effects (`box-shadow: 0 0 ...`, `text-shadow: 0 0 ...`) and multi-color gradients completely avoided?
+- [ ] Is the sidebar close button hidden on desktop screens (`display: none !important;`)?
+- [ ] Do dynamic app buttons render with domain-specific SVG icons and proper HTML escaping?
+- [ ] Is the top bar header HTML and CSS identical to the established baseline?
+- [ ] Does the page compile cleanly with zero console syntax or rendering errors?
