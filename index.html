@@ -5652,15 +5652,18 @@ function applyFilters() {
         filteredBilling.forEach((b, idx) => {
           let badgeClass = (b.status === 'PAID' || b.status === 'POSTED') ? 'bg-success' : 'bg-warning'; 
           let dateObj = b.date ? new Date(b.date) : new Date();
-          let dateWithTime = dateObj.toLocaleString('en-IN', {
+          let dateStr = dateObj.toLocaleDateString('en-IN', {
               timeZone: 'Asia/Kolkata',
               day: '2-digit',
               month: 'short',
-              year: 'numeric',
+              year: 'numeric'
+          });
+          let timeStr = dateObj.toLocaleTimeString('en-IN', {
+              timeZone: 'Asia/Kolkata',
               hour: '2-digit',
               minute: '2-digit',
               hour12: true
-          });
+          }).toLowerCase();
           let ledId = b.ledId || b.id || ('LED-TRX-' + (idx + 1));
           let amt = Number(b.amount) || 0;
           let qty = Number(b.quantity || b.metadata?.quantity) || 1;
@@ -5675,7 +5678,10 @@ function applyFilters() {
                 ${ledId}
               </button>
             </td>
-            <td data-label="Date with time" style="white-space:nowrap; font-size:12px; color:var(--text-muted);">${dateWithTime}</td>
+            <td data-label="Date with time" style="white-space:nowrap; font-size:12px; line-height:1.4;">
+              <div style="font-weight:600; color:#ffffff;">${dateStr}</div>
+              <div style="font-size:11px; color:var(--text-muted);">${timeStr}</div>
+            </td>
             <td data-label="Type"><span class="badge ${amt > 0 ? 'bg-primary' : 'bg-secondary'}">${typeStr}</span></td>
             <td data-label="Service" style="font-weight:600; color:#fff;">${serviceStr}</td>
             <td data-label="Amount"><b style="color:var(--success); font-size:13px;">₹${amt.toFixed(2)}</b></td>
@@ -9091,6 +9097,37 @@ function onFlowIframeLoaded() {
 // =========================================================================================
 let currentBillingRecords = [];
 let activeReceiptData = null;
+let cachedReceiptLogoDataUrl = null;
+
+function preloadReceiptLogo() {
+    if (cachedReceiptLogoDataUrl) return Promise.resolve(cachedReceiptLogoDataUrl);
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function() {
+            try {
+                const canvas = document.createElement("canvas");
+                canvas.width = img.naturalWidth || 200;
+                canvas.height = img.naturalHeight || 200;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                cachedReceiptLogoDataUrl = canvas.toDataURL("image/png");
+                resolve(cachedReceiptLogoDataUrl);
+            } catch (err) {
+                console.warn("[Receipt Logo]: Canvas conversion notice", err);
+                resolve(null);
+            }
+        };
+        img.onerror = function() {
+            resolve(null);
+        };
+        img.src = "https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/new-ETK.png";
+        setTimeout(() => resolve(cachedReceiptLogoDataUrl), 2000);
+    });
+}
+if (typeof window !== 'undefined') {
+    preloadReceiptLogo().catch(() => {});
+}
 
 function generateReceiptHtml(rec, isPrint = false) {
     const ledId = rec.ledId || rec.id || 'LED-TRX';
@@ -9098,15 +9135,19 @@ function generateReceiptHtml(rec, isPrint = false) {
     const qtyVal = Number(rec.quantity || 1);
     const unitPriceVal = Number(rec.unitPrice || (rec.amount / qtyVal) || 0).toFixed(2);
     const dateObj = rec.date ? new Date(rec.date) : new Date();
-    const formattedDateWithTime = dateObj.toLocaleString('en-IN', {
+    const dateStr = dateObj.toLocaleDateString('en-IN', {
         timeZone: 'Asia/Kolkata',
         day: '2-digit',
         month: 'short',
-        year: 'numeric',
+        year: 'numeric'
+    });
+    const timeStr = dateObj.toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
-    });
+    }).toLowerCase();
+
     const customerName = rec.customerName || globalUser?.name || globalUser?.full_name || 'Institute Admin';
     const customerEmail = rec.customerEmail || globalUser?.email || '';
     const customerPhone = rec.customerPhone || globalUser?.phone || globalUser?.phone_number || '';
@@ -9115,19 +9156,25 @@ function generateReceiptHtml(rec, isPrint = false) {
     const serviceName = rec.service || 'Subscription';
     const gatewayId = rec.gatewayPaymentId || rec.ref || 'pay_online_verified';
     const flowTrx = rec.paymentNumber || rec.ref || ledId;
+    const logoUrl = "https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/new-ETK.png";
 
     return `
       <div style="background: ${isPrint ? '#ffffff' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${isPrint ? '#cbd5e1' : 'rgba(255,255,255,0.08)'}; border-radius: 16px; padding: 22px; color: ${isPrint ? '#0f172a' : '#ffffff'}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
         
-        <!-- Header -->
+        <!-- Header with Logo -->
         <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}; margin-bottom: 18px; flex-wrap: wrap; gap: 14px;">
-          <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: ${isPrint ? '#0284c7' : '#26C3EA'};">ED-TRIM KEY</span>
-              <span style="font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: rgba(38, 195, 234, 0.15); color: #26C3EA; border: 1px solid rgba(38, 195, 234, 0.3);">FLOW SETTLED</span>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 52px; height: 52px; border-radius: 12px; background: #ffffff; padding: 3px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.06);">
+              <img src="${logoUrl}" alt="Ed-Trim Key Logo" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
-            <div style="font-size: 11px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.5)'}; margin-top: 3px; font-weight: 600;">
-              TAX INVOICE & OFFICIAL PAYMENT RECEIPT
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: ${isPrint ? '#0284c7' : '#26C3EA'};">ED-TRIM KEY</span>
+                <span style="font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; background: rgba(38, 195, 234, 0.15); color: #26C3EA; border: 1px solid rgba(38, 195, 234, 0.3);">FLOW SETTLED</span>
+              </div>
+              <div style="font-size: 11px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.6)'}; margin-top: 3px; font-weight: 600;">
+                TAX INVOICE & OFFICIAL PAYMENT RECEIPT
+              </div>
             </div>
           </div>
           
@@ -9141,6 +9188,33 @@ function generateReceiptHtml(rec, isPrint = false) {
           </div>
         </div>
 
+        <!-- Issuer & Business Details with SVGs -->
+        <div style="background: ${isPrint ? '#f8fafc' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
+          <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.45)'}; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 8px;">
+            Issuer & Business Information
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'};">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${isPrint ? '#0284c7' : '#26C3EA'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span><strong>Address:</strong> Tech Innovation Hub, Bailey Road, Patna, Bihar - 800001, India</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px; font-size: 12px; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'}; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${isPrint ? '#0284c7' : '#26C3EA'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span><strong>Phone:</strong> +91 8294544727</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${isPrint ? '#0284c7' : '#26C3EA'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span><strong>Email:</strong> support@trimkey.in</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: ${isPrint ? '#334155' : 'rgba(255,255,255,0.85)'};">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${isPrint ? '#0284c7' : '#26C3EA'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span><strong>Website:</strong> <a href="https://ed.trimkey.in" target="_blank" style="color: ${isPrint ? '#0284c7' : '#26C3EA'}; text-decoration: none; font-weight: 700;">https://ed.trimkey.in</a> &bull; <a href="https://flow.trimkey.in" target="_blank" style="color: #00F5A0; text-decoration: none; font-weight: 700;">https://flow.trimkey.in</a></span>
+            </div>
+          </div>
+        </div>
+
         <!-- Meta Grid -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: ${isPrint ? '#f8fafc' : 'rgba(255,255,255,0.03)'}; border: 1px solid ${isPrint ? '#e2e8f0' : 'rgba(255,255,255,0.06)'}; border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
           <div>
@@ -9149,7 +9223,10 @@ function generateReceiptHtml(rec, isPrint = false) {
           </div>
           <div>
             <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Date & Time</div>
-            <div style="font-size: 12px; font-weight: 600; color: ${isPrint ? '#1e293b' : '#fff'}; margin-top: 2px;">${formattedDateWithTime}</div>
+            <div style="font-size: 12px; font-weight: 600; color: ${isPrint ? '#1e293b' : '#fff'}; margin-top: 2px; line-height: 1.35;">
+              <div style="font-weight: 700;">${dateStr}</div>
+              <div style="font-size: 11px; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.6)'};">${timeStr}</div>
+            </div>
           </div>
           <div>
             <div style="font-size: 10px; text-transform: uppercase; color: ${isPrint ? '#64748b' : 'rgba(255,255,255,0.4)'}; font-weight: 700;">Gateway Payment ID</div>
@@ -9246,193 +9323,227 @@ function generateReceiptDoc(rec) {
     const qtyVal = Number(rec.quantity || 1);
     const unitPriceVal = Number(rec.unitPrice || (rec.amount / qtyVal) || 0).toFixed(2);
     const dateObj = rec.date ? new Date(rec.date) : new Date();
-    const formattedDate = dateObj.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
-    const formattedTime = dateObj.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
-    const fullDateTime = `${formattedDate}, ${formattedTime} IST`;
+    const dateStr = dateObj.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = dateObj.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
 
     // 1. Header Banner (Dark Obsidian)
     doc.setFillColor(15, 23, 42); // #0F172A
     doc.rect(0, 0, 595, 105, 'F');
 
+    // Logo embedding
+    if (cachedReceiptLogoDataUrl) {
+        try {
+            doc.setFillColor(255, 255, 255);
+            doc.roundedRect(38, 20, 60, 60, 6, 6, 'F');
+            doc.addImage(cachedReceiptLogoDataUrl, 'PNG', 42, 24, 52, 52);
+        } catch (e) {
+            console.warn("Logo embed notice:", e);
+        }
+    } else {
+        doc.setFillColor(38, 195, 234);
+        doc.roundedRect(38, 20, 60, 60, 6, 6, 'F');
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(16);
+        doc.setTextColor(255, 255, 255);
+        doc.text("ETK", 52, 56);
+    }
+
     // Brand Name & Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(38, 195, 234); // #26C3EA
-    doc.text("ED-TRIM KEY", 40, 42);
+    doc.text("ED-TRIM KEY", 112, 44);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
+    doc.setFontSize(8.5);
     doc.setTextColor(203, 213, 225); // #CBD5E1
-    doc.text("POWERED BY TRIM KEY FLOW INFRASTRUCTURE", 40, 58);
+    doc.text("TRIMKEY TECHNOLOGIES • CLOUD PAYMENT INFRASTRUCTURE", 112, 60);
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
+    doc.setFontSize(10.5);
     doc.setTextColor(255, 255, 255);
-    doc.text("PAYMENT RECEIPT & TAX INVOICE", 40, 82);
+    doc.text("OFFICIAL PAYMENT RECEIPT & TAX INVOICE", 112, 78);
 
     // Verified Badge on Right
     doc.setFillColor(6, 78, 59); // Dark green
-    doc.roundedRect(380, 28, 175, 26, 4, 4, 'F');
+    doc.roundedRect(380, 26, 175, 26, 4, 4, 'F');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
     doc.setTextColor(0, 245, 160); // #00F5A0
-    doc.text("256-BIT SSL ENCRYPTED", 395, 44);
+    doc.text("256-BIT SSL ENCRYPTED", 395, 42);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(148, 163, 184);
-    doc.text("SETTLEMENT CONFIRMED", 420, 68);
+    doc.text("SETTLEMENT CONFIRMED", 420, 66);
 
-    // 2. Transaction Summary Box
+    // 2. Issuer & Business Information Box
     doc.setDrawColor(226, 232, 240);
     doc.setFillColor(248, 250, 252);
-    doc.roundedRect(40, 120, 515, 65, 4, 4, 'FD');
+    doc.roundedRect(40, 116, 515, 60, 4, 4, 'FD');
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.setTextColor(71, 85, 105);
-    doc.text("TRANSACTION DETAILS", 52, 136);
-
-    doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
+    doc.setTextColor(71, 85, 105);
+    doc.text("ISSUER & BUSINESS INFORMATION", 52, 130);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
     doc.setTextColor(51, 65, 85);
+    doc.text("Address: Tech Innovation Hub, Bailey Road, Patna, Bihar - 800001, India", 52, 144);
+    doc.text("Contact: support@trimkey.in  |  Phone: +91 8294544727", 52, 157);
+    doc.text("Website: https://ed.trimkey.in  |  Payment Flow: https://flow.trimkey.in  |  GST: Registered Cloud Provider", 52, 170);
 
-    doc.text(`LED ID:`, 52, 152);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${ledId}`, 115, 152);
-
-    doc.setFont("helvetica", "normal");
-    doc.text(`Payment Ref:`, 52, 168);
-    doc.text(`${rec.paymentNumber || rec.ref || '-'}`, 115, 168);
-
-    doc.text(`Gateway ID:`, 320, 152);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${rec.gatewayPaymentId || 'pay_online_verified'}`, 385, 152);
-
-    doc.setFont("helvetica", "normal");
-    doc.text(`Date & Time:`, 320, 168);
-    doc.text(`${fullDateTime}`, 385, 168);
-
-    // 3. Customer & Institute Info Box
+    // 3. Transaction Summary Box
     doc.setDrawColor(226, 232, 240);
     doc.setFillColor(255, 255, 255);
-    doc.roundedRect(40, 195, 515, 75, 4, 4, 'FD');
+    doc.roundedRect(40, 186, 515, 62, 4, 4, 'FD');
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(71, 85, 105);
-    doc.text("BILLED TO (CUSTOMER)", 52, 212);
-    doc.text("INSTITUTE / CLIENT", 320, 212);
+    doc.text("TRANSACTION DETAILS", 52, 200);
 
     doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(51, 65, 85);
+
+    doc.text("LED ID:", 52, 216);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${ledId}`, 115, 216);
+
+    doc.setFont("helvetica", "normal");
+    doc.text("Payment Ref:", 52, 232);
+    doc.text(`${rec.paymentNumber || rec.ref || '-'}`, 115, 232);
+
+    doc.text("Gateway ID:", 320, 216);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${rec.gatewayPaymentId || 'pay_online_verified'}`, 385, 216);
+
+    doc.setFont("helvetica", "normal");
+    doc.text("Date & Time:", 320, 232);
+    doc.text(`${dateStr} at ${timeStr} (IST)`, 385, 232);
+
+    // 4. Customer & Institute Info Box
+    doc.setDrawColor(226, 232, 240);
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(40, 258, 515, 70, 4, 4, 'FD');
+
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
+    doc.setTextColor(71, 85, 105);
+    doc.text("BILLED TO (CUSTOMER)", 52, 272);
+    doc.text("INSTITUTE / CLIENT", 320, 272);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
     doc.setTextColor(30, 41, 59);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`${(rec.customerName || globalUser?.name || 'Institute Admin').toUpperCase()}`, 52, 228);
+    doc.text(`${(rec.customerName || globalUser?.name || 'Institute Admin').toUpperCase()}`, 52, 287);
     doc.setFont("helvetica", "normal");
-    doc.text(`Email: ${rec.customerEmail || globalUser?.email || 'admin@trimkey.in'}`, 52, 242);
-    doc.text(`Phone: ${rec.customerPhone ? '+91 ' + rec.customerPhone : 'N/A'}`, 52, 256);
+    doc.text(`Email: ${rec.customerEmail || globalUser?.email || 'admin@trimkey.in'}`, 52, 301);
+    doc.text(`Phone: ${rec.customerPhone ? '+91 ' + rec.customerPhone : 'N/A'}`, 52, 315);
 
     doc.setFont("helvetica", "bold");
-    doc.text(`${(rec.instName || globalUser?.institute || 'Keystone Public School').toUpperCase()}`, 320, 228);
+    doc.text(`${(rec.instName || globalUser?.institute || 'Keystone Public School').toUpperCase()}`, 320, 287);
     doc.setFont("helvetica", "normal");
-    doc.text(`Institute Code: ${rec.instCode || globalUser?.code || 'KPS'}`, 320, 242);
-    doc.text(`Payment Method: ${rec.paymentMethod || 'ONLINE'} (${rec.paymentGateway || 'Trim Key Flow'})`, 320, 256);
+    doc.text(`Institute Code: ${rec.instCode || globalUser?.code || 'KPS'}`, 320, 301);
+    doc.text(`Payment Method: ${rec.paymentMethod || 'ONLINE'} (${rec.paymentGateway || 'Trim Key Flow'})`, 320, 315);
 
-    // 4. Itemized Pricing Table
-    const tableTop = 285;
+    // 5. Itemized Pricing Table
+    const tableTop = 338;
     doc.setFillColor(38, 195, 234); // #26C3EA
-    doc.rect(40, tableTop, 515, 22, 'F');
+    doc.rect(40, tableTop, 515, 20, 'F');
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
+    doc.setFontSize(8);
     doc.setTextColor(255, 255, 255);
-    doc.text("SERVICE / ITEM DESCRIPTION", 52, tableTop + 14);
-    doc.text("QTY", 310, tableTop + 14);
-    doc.text("UNIT PRICE", 390, tableTop + 14);
-    doc.text("TOTAL (INR)", 485, tableTop + 14);
+    doc.text("SERVICE / ITEM DESCRIPTION", 52, tableTop + 13);
+    doc.text("QTY", 310, tableTop + 13);
+    doc.text("UNIT PRICE", 390, tableTop + 13);
+    doc.text("TOTAL (INR)", 485, tableTop + 13);
 
     // Table Content Row
-    const rowY = tableTop + 38;
+    const rowY = tableTop + 34;
     doc.setFillColor(248, 250, 252);
-    doc.rect(40, tableTop + 22, 515, 36, 'F');
+    doc.rect(40, tableTop + 20, 515, 34, 'F');
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9.5);
+    doc.setFontSize(9);
     doc.setTextColor(15, 23, 42);
     doc.text(`${rec.service || 'Recharge'} Quota Top-up`, 52, rowY);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(100, 116, 139);
-    doc.text(`Cloud educational operations quota credit for ${rec.service}`, 52, rowY + 12);
+    doc.text(`Cloud educational operations quota credit for ${rec.service}`, 52, rowY + 11);
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9.5);
+    doc.setFontSize(9);
     doc.setTextColor(15, 23, 42);
-    doc.text(`${qtyVal}`, 315, rowY + 4);
-    doc.text(`Rs. ${unitPriceVal}`, 390, rowY + 4);
+    doc.text(`${qtyVal}`, 315, rowY + 3);
+    doc.text(`Rs. ${unitPriceVal}`, 390, rowY + 3);
 
     doc.setTextColor(16, 185, 129); // Green
-    doc.text(`Rs. ${amountVal}`, 485, rowY + 4);
+    doc.text(`Rs. ${amountVal}`, 485, rowY + 3);
 
-    // 5. Financial Summary Block
-    let sumY = tableTop + 75;
+    // 6. Financial Summary Block
+    let sumY = tableTop + 68;
     doc.setDrawColor(226, 232, 240);
     doc.line(40, sumY, 555, sumY);
 
-    sumY += 16;
+    sumY += 14;
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(71, 85, 105);
     doc.text("Subtotal:", 360, sumY);
     doc.text(`Rs. ${amountVal}`, 485, sumY);
 
-    sumY += 14;
+    sumY += 13;
     doc.text("Processing Fee:", 360, sumY);
     doc.setTextColor(16, 185, 129);
     doc.text("Waived (Rs. 0.00)", 485, sumY);
 
-    sumY += 14;
+    sumY += 13;
     doc.setTextColor(71, 85, 105);
     doc.text("Taxes / GST:", 360, sumY);
     doc.text("Included (Rs. 0.00)", 485, sumY);
 
-    sumY += 10;
+    sumY += 8;
     doc.setDrawColor(203, 213, 225);
     doc.line(340, sumY, 555, sumY);
 
-    sumY += 18;
+    sumY += 16;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setTextColor(15, 23, 42);
     doc.text("TOTAL ORDER VALUE:", 280, sumY);
     doc.setTextColor(16, 185, 129);
     doc.text(`Rs. ${amountVal}`, 485, sumY);
 
-    // 6. Security Notice & Footer
-    const footY = 530;
+    // 7. Security Notice & Footer
+    const footY = 515;
     doc.setFillColor(241, 245, 249);
-    doc.roundedRect(40, footY, 515, 55, 4, 4, 'F');
+    doc.roundedRect(40, footY, 515, 50, 4, 4, 'F');
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(71, 85, 105);
-    doc.text("DIGITAL AUDIT TRAIL & SYSTEM COMPLIANCE", 52, footY + 16);
+    doc.text("DIGITAL AUDIT TRAIL & SYSTEM COMPLIANCE", 52, footY + 14);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7.5);
+    doc.setFontSize(7);
     doc.setTextColor(100, 116, 139);
-    doc.text("This receipt was digitally generated by Ed-Trim Key & Trim Key Flow Payment Infrastructure.", 52, footY + 28);
-    doc.text("Payment has been cryptographically confirmed and permanently committed to the immutable billing ledger.", 52, footY + 39);
-    doc.text("All transactions comply with Reserve Bank of India (RBI) guidelines for online settlements.", 52, footY + 50);
+    doc.text("This receipt was digitally generated by Ed-Trim Key & Trim Key Flow Payment Infrastructure.", 52, footY + 25);
+    doc.text("Payment has been cryptographically confirmed and permanently committed to the immutable billing ledger.", 52, footY + 35);
+    doc.text("All transactions comply with Reserve Bank of India (RBI) guidelines for online settlements.", 52, footY + 45);
 
     // Footer contact
-    doc.setFontSize(7.5);
+    doc.setFontSize(7);
     doc.setTextColor(148, 163, 184);
-    doc.text("EdTrimKey Support: support@trimkey.in  |  Official Portal: https://ed.trimkey.in", 40, 620);
-    doc.text(`Receipt Reference: ${ledId}  |  Generated on ${new Date().toLocaleString('en-IN')}`, 40, 632);
+    doc.text("EdTrimKey Support: support@trimkey.in  |  Official Portal: https://ed.trimkey.in", 40, 585);
+    doc.text(`Receipt Reference: ${ledId}  |  Generated on ${new Date().toLocaleString('en-IN')}`, 40, 597);
 
     return doc;
 }
@@ -9463,9 +9574,10 @@ function closeBillingReceiptModal() {
     }
 }
 
-function downloadCurrentReceiptPdf() {
+async function downloadCurrentReceiptPdf() {
     if (!activeReceiptData) return;
     try {
+        await preloadReceiptLogo();
         const doc = generateReceiptDoc(activeReceiptData);
         const fileName = `EdTrimKey_Receipt_${activeReceiptData.ledId || 'TRX'}.pdf`;
         doc.save(fileName);
@@ -9476,9 +9588,10 @@ function downloadCurrentReceiptPdf() {
     }
 }
 
-function openCurrentReceiptPdfBlob() {
+async function openCurrentReceiptPdfBlob() {
     if (!activeReceiptData) return;
     try {
+        await preloadReceiptLogo();
         const doc = generateReceiptDoc(activeReceiptData);
         const blobUrl = doc.output('bloburl');
         window.open(blobUrl, '_blank');
@@ -9488,10 +9601,10 @@ function openCurrentReceiptPdfBlob() {
     }
 }
 
-function downloadBillingReceiptByIndex(idx) {
+async function downloadBillingReceiptByIndex(idx) {
     if (!currentBillingRecords || !currentBillingRecords[idx]) return;
     activeReceiptData = currentBillingRecords[idx];
-    downloadCurrentReceiptPdf();
+    await downloadCurrentReceiptPdf();
 }
 
 function printBillingReceipt() {

@@ -89,12 +89,29 @@ The table in `Institute Billing` tab was redesigned from:
 to:
 `LED ID | Date with time | Type | Service | Amount | Qty | Status`
 * **LED ID:** Interactive button displaying the immutable reference (e.g. `LED-TKF-PAY-20261115-000010`). Clicking it opens the official Receipt Modal.
-* **Date with time:** Formatted in IST (e.g. `16 Nov 2026, 03:31 AM`).
+* **Date with time (Two-Line Layout):** Split cleanly into two distinct lines:
+  ```text
+  16 Nov 2026
+  03:31 am
+  ```
+  The date is highlighted in semi-bold (`font-weight: 600`), and the time in lowercase 12-hour format with muted secondary styling (`font-size: 11px; color: var(--text-muted)`).
 * **Itemized Columns:** Disaggregates `Amount` and `Qty` into separate high-contrast columns.
 * **Instant Actions:** Each row includes a direct `PDF` button to download the receipt immediately.
 
 ### 2.7. PDF Receipt Generation & Print Engine (`jsPDF`)
 * **Prompt Post-Payment Flow:** When a payment is captured (`handleFlowPaymentSuccess`), the system immediately displays `#billingReceiptModal` with the full itemized breakdown (Order Value, Quantity, Pricing, Tax status, Customer & Institute info).
+* **Official Branding & Preloaded Logo:**
+  - High-res logo loaded from `https://ypmnsgpohaaavbjdqjye.supabase.co/storage/v1/object/public/logo/new-ETK.png`.
+  - Client-side Canvas preloading (`preloadReceiptLogo`) converts the image to base64 `PNG` data URL with CORS support.
+  - Rendered in a polished 52x52px container badge in both the interactive modal and vector PDF generator (`doc.addImage`).
+* **Issuer & Business Information (Inline SVGs & PDF Geometry):**
+  - **Company:** `EdTrimKey Technologies Private Limited`
+  - **Address:** `Tech Innovation Hub, Bailey Road, Patna, Bihar - 800001, India` (rendered with Location Pin SVG).
+  - **Contact:** `+91 8294544727` & `support@trimkey.in` (rendered with Phone & Mail SVGs).
+  - **Website:** `https://ed.trimkey.in` & `https://flow.trimkey.in` (rendered with Globe SVG).
+* **A4 Single-Page Guarantee:**
+  - Geometry is strictly constrained across all layout blocks (Header: `y:24-80`, Issuer: `y:116-176`, Transaction Details: `y:186-248`, Billed To: `y:258-328`, Itemized Table: `y:338-420`, Financials: `y:430-505`, Compliance: `y:515-575`, Footer: `y:585-610`).
+  - Total vertical footprint is ~600 pt out of standard A4 height of 841.89 pt, guaranteeing clean, zero-overflow single-page prints and downloads.
 * **Download PDF:** Client-side vector PDF generation via `window.jspdf.jsPDF`, rendering a corporate GST-compliant tax receipt.
 * **Direct Print:** Isolated printing via hidden iframe (`receiptPrintIframe`), supporting standard printer dialogs and system "Save as PDF".
 * **Browser Tab Preview:** `openCurrentReceiptPdfBlob()` opens the generated PDF directly in a new tab via `doc.output('bloburl')`.
