@@ -4,11 +4,11 @@
 
 Most AI-generated interfaces feel sterile, robotic, or overly loud because language models default to two common failure modes:
 1. Flat, unshaded rectangles (`border-radius: 4px` to `8px`) with raw solid hex colors and zero optical depth.
-2. Cheap neon glow effects and noisy multi-color gradients (`linear-gradient`, `box-shadow: 0 0 25px rgba(...)`, `text-shadow: 0 0 10px ...`) that look like generic 2010s templates.
+2. Cheap neon glow effects and noisy multi-color gradients (`box-shadow: 0 0 25px rgba(...)`, `text-shadow: 0 0 10px ...`) that look like generic templates.
 
 **Ed-Trim Key is engineered strictly on Apple Cupertino Human Interface Guidelines (HIG)**:
 - **Zero glowing halos or neon text-shadows**: Clean, diffuse ambient shadows (`box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25)` or `0 2px 8px rgba(0, 0, 0, 0.2)`).
-- **Zero gradient colors**: No noisy multi-color gradients (`linear-gradient`). Solid, refined tones and single-tint translucent frosted layers.
+- **Subtle, Purposeful Surface Optics**: No aggressive multi-color gradient clashes. Micro-luminance sweeps are permitted strictly for atmospheric environmental fades (`.header-scrim`) and anodized table rows (`.tk-sleek-table td`).
 - **Two Distinct Button Personalities**:
   1. **Solid Color-Filled Glass Effect**: High-contrast, rich solid buttons (e.g., `#26C3EA` Electric Cyan Blue for primary submits and dashboard actions, `#10B981` Emerald Green for positive confirmations, `#EF4444` Ruby Crimson for critical actions) with physical top specular reflection rims (`inset 0 1px 1px rgba(255, 255, 255, 0.6)`) and crisp dark typography.
   2. **Translucent Tinted Frosted Glass Effect**: Subtle, frosted optical glass (`rgba(255, 255, 255, 0.06)` to `rgba(38, 195, 234, 0.12)`) with `backdrop-filter: blur(20px) saturate(190%)` for secondary, outline, cancel, and table ledger badges.
@@ -16,7 +16,7 @@ Most AI-generated interfaces feel sterile, robotic, or overly loud because langu
 - **Tactile Apple Spring Kinetics**: `cubic-bezier(0.32, 0.72, 0, 1)` with haptic compression `scale(0.94)` on active press.
 
 > **Golden Rule of Brand Consistency:**  
-> Never render flat rectangles, neon glows, or multi-color gradients in Ed-Trim Key. Every action element must strictly follow the Liquid Glass Optical Engine.
+> Never render flat rectangles or neon glowing halos in Ed-Trim Key. Every action element must strictly follow the Liquid Glass Optical Engine.
 
 ---
 
@@ -97,16 +97,68 @@ All button classes are globally defined in [index.html](file:///c:/Users/Dell/Do
 
 ---
 
-## 4. Architectural Rules
+## 4. Architectural Rules & Latest Specifications
 
-### 4.1 Desktop Sidebar Close Button
+### 4.1 Atmospheric Header Scrim (Commit `44658c4`)
+- The top-bar area uses a floating translucent scrim to let background content seamlessly dissolve under the header during scrolling without an abrupt horizontal border:
+  ```css
+  .header-scrim {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(to bottom, rgba(11, 17, 30, 70%) 0%, rgba(11, 17, 30, 30%) 30%, transparent 100%);
+    pointer-events: none;
+    z-index: 90;
+  }
+  ```
+- *Optical Mechanics:* Starts at 70% opacity at the very top, transitions to 30% at the 30% vertical mark, and dissolves cleanly to transparent by 100% (140px).
+
+### 4.2 Sleek Data Tables & Micro-Gradient Rows (Commit `ef823b5`)
+The high-density data table (`.tk-sleek-table`) implements micro-luminance physics across rows to create an anodized depth effect:
+```css
+/* Cell Base Styling with Horizontal Anodized Luminance */
+.tk-sleek-table td {
+    padding: 18px 22px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    vertical-align: middle;
+}
+
+/* Row Hover State: Optical Lift & Brand Light Sweep */
+.tk-sleek-table tbody tr {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.tk-sleek-table tbody tr:hover {
+    transform: scale(1.005) translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+.tk-sleek-table tbody tr:hover td {
+    background: linear-gradient(90deg, rgba(38, 195, 234, 0.05) 0%, rgba(38, 195, 234, 0.02) 100%);
+    border-color: rgba(38, 195, 234, 0.2);
+}
+```
+- **LED ID Column**: The LED ID triggers the PDF receipt modal directly. It is rendered with `.tk-led-btn` or a clean mono-styled pill.
+- **Date/Time Display**: Formatted in a two-line layout:
+  ```html
+  <div style="font-weight:700;">16 Nov 2026</div>
+  <div style="font-size:11px; color:var(--text-muted);">03:31 am</div>
+  ```
+
+### 4.3 Desktop Sidebar Close Button
 - In desktop mode (screens wider than 950px), the sidebar close button (`.mobile-close-btn`) must be strictly hidden:
   ```css
   .mobile-close-btn { display: none !important; }
   ```
 - The desktop view relies exclusively on the top-bar 3-bar hamburger button to toggle the sidebar smoothly. On mobile (`max-width: 950px`), the close button appears inside the drawer.
 
-### 4.2 Dashboard Dynamic App Buttons with Domain SVGs
+### 4.4 Dashboard Dynamic App Buttons with Domain SVGs
 When dynamic applications are loaded into the dashboard (`#dyn-apps-container`), every app button must render with a dedicated SVG icon matching its capability:
 - **Attendance**: Calendar check icon
 - **Report Card / Results**: File text icon
@@ -121,7 +173,7 @@ const appSvg = getAppSvgIcon(app.name);
 btn.innerHTML = `${appSvg} <span>${escapeHtml(app.name)}</span>`;
 ```
 
-### 4.3 Top Bar Header Integrity
+### 4.5 Top Bar Header Integrity
 - The top bar header (`<header class="top-bar">` and its associated `.top-bar` CSS) is maintained strictly as established in commit `9cc7ec3`.
 - Any updates to the app shell must never disrupt or override the layout, spacing, or functionality of this header.
 
@@ -135,7 +187,7 @@ When adding new screens or modifying existing code, **never** introduce the foll
 | :--- | :--- |
 | `border-radius: 4px;` or `border-radius: 6px;` | `border-radius: 9999px;` or `var(--radius-pill)` |
 | Neon glow `box-shadow: 0 0 25px rgba(...)` | Diffuse ambient shadow: `box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25)` |
-| Multi-color `linear-gradient(...)` backgrounds | Clean solid tones (`var(--brand)`) or single-tint frosted layers |
+| Loud multi-color gradients across buttons/panels | Clean solid glass fills or single-tint frosted layers |
 | Glowing text `text-shadow: 0 0 10px rgba(...)` | Crisp, legible text without blur: `text-shadow: none;` |
 | Plain text modal close button `×` with no background | `.close-minimal` circular glass orb with red hover state |
 | Default `transition: 0.3s ease;` | `transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);` with `active: scale(0.94)` |
@@ -181,7 +233,9 @@ Before opening a pull request or submitting code touching UI in Ed-Trim Key:
 - [ ] Are all action buttons styled with `.liquid-glass` and a semantic variant (`.btn-primary`, `.btn-success`, etc.)?
 - [ ] Are all primary and confirmation actions rendered as solid color-filled glass buttons with dark text and specular top inset reflections?
 - [ ] Are all secondary, cancel, and outline actions rendered as translucent frosted glass buttons?
-- [ ] Are all neon glow effects (`box-shadow: 0 0 ...`, `text-shadow: 0 0 ...`) and multi-color gradients completely avoided?
+- [ ] Are neon glow halos (`box-shadow: 0 0 ...`, `text-shadow: 0 0 ...`) completely avoided?
+- [ ] Do data table cells follow the sanctioned micro-luminance horizontal sweep?
+- [ ] Does the top atmospheric scrim use the smooth vertical dissolution gradient?
 - [ ] Is the sidebar close button hidden on desktop screens (`display: none !important;`)?
 - [ ] Do dynamic app buttons render with domain-specific SVG icons and proper HTML escaping?
 - [ ] Is the top bar header HTML and CSS identical to the established baseline?
